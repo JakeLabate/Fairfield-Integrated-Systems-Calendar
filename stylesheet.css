@@ -1,0 +1,186 @@
+:root {
+
+	/* Text Color */
+	--primaryTextColor: #2f2f2f;
+	--secondaryTextColor: #656565;
+
+	/* Font Size */
+	--primaryFontSize: 24px;
+	--secondaryFontSize: 14px;
+
+}
+
+* {
+	font-family: 'Roboto', sans-serif;
+	font-weight: 600;
+}
+
+body {
+	padding: 20px 20px 20px 20px;
+}
+
+div {
+	display: inline-block;
+}
+
+details {
+	margin: 5px 5px 5px 5px;
+}
+
+summary {
+	font-size: var(--secondaryFontSize);
+	color: var(--secondaryTextColor);
+}
+
+.chip {
+	display: inline-block;
+	padding: 4px 15px 4px 15px;
+	margin: 5px 10px 15px 0;
+	background-color: #1a1a1a;
+	color: #ffffff !important;
+	border-radius: 25px;
+}
+
+/* Calendar Today */
+#CalendarToday {
+	background-color: #f1f1f1;
+	border-radius: 5px;
+	padding: 10px;
+	margin: 10px;
+}
+
+/* Calendar Upcoming */
+#CalendarUpcoming {
+	background-color: #f1f1f1;
+	border-radius: 5px;
+	padding: 10px;
+	margin: 10px;
+}
+
+/* Projects */
+#Projects {
+}
+.projectCard {
+	background-color: #f5f5f5;
+	border-radius: 5px;
+	padding: 1rem;
+	margin: 1rem;
+	width: 300px;
+	-webkit-box-shadow: 3px 3px 15px 4px #c4c4c4;
+	-moz-box-shadow: 3px 3px 15px 4px #c4c4c4;
+	box-shadow: 3px 3px 15px 4px #c4c4c4;
+}
+.ProjectName {
+	color: var(--primaryTextColor);
+	font-size: var(--primaryFontSize);
+}
+.ProjectClient {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
+.ProjectClientId {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
+.ProjectProgress {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
+.ProjectPrice {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
+.ProjectNumber {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
+.ProjectId {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
+.ProjectPublishedOn {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
+
+/* Service Orders */
+#ServiceOrders {
+
+}
+.serviceOrderCard {
+	background-color: #f5f5f5;
+	border-radius: 5px;
+	padding: 1rem;
+	margin: 1rem;
+	width: 300px;
+	-webkit-box-shadow: 3px 3px 15px 4px #c4c4c4;
+	-moz-box-shadow: 3px 3px 15px 4px #c4c4c4;
+	box-shadow: 3px 3px 15px 4px #c4c4c4;
+}
+.ServiceOrderName {
+	color: var(--primaryTextColor);
+	font-size: var(--primaryFontSize);
+}
+.ServiceOrderProgress {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
+.ServiceOrderDescription {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+	padding-top: 20px;
+	line-height: 1.5;
+}
+.ServiceOrderId {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
+.ServiceOrderPublishedOn {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
+
+/* Tasks */
+#Tasks {
+
+}
+.taskCard {
+	background-color: #f5f5f5;
+	border-radius: 5px;
+	padding: 1rem;
+	margin: 1rem;
+	width: 300px;
+	-webkit-box-shadow: 3px 3px 15px 4px #c4c4c4;
+	-moz-box-shadow: 3px 3px 15px 4px #c4c4c4;
+	box-shadow: 3px 3px 15px 4px #c4c4c4;
+}
+.TaskProgress {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
+.TaskName {
+	color: var(--primaryTextColor);
+	font-size: var(--primaryFontSize);
+}
+.TaskClient {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
+.TaskDescription {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+	padding-top: 20px;
+	line-height: 1.5;
+}
+.TaskNumber {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
+.TaskId {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
+.TaskPublishedOn {
+	color: var(--secondaryTextColor);
+	font-size: var(--secondaryFontSize);
+}
