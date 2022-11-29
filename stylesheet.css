@@ -15,9 +15,56 @@
 	font-weight: 600;
 }
 
-body {
-	padding: 20px 20px 20px 20px;
+/* Style tab links */
+.tablink {
+	background-color: #555;
+	color: #ffffff;
+	float: left;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	font-size: 17px;
+	width: 25%;
 }
+
+.tablink:hover {
+	background-color: #777;
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+	color: #000000;
+	display: none;
+	padding: 100px 20px;
+	height: 100%;
+}
+
+.container {
+	width:100%;
+}
+
+.column20Percent {
+	float:left;
+	width:20%;
+}
+.column44Percent {
+	float:left;
+	width:44%;
+}
+.column33Percent {
+	width:33.33333333%;
+	float:left;
+}
+.column40Percent {
+	width:40%;
+	float:left;
+}
+.column66Percent {
+	width:66.66666667%;
+	float:left;
+}
+
 
 div {
 	display: inline-block;

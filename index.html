@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
 
+	<!-- Title & Meta Data -->
 	<meta charset="UTF-8">
 	<title>Fairfield Integrated Systems Calendar</title>
 	<meta name="robots" content="index, follow">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="title" content="Fairfield Integrated Systems Calendar">
 	<meta name="description" content="Fairfield Integrated Systems Calendar">
-	<meta name="author" content="Jake Labate, Founder & CEO of BrandWield, brandwield@gmail.com 203-907-5536">
+	<meta name="author" content="BRANDWIELD Inc. - brandwield@gmail.com - 203-907-5536">
 	<meta name="language" content="English">
 	<meta name="distribution" content="global">
 
@@ -22,29 +23,138 @@
 <body>
 
 <main>
-
 	<h1>Fairfield Integrated Systems Calendar</h1>
-	<section id="CalendarToday">
+
+	<!-- Tabs -->
+	<button class="tablink" onclick="openPage('Today', this, 'red')" id="defaultOpen">Today</button>
+	<button class="tablink" onclick="openPage('Upcoming', this, 'green')">Upcoming</button>
+	<button class="tablink" onclick="openPage('Contact', this, 'blue')">Contact</button>
+	<button class="tablink" onclick="openPage('About', this, 'orange')">About</button>
+
+	<!-- Today Tab -->
+	<section id="Today" class="tabcontent">
 		<h2>Today</h2>
+		<div class="container">
+			<div class="column20Percent">
+				<h3>To Do</h3>
+				<div id="Projects"></div>
+				<div id="ServiceOrders"></div>
+				<div id="Tasks"></div>
+			</div>
+			<div class="column20Percent">Vehicles</div>
+			<div class="column20Percent">People</div>
+			<div class="column40Percent">Today</div>
+		</div>
 	</section>
-	<section id="CalendarUpcoming">
-		<h2>Upcoming</h2>
+
+
+
+	<style>
+		.filterDiv {
+			display: none;
+		}
+
+		.show {
+			display: block;
+		}
+
+		.container {
+			margin-top: 20px;
+			overflow: hidden;
+		}
+
+		/* Style the buttons */
+		.btn {
+			border: none;
+			outline: none;
+			padding: 12px 16px;
+			background-color: #f1f1f1;
+			cursor: pointer;
+		}
+
+		.btn:hover {
+			background-color: #ddd;
+		}
+
+		.btn.active {
+			background-color: #666;
+			color: white;
+		}
+	</style>
+
+
+	<div id="myBtnContainer">
+		<button class="btn active" onclick="filterSelection('all')">All</button>
+		<button class="btn" onclick="filterSelection('project')">Projects</button>
+		<button class="btn" onclick="filterSelection('task')">Tasks</button>
+		<button class="btn" onclick="filterSelection('serviceOrder')">Service Orders</button>
+	</div>
+
+	<!-- To Do Filter -->
+	<script>
+		filterSelection("all")
+		function filterSelection(c) {
+			var x, i;
+			x = document.getElementsByClassName("filterDiv");
+			if (c == "all") c = "";
+			for (i = 0; i < x.length; i++) {
+				w3RemoveClass(x[i], "show");
+				if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+			}
+		}
+
+		function w3AddClass(element, name) {
+			var i, arr1, arr2;
+			arr1 = element.className.split(" ");
+			arr2 = name.split(" ");
+			for (i = 0; i < arr2.length; i++) {
+				if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+			}
+		}
+
+		function w3RemoveClass(element, name) {
+			var i, arr1, arr2;
+			arr1 = element.className.split(" ");
+			arr2 = name.split(" ");
+			for (i = 0; i < arr2.length; i++) {
+				while (arr1.indexOf(arr2[i]) > -1) {
+					arr1.splice(arr1.indexOf(arr2[i]), 1);
+				}
+			}
+			element.className = arr1.join(" ");
+		}
+
+		// Add active class to the current button (highlight it)
+		var btnContainer = document.getElementById("myBtnContainer");
+		var btns = btnContainer.getElementsByClassName("btn");
+		for (var i = 0; i < btns.length; i++) {
+			btns[i].addEventListener("click", function(){
+				var current = document.getElementsByClassName("active");
+				current[0].className = current[0].className.replace(" active", "");
+				this.className += " active";
+			});
+		}
+	</script>
+
+
+
+	<!-- Upcoming Tab -->
+	<section id="Upcoming" class="tabcontent">
+		<h3>Upcoming</h3>
 	</section>
-	<section id="Projects">
-		<h2>Projects</h2>
+
+	<section id="Contact" class="tabcontent">
+		<h3>Contact</h3>
 	</section>
-	<section id="ServiceOrders">
-		<h2>Service Orders</h2>
+
+	<section id="About" class="tabcontent">
+		<h3>About</h3>
 	</section>
-	<section id="Tasks">
-		<h2>Tasks</h2>
-	</section>
-	<section id="TeamMembers">
-		<h2>Team Members</h2>
-	</section>
-	<section id="Vehicles">
-		<h2>Vehicles</h2>
-	</section>
+
+
+
+
+
 
 </main>
 
@@ -54,6 +164,28 @@
 	<text style="font-size: 14px;">© Copyright 2022 | BrandWield Inc. | All Rights Reserved</text>
 </footer>
 
+	<!-- Tabs Script -->
+	<script>
+		console.log("Tabs Script Loaded");
+		function openPage(pageName,elmnt,color) {
+			var i, tabcontent, tablinks;
 
+			tabcontent = document.getElementsByClassName("tabcontent");
+			for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			}
+
+			tablinks = document.getElementsByClassName("tablink");
+			for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].style.backgroundColor = "";
+			}
+
+			document.getElementById(pageName).style.display = "block";
+			elmnt.style.backgroundColor = color;
+			console.log("'" + pageName + "' Tab Opened");
+		}
+		// Get the element with id="defaultOpen" and click on it
+		document.getElementById("defaultOpen").click();
+	</script>
 </body>
 </html>
