@@ -323,6 +323,18 @@ function newVehicle() {
 	document.getElementById("teamMembersToday").appendChild(teamMemberToday);
 }
 
-function openModal(){
-	console.log("Opening Modal")
+function toggleModal(e){
+	if(e){
+		console.log(e)
+		e.preventDefault()
+	}
+	
+	const modal = document.getElementById("modal-team")
+	if(modal.style.display === "none"){
+		console.log("Opening Modal");
+		modal.style.display = "flex"
+	}else{
+		console.log("Closing Modal");
+		modal.style.display = "none"
+	}
 }
