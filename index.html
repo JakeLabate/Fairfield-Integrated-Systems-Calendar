@@ -61,8 +61,11 @@
 				teamMember.innerHTML =
 					'<div draggable="true" class="card" style="cursor: pointer;">' +
 					'<text class="topCardLabel">Team Member</text><br>' +
-					'<text>' + childData.firstName + '</text>&nbsp;<text>' + childData.lastName + '</text>' +
+					'<text>' + childData.firstName + '</text>&nbsp;<text>' + childData.lastName + '</text><br>' +
+					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">' + childData.email + '</text>'
 					'</div>';
+
+				// Place the div
 				document.getElementById("team").appendChild(teamMember);
 
 				// Create a div for the 'today' tab
@@ -70,8 +73,11 @@
 				teamMemberToday.innerHTML =
 					'<div draggable="true" class="card" style="cursor: pointer;">' +
 					'<text class="topCardLabel">Team Member</text><br>' +
-					'<text>' + childData.firstName + '</text>&nbsp;<text>' + childData.lastName + '</text>' +
+					'<text>' + childData.firstName + '</text>&nbsp;<text>' + childData.lastName + '</text><br>' +
+					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">' + childData.email + '</text>'
 					'</div>';
+
+				// Place the div
 				document.getElementById("teamMembersToday").appendChild(teamMemberToday);
 
 				// Console log the created items
@@ -99,8 +105,10 @@
 					'<text class="topCardLabel">Vehicle</text><br>' +
 					'<text>' + childData.vehicleName + '</text><br>' +
 					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">License: ' + childData.license + '</text><br>' +
-					'<text  style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">VIN: ' + childData.vin + '</text> <br>' +
+					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">VIN: ' + childData.vin + '</text> <br>' +
 					'</div>';
+
+				// Place the div
 				document.getElementById("vehicles").appendChild(vehicle);
 
 				// Create a div for the 'today' tab
@@ -112,6 +120,8 @@
 					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">License: ' + childData.license + '</text><br>' +
 					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">VIN: ' + childData.vin + '</text> <br>' +
 					'</div>';
+
+				// Place the div
 				document.getElementById("vehiclesToday").appendChild(vehicleToday);
 
 				// Console log the created items

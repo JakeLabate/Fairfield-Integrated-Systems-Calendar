@@ -1,6 +1,7 @@
 console.log('script.js loaded');
 
 getAll();
+newEvent();
 
 // GET all lists from D-Tools
 function getAll() {
@@ -247,14 +248,14 @@ function getProducts() {
 function newEvent() {
 	console.log('Creating new event...');
 
-	// POST to Integromat webhook - Can be accessed at: https://us1.make.com/145062/scenarios/517441/edit (only with account cookie)
+	// POST to 'Make' webhook - Can be accessed at: https://us1.make.com/145062/scenarios/517441/edit (only with account cookie)
 	const eventOptions = {
 		method: 'POST',
 		headers: {
 			'content-type': 'application/json'
 		},
 		body: JSON.stringify({
-			toDO: {
+			toDo: {
 				name: '123 Branch Ave (Home)', // always
 				type: 'Task', // always
 				progress: 'Not Started', // always
@@ -272,6 +273,7 @@ function newEvent() {
 			teamMember: {
 				firstName: 'Test', // always
 				lastName: 'User', // always
+				email: 'brandwield@gmail.com' // always
 			},
 			time: {
 				start: '2020-01-01T00:00:00', // always
