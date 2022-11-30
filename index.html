@@ -107,15 +107,16 @@
 		window.newTeamMember = () => {
 			const firstName = document.getElementById("fname").value
 			const lastName = document.getElementById("lname").value
+			const email = document.getElementById("email").value
 
-			if(!firstName || !lastName) return;
+			if(!firstName || !lastName || !email) return;
 
 			// Push is used to ensure we don't overwrite the team list
 			const teamListRef = child(dbRef, 'team' );
 			const newTeamMemberRef = push(teamListRef)
-			set(newTeamMemberRef, {firstName, lastName})
+			set(newTeamMemberRef, {firstName, lastName, email})
 				.then(() => {
-					addTeamMemberToDOM({firstName, lastName})
+					addTeamMemberToDOM({firstName, lastName, email})
 				})
 				.catch(err => {
 					console.log("Could not create Team member ",err)
@@ -286,6 +287,9 @@
 	
 			<label for="lname">Last Name</label>
 			<input type="text" id="lname" name="lastname" placeholder="Your last name.." required>
+
+			<label for="lname">Email</label>
+			<input type="email" id="email" name="email" placeholder="Your Email.." required>
 
 			<div class="modal-actions">
 				<button type="button" onclick="toggleModal()">Cancel</button>
