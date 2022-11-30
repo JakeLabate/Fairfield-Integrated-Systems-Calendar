@@ -33,7 +33,7 @@ function getProjects() {
 			// Create a new div for each project
 			let div = document.createElement('div');
 			div.innerHTML =
-				'<div draggable="true" class="projectCard filterDiv project" style="cursor: pointer;">' +
+				'<div draggable="true" class="projectCard filterDiv ' + Project.Progress.toLowerCase() + ' project" style="cursor: pointer;">' +
 				'<text class="chip">Project</text><br>' +
 				'<text class="ProjectProgress chip">' + Project.Progress + '</text>' + ' ' + '<text class="ProjectPrice">$' + Project.Price + '</text> <br>' +
 				'<text class="ProjectName">' + Project.Name + '</text> <br>' +
@@ -94,7 +94,7 @@ function getTasks() {
 			// Create a new div for each project
 			let div = document.createElement('div');
 			div.innerHTML =
-				'<div draggable="true" class="taskCard filterDiv task" style="cursor: pointer;">' +
+				'<div draggable="true" class="taskCard filterDiv ' + Task.Progress.toLowerCase() + ' task" style="cursor: pointer;">' +
 				'<text class="chip">Task</text><br>' +
 				'<text class="TaskProgress chip">' + Task.Progress + '</text> <br>' +
 				'<text class="TaskName">' + Task.Name + '</text> <br>' +
@@ -138,7 +138,7 @@ function getServiceOrders() {
 			// Create a new div for each serviceOrder
 			let div = document.createElement('div');
 			div.innerHTML =
-				'<div draggable="true" class="serviceOrderCard filterDiv serviceOrder" style="cursor: pointer;">' +
+				'<div draggable="true" class="serviceOrderCard filterDiv ' + ServiceOrder.Progress.toLowerCase() + ' serviceOrder" style="cursor: pointer;">' +
 				'<text class="chip">Service Order</text><br>' +
 				'<text class="ServiceOrderProgress chip">' + ServiceOrder.Progress + '</text> <br>' +
 				'<text class="ServiceOrderName">' + ServiceOrder.Name + '</text> <br>' +

@@ -12,20 +12,35 @@
 
 * {
 	font-family: 'Roboto', sans-serif;
-	font-weight: 600;
+	font-weight: bolder;
+}
+
+body {
+	margin: 0 0 0 0;
+}
+
+section {
+	padding: 0 0 0 0;
+}
+
+h3 {
+	text-align: center;
+	font-weight: bolder;
 }
 
 /* Style tab links */
 .tablink {
-	background-color: #555;
-	color: #ffffff;
-	float: left;
+	background-color: #9b9b9b;
+	color: #000000;
 	border: none;
+	float: left;
 	outline: none;
 	cursor: pointer;
 	padding: 14px 16px;
 	font-size: 17px;
-	width: 25%;
+	width: 33%;
+	font-weight: bolder;
+
 }
 
 .tablink:hover {
@@ -36,17 +51,18 @@
 .tabcontent {
 	color: #000000;
 	display: none;
-	padding: 100px 20px;
 	height: 100%;
 }
 
 .container {
-	width:100%;
+	width: 100%;
+	height: 100%;
+	margin-top: 0 !important;
 }
 
-.column20Percent {
-	float:left;
-	width:20%;
+.column18Percent {
+	float: left;
+	width: 18%;
 }
 .column44Percent {
 	float:left;
@@ -60,10 +76,51 @@
 	width:40%;
 	float:left;
 }
+.column46Percent {
+	width: 46%;
+	float: left;
+}
 .column66Percent {
 	width:66.66666667%;
 	float:left;
 }
+
+
+/* Filtering */
+.filterDiv {
+	display: none;
+}
+
+.show {
+	display: block;
+}
+
+.container {
+	margin-top: 20px;
+	overflow: hidden;
+}
+
+/* Style the buttons */
+.btn {
+	border: none;
+	outline: none;
+	padding: 10px 14px;
+	background-color: #f1f1f1;
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: bolder;
+}
+
+.btn:hover {
+	background-color: #ddd;
+}
+
+.btn.active {
+	background-color: #000000;
+	color: white;
+}
+
+
 
 
 div {
