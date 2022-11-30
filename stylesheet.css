@@ -350,3 +350,48 @@ summary {
 	text-align: center;
 	margin: -5px -20px 0 -20px;
 }
+
+.modal{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.6);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.modal>form{
+	background-color: white;
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
+	font-size: var(--primaryFontSize);
+	color: var(--primaryTextColor);
+	border-radius: 16px;
+	min-width: 300px;
+	max-width: 400px;
+	width: 40%;
+}
+
+.modal>form input{
+	margin: 12px 0px;
+	padding: 12px 8px;
+	border-radius: 12px;
+}
+
+.modal>form button {
+	padding: 12px;
+	border-radius: 12px;
+	background-color: #1a1a1a;
+	color: #ffffff;
+	font-size: medium;
+	margin-top: 24px;
+	cursor: pointer;
+}
+
+.modal>form button:hover{
+	background-color: #656565;
+}
