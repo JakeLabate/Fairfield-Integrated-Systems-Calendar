@@ -244,6 +244,7 @@ function getProducts() {
 	})
 }
 
+function addTeamMemberToDOM(payload){
 
 function newEvent() {
 	console.log('Creating new event...');
@@ -301,3 +302,23 @@ function newVehicle() {
 }
 
 
+	// Create a div for the 'lists' tab
+	var teamMember = document.createElement("div");
+	teamMember.innerHTML =
+		'<div draggable="true" class="teamMemberCard" style="cursor: pointer;">' +
+		'<text class="chip">Team Member</text><br>' +
+		'<text class="">' + payload.firstName + '</text>&nbsp;' +
+		'<text class="">' + payload.lastName + '</text>' +
+		'</div>';
+	document.getElementById("team").appendChild(teamMember);
+
+	// Create a div for the 'today' tab
+	var teamMemberToday = document.createElement("div");
+	teamMemberToday.innerHTML =
+		'<div draggable="true" class="teamMemberCard" style="cursor: pointer;">' +
+		'<text class="chip">Team Member</text><br>' +
+		'<text class="">' + payload.firstName + '</text>&nbsp;' +
+		'<text class="">' + payload.lastName + '</text>' +
+		'</div>';
+	document.getElementById("teamMembersToday").appendChild(teamMemberToday);
+}
