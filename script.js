@@ -241,3 +241,17 @@ function getProducts() {
 		console.log(data);
 	})
 }
+
+
+
+
+
+// New Team Member
+function newTeamMember() {
+	console.log('Creating new team member...');
+}
+
+// New Vehicle
+function newVehicle() {
+	console.log('Creating new vehicle...');
+}

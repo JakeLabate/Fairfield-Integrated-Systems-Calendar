@@ -288,3 +288,42 @@ summary {
 	color: var(--secondaryTextColor);
 	font-size: var(--secondaryFontSize);
 }
+
+.vehicleCard {
+	background-color: #f5f5f5;
+	border-radius: 5px;
+	padding: 1rem;
+	margin: 1rem;
+	width: 300px;
+	-webkit-box-shadow: 3px 3px 15px 4px #c4c4c4;
+	-moz-box-shadow: 3px 3px 15px 4px #c4c4c4;
+	box-shadow: 3px 3px 15px 4px #c4c4c4;
+}
+
+.teamMemberCard {
+	background-color: #f5f5f5;
+	border-radius: 5px;
+	padding: 1rem;
+	margin: 1rem;
+	width: 300px;
+	-webkit-box-shadow: 3px 3px 15px 4px #c4c4c4;
+	-moz-box-shadow: 3px 3px 15px 4px #c4c4c4;
+	box-shadow: 3px 3px 15px 4px #c4c4c4;
+}
+
+.plusIcon {
+	background-color: white;
+	border-radius: 25px;
+	padding: 10px 20px 10px 15px;
+	-webkit-box-shadow: 3px 3px 15px 4px #c4c4c4;
+	-moz-box-shadow: 3px 3px 15px 4px #c4c4c4;
+	box-shadow: 3px 3px 15px 4px #c4c4c4;
+	transition: .2s ease-in-out;
+	margin-left: 20px;
+}
+.plusIcon:hover {
+	background-color: #dcdcdc;
+	scale: 1.03;
+	transition: .2s ease-in-out;
+	cursor: pointer;
+}

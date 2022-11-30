@@ -18,12 +18,14 @@
 
 	<!-- Firebase Real Time Database -->
 	<script type="module">
+
 		console.log("Firebase Real Time Database Script Loaded");
-		// Import the functions you need from the SDKs you need - https://firebase.google.com/docs/web/setup#available-libraries
+
+		// Full list of functions: https://firebase.google.com/docs/web/setup#available-libraries
 		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
 		import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
 
-		// Your web app's Firebase configuration
+		// Firebase configuration
 		const firebaseConfig = {
 			apiKey: "AIzaSyA076_DdfgtN-UFPRysbn-3ca7khvOSx6E",
 			authDomain: "fairfield-integrated-systems.firebaseapp.com",
@@ -33,21 +35,13 @@
 			messagingSenderId: "358421826101",
 			appId: "1:358421826101:web:b8b89c26da56a64731ff7c"
 		};
+
 		// Initialize Firebase
 		const app = initializeApp(firebaseConfig);
 		const db = getDatabase();
 
 		// Get from database
 		const dbRef = ref(getDatabase());
-
-		// Get vehicles
-		get(child(dbRef, 'vehicles' )).then((snapshot) => {
-			if (snapshot.exists()) {
-				console.log(snapshot.val());
-			} else {
-				console.log("No data available");
-			}
-		});
 
 		// Get team members
 		get(child(dbRef, 'team' )).then((snapshot) => {
@@ -56,6 +50,75 @@
 			} else {
 				console.log("No data available");
 			}
+
+			// For all team members, create a div and add the item to the page in the div with id="team"
+			console.log('Loading team members...');
+			snapshot.forEach((childSnapshot) => {
+				var childData = childSnapshot.val();
+
+				// Create a div for the 'lists' tab
+				var teamMember = document.createElement("div");
+				teamMember.innerHTML =
+					'<div draggable="true" class="teamMemberCard" style="cursor: pointer;">' +
+					'<text class="chip">Team Member</text><br>' +
+					'<text class="">' + childData.firstName + '</text>&nbsp;' +
+					'<text class="">' + childData.lastName + '</text>' +
+					'</div>';
+				document.getElementById("team").appendChild(teamMember);
+
+				// Create a div for the 'today' tab
+				var teamMemberToday = document.createElement("div");
+				teamMemberToday.innerHTML =
+					'<div draggable="true" class="teamMemberCard" style="cursor: pointer;">' +
+					'<text class="chip">Team Member</text><br>' +
+					'<text class="">' + childData.firstName + '</text>&nbsp;' +
+					'<text class="">' + childData.lastName + '</text>' +
+					'</div>';
+				document.getElementById("teamMembersToday").appendChild(teamMemberToday);
+
+				// Console log the created items
+				console.log('Team member loaded: ' + childData.firstName + ' ' + childData.lastName);
+			});
+		});
+
+		// Get vehicles
+		get(child(dbRef, 'vehicles' )).then((snapshot) => {
+			if (snapshot.exists()) {
+				console.log(snapshot.val());
+			} else {
+				console.log("No data available");
+			}
+
+			// For all vehicles, create a div and add the item to the page in the div with id="vehicles"
+			console.log('Loading vehicles...');
+			snapshot.forEach((childSnapshot) => {
+				var childData = childSnapshot.val();
+
+				// Create a div for the 'lists' tab
+				var vehicle = document.createElement("div");
+				vehicle.innerHTML =
+					'<div draggable="true" class="vehicleCard" style="cursor: pointer;">' +
+					'<text class="chip">Vehicle</text><br>' +
+					'<text class="">' + childData.vehicleName + '</text><br>' +
+					'<text class="">' + childData.license + '</text><br>' +
+					'<text class="">' + childData.vin + '</text> <br>' +
+					'</div>';
+				document.getElementById("vehicles").appendChild(vehicle);
+
+				// Create a div for the 'today' tab
+				var vehicleToday = document.createElement("div");
+				vehicleToday.innerHTML =
+					'<div draggable="true" class="vehicleCard" style="cursor: pointer;">' +
+					'<text class="chip">Vehicle</text><br>' +
+					'<text class="">' + childData.vehicleName + '</text><br>' +
+					'<text class="">' + childData.license + '</text><br>' +
+					'<text class="">' + childData.vin + '</text> <br>' +
+					'</div>';
+				document.getElementById("vehiclesToday").appendChild(vehicleToday);
+
+				// Console log the created items
+				console.log('Vehicle loaded: ' + childData.vehicleName);
+			});
 		});
 
 	</script>
@@ -89,14 +152,14 @@
 			</div>
 
 			<!-- Vehicles -->
-			<div class="column18Percent">
+			<div id="vehiclesToday" class="column18Percent" style="margin-top: 37px;">
 				<h3>Vehicles</h3>
 
 			</div>
 
-			<!-- People -->
-			<div class="column18Percent">
-				<h3>People</h3>
+			<!-- Team Members -->
+			<div id="teamMembersToday" class="column18Percent" style="margin-top: 37px;">
+				<h3>Team Members</h3>
 			</div>
 
 			<!-- Today -->
@@ -111,8 +174,34 @@
 
 	<!-- Lists Tab -->
 	<section id="Lists" class="tabcontent">
-		<div id="team"></div>
-		<div id="vehicles"></div>
+
+		<!-- Team Members-->
+		<div id="team" class="column33Percent" style="margin-top: 35px; max-width: 420px;">
+
+			<!-- Creat New Team Member -->
+			<div id="newTeamMember" class="plusIcon" onclick="newTeamMember();">
+				<img src="media/plus.webp" width="15" height="15">
+				<text>New Team Member</text>
+			</div>
+
+		</div>
+
+		<!-- Vehicles -->
+		<div id="vehicles" class="column33Percent" style="margin-top: 35px; max-width: 420px;">
+
+			<!-- Creat New Vehicle -->
+			<div id="newVehicle" class="plusIcon" onclick="newVehicle();">
+				<img src="media/plus.webp" width="15" height="15">
+				<text>New Vehicle</text>
+			</div>
+
+		</div>
+
+		<!-- Garbage -->
+		<div id="garbage" style="position: absolute; bottom: 20px; right: 20px;" onmouseover="this.style.scale = 1.15; this.style.transition = '.2s ease-in-out'" onmouseleave="this.style.scale = 1; this.style.transition = '.2s ease-in-out'">
+			<img src="media/trash.png" width="35" height="35">
+		</div>
+
 	</section>
 
 
