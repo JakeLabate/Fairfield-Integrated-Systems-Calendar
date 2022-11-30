@@ -33,9 +33,10 @@ function getProjects() {
 			// Create a new div for each project
 			let div = document.createElement('div');
 			div.innerHTML =
-				'<div draggable="true" class="projectCard filterDiv ' + Project.Progress.toLowerCase() + ' project" style="cursor: pointer;">' +
-				'<text class="chip">Project</text><br>' +
-				'<text class="ProjectProgress chip">' + Project.Progress + '</text>' + ' ' + '<text class="ProjectPrice">$' + Project.Price + '</text> <br>' +
+				'<div draggable="true" class="card filterDiv ' + Project.Progress.toLowerCase() + ' project" style="cursor: pointer;">' +
+				'<text class="topCardLabel">Project</text><br>' +
+				'<text class="ProjectProgress chip">' + Project.Progress + '</text> <br>' +
+				//	'<text class="ProjectPrice">$' + Project.Price + '</text> <br>' +
 				'<text class="ProjectName">' + Project.Name + '</text> <br>' +
 				'<details>' +
 				'<summary>Project Details</summary>' +
@@ -94,8 +95,8 @@ function getTasks() {
 			// Create a new div for each project
 			let div = document.createElement('div');
 			div.innerHTML =
-				'<div draggable="true" class="taskCard filterDiv ' + Task.Progress.toLowerCase() + ' task" style="cursor: pointer;">' +
-				'<text class="chip">Task</text><br>' +
+				'<div draggable="true" ondragstart="dragToDo()" class="card filterDiv ' + Task.Progress.toLowerCase() + ' task" style="cursor: pointer;">' +
+				'<text class="topCardLabel">Task</text><br>' +
 				'<text class="TaskProgress chip">' + Task.Progress + '</text> <br>' +
 				'<text class="TaskName">' + Task.Name + '</text> <br>' +
 				'<text class="TaskClient">' + Task.Client + '</text>' +
@@ -138,8 +139,8 @@ function getServiceOrders() {
 			// Create a new div for each serviceOrder
 			let div = document.createElement('div');
 			div.innerHTML =
-				'<div draggable="true" class="serviceOrderCard filterDiv ' + ServiceOrder.Progress.toLowerCase() + ' serviceOrder" style="cursor: pointer;">' +
-				'<text class="chip">Service Order</text><br>' +
+				'<div draggable="true" class="card filterDiv ' + ServiceOrder.Progress.toLowerCase() + ' serviceOrder" style="cursor: pointer;">' +
+				'<text class="topCardLabel">Service Order</text><br>' +
 				'<text class="ServiceOrderProgress chip">' + ServiceOrder.Progress + '</text> <br>' +
 				'<text class="ServiceOrderName">' + ServiceOrder.Name + '</text> <br>' +
 				//	'<text class="ServiceOrderClient">' + ServiceOrder.Client + '</text> <br>' +
@@ -243,7 +244,48 @@ function getProducts() {
 }
 
 
+function newEvent() {
+	console.log('Creating new event...');
 
+	// POST to Integromat webhook - Can be accessed at: https://us1.make.com/145062/scenarios/517441/edit (only with account cookie)
+	const eventOptions = {
+		method: 'POST',
+		headers: {
+			'content-type': 'application/json'
+		},
+		body: JSON.stringify({
+			toDO: {
+				name: '123 Branch Ave (Home)', // always
+				type: 'Task', // always
+				progress: 'Not Started', // always
+				description: 'This is a test description', // if != null
+				client: {
+					name: 'Test Client', // if 'type' == 'Project'
+					id: '123456789' // if 'type' == 'Project'
+				}
+			},
+			vehicle: {
+				name: 'Test Vehicle', // always
+				vin: '123456789', // always
+				license: 'GDG36F3', // always
+			},
+			teamMember: {
+				firstName: 'Test', // always
+				lastName: 'User', // always
+			},
+			time: {
+				start: '2020-01-01T00:00:00', // always
+				end: '2022-01-01T00:00:00' // always
+			}
+		})
+	};
+	fetch('https://hook.us1.make.com/8il7zph12nsp5lkmdkx85fv5h2smwyb1', eventOptions)
+	.then(response => response.json())
+	.then(data => {
+		console.log(data);
+		}
+	)
+}
 
 
 // New Team Member
@@ -255,3 +297,5 @@ function newTeamMember() {
 function newVehicle() {
 	console.log('Creating new vehicle...');
 }
+
+

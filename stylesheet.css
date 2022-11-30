@@ -38,13 +38,43 @@ h3 {
 	cursor: pointer;
 	padding: 14px 16px;
 	font-size: 17px;
-	width: 33%;
+	width: 32.3333%;
 	font-weight: bolder;
-
 }
 
 .tablink:hover {
 	background-color: #777;
+}
+
+.tablinkRefresh {
+	background-color: #9b9b9b;
+	color: #000000;
+	border: none;
+	float: left;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	font-size: 17px;
+	width: 3%;
+	font-weight: bolder;
+}
+
+.tablinkRefresh:hover {
+	background-color: #777;
+}
+
+.placeholder {
+	background-color: #ececec;
+	height: 150px;
+	width: 250px;
+	color: #000000;
+	border-radius: 10px;
+	border: 2px dashed #7e7e7e;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-left: 10px;
+	padding-right: 10px;
 }
 
 /* Style the tab content (and add height:100% for full page content) */
@@ -248,16 +278,7 @@ summary {
 #Tasks {
 
 }
-.taskCard {
-	background-color: #f5f5f5;
-	border-radius: 5px;
-	padding: 1rem;
-	margin: 1rem;
-	width: 300px;
-	-webkit-box-shadow: 3px 3px 15px 4px #c4c4c4;
-	-moz-box-shadow: 3px 3px 15px 4px #c4c4c4;
-	box-shadow: 3px 3px 15px 4px #c4c4c4;
-}
+
 .TaskProgress {
 	color: var(--secondaryTextColor);
 	font-size: var(--secondaryFontSize);
@@ -289,10 +310,10 @@ summary {
 	font-size: var(--secondaryFontSize);
 }
 
-.vehicleCard {
+.card {
 	background-color: #f5f5f5;
 	border-radius: 5px;
-	padding: 1rem;
+	padding: 5px 20px 20px 20px;
 	margin: 1rem;
 	width: 300px;
 	-webkit-box-shadow: 3px 3px 15px 4px #c4c4c4;
@@ -300,16 +321,6 @@ summary {
 	box-shadow: 3px 3px 15px 4px #c4c4c4;
 }
 
-.teamMemberCard {
-	background-color: #f5f5f5;
-	border-radius: 5px;
-	padding: 1rem;
-	margin: 1rem;
-	width: 300px;
-	-webkit-box-shadow: 3px 3px 15px 4px #c4c4c4;
-	-moz-box-shadow: 3px 3px 15px 4px #c4c4c4;
-	box-shadow: 3px 3px 15px 4px #c4c4c4;
-}
 
 .plusIcon {
 	background-color: white;
@@ -326,4 +337,16 @@ summary {
 	scale: 1.03;
 	transition: .2s ease-in-out;
 	cursor: pointer;
+}
+
+.topCardLabel {
+	display: block;
+	padding: 5px 10px 0 10px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	height: 30px;
+	background-color: black;
+	color: white;
+	text-align: center;
+	margin: -5px -20px 0 -20px;
 }
