@@ -353,12 +353,12 @@ summary {
 
 .modal{
 	position: absolute;
+	/* display: flex; */
 	top: 0;
 	left: 0;
 	width: 100vw;
 	height: 100vh;
 	background-color: rgba(0, 0, 0, 0.6);
-	display: flex;
 	justify-content: center;
 	align-items: center;
 }
@@ -380,6 +380,12 @@ summary {
 	margin: 12px 0px;
 	padding: 12px 8px;
 	border-radius: 12px;
+}
+
+.modal-actions{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .modal>form button {
