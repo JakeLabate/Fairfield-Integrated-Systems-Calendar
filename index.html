@@ -55,33 +55,6 @@
 			console.log('Loading team members...');
 			snapshot.forEach((childSnapshot) => {
 				var childData = childSnapshot.val();
-
-				// Create a div for the 'lists' tab
-				var teamMember = document.createElement("div");
-				teamMember.innerHTML =
-					'<div draggable="true" class="card" style="cursor: pointer;">' +
-					'<text class="topCardLabel">Team Member</text><br>' +
-					'<text>' + childData.firstName + '</text>&nbsp;<text>' + childData.lastName + '</text><br>' +
-					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">' + childData.email + '</text>'
-					'</div>';
-
-				// Place the div
-				document.getElementById("team").appendChild(teamMember);
-
-				// Create a div for the 'today' tab
-				var teamMemberToday = document.createElement("div");
-				teamMemberToday.innerHTML =
-					'<div draggable="true" class="card" style="cursor: pointer;">' +
-					'<text class="topCardLabel">Team Member</text><br>' +
-					'<text>' + childData.firstName + '</text>&nbsp;<text>' + childData.lastName + '</text><br>' +
-					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">' + childData.email + '</text>'
-					'</div>';
-
-				// Place the div
-				document.getElementById("teamMembersToday").appendChild(teamMemberToday);
-
-				// Console log the created items
-				console.log('Team member loaded: ' + childData.firstName + ' ' + childData.lastName);
 				addTeamMemberToDOM(childData)
 			});
 		});

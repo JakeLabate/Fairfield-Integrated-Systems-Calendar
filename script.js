@@ -305,8 +305,11 @@ function addTeamMemberToDOM(payload){
 	teamMember.innerHTML =
 		'<div draggable="true" class="card" style="cursor: pointer;">' +
 		'<text class="topCardLabel">Team Member</text><br>' +
-		'<text>' + payload.firstName + '</text>&nbsp;<text>' + payload.lastName + '</text>' +
+		'<text>' + payload.firstName + '</text>&nbsp;<text>' + payload.lastName + '</text><br>' +
+		'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">' + payload.email + '</text>'
 		'</div>';
+
+	// Place the div
 	document.getElementById("team").appendChild(teamMember);
 
 	// Create a div for the 'today' tab
@@ -314,12 +317,15 @@ function addTeamMemberToDOM(payload){
 	teamMemberToday.innerHTML =
 		'<div draggable="true" class="card" style="cursor: pointer;">' +
 		'<text class="topCardLabel">Team Member</text><br>' +
-		'<text>' + payload.firstName + '</text>&nbsp;<text>' + payload.lastName + '</text>' +
+		'<text>' + payload.firstName + '</text>&nbsp;<text>' + payload.lastName + '</text><br>' +
+		'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">' + payload.email + '</text>'
 		'</div>';
+
+	// Place the div
 	document.getElementById("teamMembersToday").appendChild(teamMemberToday);
 
 	// Console log the created items
-	console.log('Team member loaded: ' + payload.firstName + ' ' + payload.lastName);
+	console.log('Team member loaded: ' + payload.firstName + ' ' + payload.lastName + ' ' + payload.lastName);
 }
 
 function toggleModal(e){
