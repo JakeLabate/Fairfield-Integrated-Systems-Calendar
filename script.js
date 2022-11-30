@@ -322,3 +322,7 @@ function newVehicle() {
 		'</div>';
 	document.getElementById("teamMembersToday").appendChild(teamMemberToday);
 }
+
+function openModal(){
+	console.log("Opening Modal")
+}

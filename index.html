@@ -128,7 +128,6 @@
 				console.log('Vehicle loaded: ' + childData.vehicleName);
 			});
 		});
-
 		
 		// New Team Member
 		window.newTeamMember = ({firstName, lastName}) => {
@@ -277,7 +276,7 @@
 		<div id="team" class="column33Percent" style="margin-top: 35px; max-width: 420px;">
 			<h3>Team Members</h3>
 			<!-- Creat New Team Member -->
-			<div id="newTeamMember" class="plusIcon" onclick="newTeamMember();">
+			<div id="newTeamMember" class="plusIcon" onclick="openModal();">
 				<img src="media/plus.webp" width="15" height="15">
 				<text>New Team Member</text>
 			</div>
@@ -288,17 +287,32 @@
 			<img src="media/trash.png" width="35" height="35">
 		</div>
 
+		
 	</section>
-
-
-
-
+	
+	
+	
+	
 
 
 
 
 
 </main>
+	<!-- Modal for Team Member Details -->
+	<div id="modal-team" class="modal">		
+		<form onsubmit="newTeamMember()">
+
+			<label for="fname">First Name</label>
+			<input type="text" id="fname" name="firstname" placeholder="Your first name..">
+	
+			<label for="lname">Last Name</label>
+			<input type="text" id="lname" name="lastname" placeholder="Your last name..">
+
+			<button type="submit" >Save Team Member</button>
+	
+		</form>			          		
+	</div>
 
 	<!-- Tabs Script -->
 	<script>
