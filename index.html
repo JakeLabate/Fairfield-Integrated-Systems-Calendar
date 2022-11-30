@@ -23,7 +23,7 @@
 
 		// Full list of functions: https://firebase.google.com/docs/web/setup#available-libraries
 		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
-		import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+		import { getDatabase, ref, child, get, set, push } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
 
 		// Firebase configuration
 		const firebaseConfig = {
@@ -55,33 +55,7 @@
 			console.log('Loading team members...');
 			snapshot.forEach((childSnapshot) => {
 				var childData = childSnapshot.val();
-
-				// Create a div for the 'lists' tab
-				var teamMember = document.createElement("div");
-				teamMember.innerHTML =
-					'<div draggable="true" class="card" style="cursor: pointer;">' +
-					'<text class="topCardLabel">Team Member</text><br>' +
-					'<text>' + childData.firstName + '</text>&nbsp;<text>' + childData.lastName + '</text><br>' +
-					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">' + childData.email + '</text>'
-					'</div>';
-
-				// Place the div
-				document.getElementById("team").appendChild(teamMember);
-
-				// Create a div for the 'today' tab
-				var teamMemberToday = document.createElement("div");
-				teamMemberToday.innerHTML =
-					'<div draggable="true" class="card" style="cursor: pointer;">' +
-					'<text class="topCardLabel">Team Member</text><br>' +
-					'<text>' + childData.firstName + '</text>&nbsp;<text>' + childData.lastName + '</text><br>' +
-					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">' + childData.email + '</text>'
-					'</div>';
-
-				// Place the div
-				document.getElementById("teamMembersToday").appendChild(teamMemberToday);
-
-				// Console log the created items
-				console.log('Team member loaded: ' + childData.firstName + ' ' + childData.lastName);
+				addTeamMemberToDOM(childData)
 			});
 		});
 
@@ -128,6 +102,31 @@
 				console.log('Vehicle loaded: ' + childData.vehicleName);
 			});
 		});
+		
+		// New Team Member
+		window.newTeamMember = () => {
+			const firstName = document.getElementById("fname").value
+			const lastName = document.getElementById("lname").value
+			const email = document.getElementById("email").value
+
+			if(!firstName || !lastName || !email) return;
+
+			// Push is used to ensure we don't overwrite the team list
+			const teamListRef = child(dbRef, 'team' );
+			const newTeamMemberRef = push(teamListRef)
+			set(newTeamMemberRef, {firstName, lastName, email})
+				.then(() => {
+					addTeamMemberToDOM({firstName, lastName, email})
+				})
+				.catch(err => {
+					console.log("Could not create Team member ",err)
+				}).finally(toggleModal)
+		}
+
+		// New Vehicle
+		window.newVehicle = () => {
+			console.log('Creating new vehicle...');
+		}
 
 	</script>
 
@@ -256,7 +255,7 @@
 		<div id="team" class="column33Percent" style="margin-top: 35px; max-width: 420px;">
 			<h3>Team Members</h3>
 			<!-- Creat New Team Member -->
-			<div id="newTeamMember" class="plusIcon" onclick="newTeamMember();">
+			<div id="newTeamMember" class="plusIcon" onclick="toggleModal();">
 				<img src="media/plus.webp" width="15" height="15">
 				<text>New Team Member</text>
 			</div>
@@ -267,17 +266,38 @@
 			<img src="media/trash.png" width="35" height="35">
 		</div>
 
+		
 	</section>
-
-
-
-
+	
+	
+	
+	
 
 
 
 
 
 </main>
+	<!-- Modal for Team Member Details -->
+	<div id="modal-team" class="modal" style="display: none;">		
+		<form >
+
+			<label for="fname">First Name</label>
+			<input type="text" id="fname" name="firstname" placeholder="Your first name.." required>
+	
+			<label for="lname">Last Name</label>
+			<input type="text" id="lname" name="lastname" placeholder="Your last name.." required>
+
+			<label for="lname">Email</label>
+			<input type="email" id="email" name="email" placeholder="Your Email.." required>
+
+			<div class="modal-actions">
+				<button type="button" onclick="toggleModal()">Cancel</button>
+				<button type="button" onclick="newTeamMember()" >Save Team Member</button>
+			</div>
+	
+		</form>			          		
+	</div>
 
 	<!-- Tabs Script -->
 	<script>
