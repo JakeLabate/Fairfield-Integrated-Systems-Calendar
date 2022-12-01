@@ -303,25 +303,33 @@ function newVehicle() {
 function addTeamMemberToDOM(payload){
 	// Create a div for the 'lists' tab
 	var teamMember = document.createElement("div");
-	teamMember.innerHTML =
-		'<div draggable="true" class="card" style="cursor: pointer;">' +
-		'<text class="topCardLabel">Team Member</text><br>' +
-		'<text>' + payload.firstName + '</text>&nbsp;<text>' + payload.lastName + '</text><br>' +
-		'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">' + payload.email + '</text>'
-		'</div>';
+	teamMember.id = payload.id;
+	teamMember.innerHTML = `
+	<div draggable="true" class="card" style="cursor: pointer;">
+	<div class="topCardLabel" style="position:relative;  margin-bottom: 20px;">
+		<span style="position:absolute; top:8px; right: 8px;" onclick="deleteTeamMember('${payload.id}')">X</span>
+		<text >Team Member</text>
+	</div>
+		<text> ${payload.firstName}&nbsp${payload.lastName}</text><br>
+		<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">${payload.email}</text>
+	</div>`;
 
 	// Place the div
 	document.getElementById("team").appendChild(teamMember);
 
 	// Create a div for the 'today' tab
 	var teamMemberToday = document.createElement("div");
-	teamMemberToday.innerHTML =
-		'<div draggable="true" class="card" style="cursor: pointer;">' +
-		'<text class="topCardLabel">Team Member</text><br>' +
-		'<text>' + payload.firstName + '</text>&nbsp;<text>' + payload.lastName + '</text><br>' +
-		'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">' + payload.email + '</text>'
-		'</div>';
-
+	teamMemberToday.id = `today-${payload.id}`;
+	teamMemberToday.innerHTML = `
+	<div draggable="true" class="card" style="cursor: pointer;">
+	<div class="topCardLabel" style="position:relative; margin-bottom: 20px;">
+		<span style="position:absolute; top:8px; right: 8px;" onclick="deleteTeamMember('${payload.id}')">X</span>
+		<text >Team Member</text><br>
+	</div>
+		<text style="margin-top: 12px"> ${payload.firstName}&nbsp${payload.lastName}</text><br>
+		<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">${payload.email}</text>
+	</div>
+	`
 	// Place the div
 	document.getElementById("teamMembersToday").appendChild(teamMemberToday);
 
@@ -330,10 +338,6 @@ function addTeamMemberToDOM(payload){
 }
 
 function toggleModal(e){
-	if(e){
-		console.log(e)
-		e.preventDefault()
-	}
 	
 	const modal = document.getElementById("modal-team")
 	if(modal.style.display === "none"){
@@ -343,4 +347,10 @@ function toggleModal(e){
 		console.log("Closing Modal");
 		modal.style.display = "none"
 	}
+}
+
+function resetModalForm(){
+	document.getElementById("fname").value = "";
+  document.getElementById("lname").value = "";
+  document.getElementById("email").value = "";
 }

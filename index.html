@@ -23,7 +23,7 @@
 
 		// Full list of functions: https://firebase.google.com/docs/web/setup#available-libraries
 		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
-		import { getDatabase, ref, child, get, set, push } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+		import { getDatabase, ref, child, get, set, push, remove } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
 
 		// Firebase configuration
 		const firebaseConfig = {
@@ -55,7 +55,7 @@
 			console.log('Loading team members...');
 			snapshot.forEach((childSnapshot) => {
 				var childData = childSnapshot.val();
-				addTeamMemberToDOM(childData)
+				addTeamMemberToDOM({id: childSnapshot.key, ...childData})
 			});
 		});
 
@@ -115,14 +115,30 @@
 			const teamListRef = child(dbRef, 'team' );
 			const newTeamMemberRef = push(teamListRef)
 			set(newTeamMemberRef, {firstName, lastName, email})
-				.then(() => {
-					addTeamMemberToDOM({firstName, lastName, email})
+				.then((res) => {
+					addTeamMemberToDOM({firstName, lastName, email, id: newTeamMemberRef.key})
+					resetModalForm()
 				})
 				.catch(err => {
 					console.log("Could not create Team member...",err)
 				}).finally(toggleModal)
 		}
 
+		window.deleteTeamMember = (id) => {
+			if(!id) return;
+			if(!confirm("Are you sure you want to delete?")){
+				return;
+			}
+			// Remove from the database
+			remove(child(dbRef, `team/${id}`)).then((res) => {
+				// Remove from the frontend list
+				const toBeDeletedDivs = []
+				toBeDeletedDivs.push(document.getElementById(id));
+				toBeDeletedDivs.push(document.getElementById(`today-${id}`));
+				toBeDeletedDivs.forEach(el => el.parentNode.removeChild(el))
+			})
+		}
+		
 		// New Vehicle
 		window.newVehicle = () => {
 			console.log('Creating new vehicle...');
