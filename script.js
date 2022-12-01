@@ -244,6 +244,7 @@ function getProducts() {
 	})
 }
 
+
 function newEvent() {
 	console.log('Creating new event...');
 

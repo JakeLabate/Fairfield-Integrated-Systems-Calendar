@@ -377,7 +377,7 @@ summary {
 }
 
 .modal>form input{
-	margin: 12px 0px;
+	margin: 12px 0;
 	padding: 12px 8px;
 	border-radius: 12px;
 }
