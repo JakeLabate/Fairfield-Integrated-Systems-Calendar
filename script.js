@@ -306,7 +306,7 @@ function addTeamMemberToDOM(payload){
 	teamMember.id = payload.id;
 	teamMember.innerHTML = `
 	<div draggable="true" class="card" style="cursor: pointer;">
-	<div class="topCardLabel" style="position:relative;">
+	<div class="topCardLabel" style="position:relative;  margin-bottom: 20px;">
 		<span style="position:absolute; top:8px; right: 8px;" onclick="deleteTeamMember('${payload.id}')">X</span>
 		<text >Team Member</text>
 	</div>
@@ -322,13 +322,13 @@ function addTeamMemberToDOM(payload){
 	teamMemberToday.id = `today-${payload.id}`;
 	teamMemberToday.innerHTML = `
 	<div draggable="true" class="card" style="cursor: pointer;">
-	<div class="topCardLabel" style="position:relative;">
+	<div class="topCardLabel" style="position:relative; margin-bottom: 20px;">
 		<span style="position:absolute; top:8px; right: 8px;" onclick="deleteTeamMember('${payload.id}')">X</span>
-		<text >Team Member</text>
+		<text >Team Member</text><br>
 	</div>
-		<text> ${payload.firstName}&nbsp${payload.lastName}</text><br>
+		<text style="margin-top: 12px"> ${payload.firstName}&nbsp${payload.lastName}</text><br>
 		<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">${payload.email}</text>
-	</div>;
+	</div>
 	`
 	// Place the div
 	document.getElementById("teamMembersToday").appendChild(teamMemberToday);
