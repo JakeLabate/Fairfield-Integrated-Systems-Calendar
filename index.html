@@ -78,42 +78,7 @@
 			console.log('Loading vehicles...');
 			snapshot.forEach((childSnapshot) => {
 				var childData = childSnapshot.val();
-
-/*				// Create a div for the 'lists' tab
-				var vehicle = document.createElement("div");
-				vehicle.innerHTML =
-					'<div draggable="true" class="card" style="cursor: pointer;">' +
-					'<text class="topCardLabel">Vehicle</text><br>' +
-					'<text>' + childData.vehicleName + '</text><br>' +
-					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">License: ' + childData.license + '</text><br>' +
-					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">VIN: ' + childData.vin + '</text> <br>' +
-					'</div>';
-
-				// Place the div
-				document.getElementById("vehicles").appendChild(vehicle);
-
-				// Create a div for the 'today' tab
-				var vehicleToday = document.createElement("div");
-				vehicleToday.innerHTML =
-					'<div draggable="true" class="card" style="cursor: pointer;">' +
-					'<text class="topCardLabel">Vehicle</text><br>' +
-					'<text>' + childData.vehicleName + '</text><br>' +
-					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">License: ' + childData.license + '</text><br>' +
-					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">VIN: ' + childData.vin + '</text> <br>' +
-					'</div>';
-
-				// Place the div
-				document.getElementById("vehiclesToday").appendChild(vehicleToday);*/
-
-				// Add an 'option' for each vehicle to the 'select' with the id of 'vehiclesSelect' <-- has an 's' in the #id
-				let option = document.createElement('option');
-				option.value = childData.vehicleName;
-				document.getElementById('vehiclesSelect').appendChild(option);
-				// select the last option added
-				document.getElementById('vehiclesSelect').lastElementChild.innerText = childData.vehicleName + ' - Lic: ' + childData.license;
-
-				// Console log the created items
-				console.log('Vehicle loaded: ' + childData.vehicleName);
+				addVehicleToDOM({id: childSnapshot.key, ...childData});
 			});
 		});
 		
@@ -131,11 +96,11 @@
 			set(newTeamMemberRef, {firstName, lastName, email})
 				.then((res) => {
 					addTeamMemberToDOM({firstName, lastName, email, id: newTeamMemberRef.key})
-					resetModalForm()
+					resetModalForm('modal-team')
 				})
 				.catch(err => {
-					console.log("Could not create Team member...",err)
-				}).finally(toggleModal)
+					console.log("Could not create Team member... ",err)
+				}).finally(() => toggleModal('modal-team'))
 		}
 
 		// Delete Team Member
@@ -156,7 +121,38 @@
 		
 		// New Vehicle
 		window.newVehicle = () => {
-			console.log('Creating new vehicle...');
+			const vehicleName = document.getElementById("vehicleName").value
+			const license = document.getElementById("license").value
+			const vin = document.getElementById("vin").value
+			
+			if(!vehicleName || !license || !vin) return;
+
+			// Push is used to ensure we don't overwrite the vehicles list
+			const vehicleListRef = child(dbRef, 'vehicles' );
+			const newVehicleMemberRef = push(vehicleListRef)
+			set(newVehicleMemberRef, {vehicleName, license, vin})
+				.then((res) => {
+					addVehicleToDOM({vehicleName, license, vin, id: newVehicleMemberRef.key})
+					resetModalForm('modal-vehicle')
+				})
+				.catch(err => {
+					console.log("Could not create Vehicle... ",err)
+				}).finally(() => toggleModal('modal-vehicle'))
+		}
+
+		window.deleteVehicle = (id) => {
+			if(!id) return;
+			if(!confirm("Are you sure you want to delete?")){
+				return;
+			}
+			// Remove from the database
+			remove(child(dbRef, `vehicles/${id}`)).then((res) => {
+				// Remove from the frontend list
+				const toBeDeletedDivs = []
+				toBeDeletedDivs.push(document.getElementById(id));
+				toBeDeletedDivs.push(document.getElementById(`today-${id}`));
+				toBeDeletedDivs.forEach(el => el.parentNode.removeChild(el))
+			})
 		}
 
 	</script>
@@ -252,7 +248,7 @@
 		<div id="vehicles" class="column33Percent" style="margin-top: 35px; max-width: 420px;">
 			<h3>Vehicles</h3>
 			<!-- Creat New Vehicle -->
-			<div id="newVehicle" class="plusIcon" onclick="newVehicle();">
+			<div id="newVehicle" class="plusIcon" onclick="toggleModal('modal-vehicle');">
 				<img src="media/plus.webp" width="15" height="15">
 				<text>New Vehicle</text>
 			</div>
@@ -262,13 +258,21 @@
 		<div id="team" class="column33Percent" style="margin-top: 35px; max-width: 420px;">
 			<h3>Team Members</h3>
 			<!-- Creat New Team Member -->
-			<div id="newTeamMember" class="plusIcon" onclick="toggleModal();">
+			<div id="newTeamMember" class="plusIcon" onclick="toggleModal('modal-team');">
 				<img src="media/plus.webp" width="15" height="15">
 				<text>New Team Member</text>
 			</div>
 		</div>
 
 	</section>
+	
+	
+	
+	
+
+
+
+
 
 </main>
 
@@ -286,8 +290,29 @@
 			<input type="email" id="email" name="email" placeholder="Your Email.." required>
 
 			<div class="modal-actions">
-				<button type="button" onclick="toggleModal()">Cancel</button>
+				<button type="button" onclick="toggleModal('modal-team')">Cancel</button>
 				<button type="button" onclick="newTeamMember()" >Save Team Member</button>
+			</div>
+	
+		</form>			          		
+	</div>
+
+	<!-- Modal for Vehicle Details -->
+	<div id="modal-vehicle" class="modal" style="display: none;">		
+		<form>
+
+			<label for="vehicleName">Vehicle Name</label>
+			<input type="text" id="vehicleName" name="vehicleName" placeholder="Your vehicle name.." required>
+	
+			<label for="license">License Number</label>
+			<input type="text" id="license" name="license" placeholder="License..." required>
+
+			<label for="vin">VIN</label>
+			<input type="vin" id="vin" name="vin" placeholder="VIN..." required>
+
+			<div class="modal-actions">
+				<button type="button" onclick="toggleModal('modal-vehicle')">Cancel</button>
+				<button type="button" onclick="newVehicle()" >Save Vehicle</button>
 			</div>
 	
 		</form>			          		

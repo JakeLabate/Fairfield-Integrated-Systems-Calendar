@@ -299,7 +299,7 @@ function addTeamMemberToDOM(payload){
 		<span style="position:absolute; top:8px; right: 8px;" onclick="deleteTeamMember('${payload.id}')">X</span>
 		<text >Team Member</text><br>
 	</div>
-		<text style="margin-top: 12px"> ${payload.firstName}&nbsp${payload.lastName}</text><br>
+		<text> ${payload.firstName}&nbsp${payload.lastName}</text><br>
 		<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">${payload.email}</text>
 	</div>
 	`
@@ -310,9 +310,43 @@ function addTeamMemberToDOM(payload){
 	console.log('Team member loaded: ' + payload.firstName + ' ' + payload.lastName + ' ' + payload.lastName);
 }
 
-function toggleModal(e){
+function addVehicleToDOM(payload){
+
+	const template = `
+	<div draggable="true" class="card" style="cursor: pointer;">
+	<div class="topCardLabel" style="position:relative;  margin-bottom: 20px;">
+		<span style="position:absolute; top:8px; right: 8px;" onclick="deleteVehicle('${payload.id}')">X</span>
+		<text >Vehicle</text>
+	</div>
+	<text>${payload.vehicleName}</text><br>
+	<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">License: ${payload.license}</text><br>
+	<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">VIN: ${payload.vin}</text> <br>
+	</div>
+	`
+
+	// Create a div for the 'lists' tab
+	var vehicle = document.createElement("div");
+	vehicle.id = payload.id
+	vehicle.innerHTML = template;
+
+	// Place the div
+	document.getElementById("vehicles").appendChild(vehicle);
+
+	// Create a div for the 'today' tab
+	var vehicleToday = document.createElement("div");
+	vehicleToday.id = `today-${payload.id}`
+	vehicleToday.innerHTML = template;
+
+	// Place the div
+	document.getElementById("vehiclesToday").appendChild(vehicleToday);
+
+	// Console log the created items
+	console.log('Vehicle loaded: ' + payload.vehicleName);
+}
+
+function toggleModal(modalID = 'modal-team'){
 	
-	const modal = document.getElementById("modal-team")
+	const modal = document.getElementById(modalID)
 	if(modal.style.display === "none"){
 		console.log("Opening Modal");
 		modal.style.display = "flex"
@@ -322,10 +356,10 @@ function toggleModal(e){
 	}
 }
 
-function resetModalForm(){
-	document.getElementById("fname").value = "";
-	document.getElementById("lname").value = "";
-	document.getElementById("email").value = "";
+function resetModalForm(modalID = 'modal-team'){
+	const modal = document.getElementById(modalID)
+	const inputs = modal.querySelectorAll('input')
+	inputs.forEach(input => input.value = "")
 }
 
 function confirmAssignment() {
