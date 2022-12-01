@@ -126,6 +126,9 @@
 
 		window.deleteTeamMember = (id) => {
 			if(!id) return;
+			if(!confirm("Are you sure you want to delete?")){
+				return;
+			}
 			// Remove from the database
 			remove(child(dbRef, `team/${id}`)).then((res) => {
 				// Remove from the frontend list
