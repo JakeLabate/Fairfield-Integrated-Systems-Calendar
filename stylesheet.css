@@ -88,7 +88,7 @@ h3 {
 .container {
 	width: 100%;
 	height: 100%;
-	margin-top: 0 !important;
+	margin: 20px 20px 20px 20px;
 }
 
 .column18Percent {
@@ -169,32 +169,22 @@ summary {
 
 .chip {
 	display: inline-block;
+	font-size: 14px;
 	padding: 4px 15px 4px 15px;
 	margin: 5px 10px 15px 0;
 	background-color: #1a1a1a;
 	color: #ffffff !important;
 	border-radius: 25px;
+	cursor: pointer;
+	transition: .15s ease-in-out;
 }
 
-/* Calendar Today */
-#CalendarToday {
-	background-color: #f1f1f1;
-	border-radius: 5px;
-	padding: 10px;
-	margin: 10px;
+.chip:hover {
+	background-color: #000000;
+	transition: .15s ease-in-out;
+	scale: 1.05;
 }
 
-/* Calendar Upcoming */
-#CalendarUpcoming {
-	background-color: #f1f1f1;
-	border-radius: 5px;
-	padding: 10px;
-	margin: 10px;
-}
-
-/* Projects */
-#Projects {
-}
 .projectCard {
 	background-color: #f5f5f5;
 	border-radius: 5px;
@@ -402,6 +392,31 @@ summary {
 }
 
 .modal>form button:hover{
+	background-color: #656565;
+	transition: .2s ease-in-out;
+}
+
+input, select, textarea {
+	padding: 5px 12px 5px 12px;
+	margin: 5px 5px 5px 5px;
+	background-color: white;
+	color: black;
+	border: 1px solid #c4c4c4;
+	border-radius: 5px;
+}
+
+button {
+	padding: 5px 12px 5px 12px;
+	margin: 5px 5px 5px 5px;
+	background-color: #1a1a1a;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: .2s ease-in-out;
+}
+
+button:hover {
 	background-color: #656565;
 	transition: .2s ease-in-out;
 }

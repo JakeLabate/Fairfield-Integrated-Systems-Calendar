@@ -1,7 +1,6 @@
 console.log('script.js loaded');
 
 getAll();
-newEvent();
 
 // GET all lists from D-Tools
 function getAll() {
@@ -34,7 +33,7 @@ function getProjects() {
 			console.log(Project);
 
 			// If the project's progress is 'Approved'
-			if (Project.Progress == 'Approved') {
+			if (Project.Progress === 'Approved') {
 
 				// Create a new div for each project
 				let div = document.createElement('div');
@@ -68,11 +67,12 @@ function getProjects() {
 				// Set the background color of the ProjectProgress .chip to green
 				div.getElementsByClassName('ProjectProgress')[0].style.backgroundColor = '#1e8123';
 
-				// Add an 'option' for each project to the search input with the id of 'toDoList'
+				// Add an 'option' for each project to the search input with the id of 'projectsOptgroup'
 				let option = document.createElement('option');
 				option.value = Project.Name;
-				document.getElementById('toDoList').appendChild(option);
-
+				document.getElementById('projectsOptgroup').appendChild(option);
+				// select the last option added
+				document.getElementById('projectsOptgroup').lastElementChild.innerText = Project.Name;
 			}
 		})
 	})
@@ -114,15 +114,17 @@ function getTasks() {
 			// add the new div to the section with the id of "projects"
 			document.getElementById('Tasks').appendChild(div);
 
-			if (Task.Progress == 'In Progress') {
+			if (Task.Progress === 'In Progress') {
 				// Set the background color of the ProjectProgress .chip to orange
 				div.getElementsByClassName('TaskProgress')[0].style.backgroundColor = '#c27312';
 			}
 
-			// Add an 'option' for each task to the search input with the id of 'toDoList'
+			// Add an 'option' for each task to the search input with the id of 'tasksOptgroup'
 			let option = document.createElement('option');
 			option.value = Task.Name;
-			document.getElementById('toDoList').appendChild(option);
+			document.getElementById('tasksOptgroup').appendChild(option);
+			// select the last option added
+			document.getElementById('tasksOptgroup').lastElementChild.innerText = Task.Name;
 
 		})
 	})
@@ -171,19 +173,22 @@ function getServiceOrders() {
 			document.getElementById('ServiceOrders').appendChild(div);
 
 			// change the color of the progress chip based on their value
-			if (ServiceOrder.Progress == 'Completed') {
+			if (ServiceOrder.Progress === 'Completed') {
 				// Set the background color of the ProjectProgress .chip to green
 				div.getElementsByClassName('ServiceOrderProgress')[0].style.backgroundColor = '#1e8123';
 			}
-			if (ServiceOrder.Progress == 'Not Started') {
+			if (ServiceOrder.Progress === 'Not Started') {
 				// Set the background color of the ProjectProgress .chip to orange
 				div.getElementsByClassName('ServiceOrderProgress')[0].style.backgroundColor = '#c27312';
 			}
 
-			// Add an 'option' for each service order to the search input with the id of 'toDoList'
+			// Add an 'option' for each service order to the search input with the id of 'serviceOrdersOptgroup'
 			let option = document.createElement('option');
 			option.value = ServiceOrder.Name;
-			document.getElementById('toDoList').appendChild(option);
+			document.getElementById('serviceOrdersOptgroup').appendChild(option);
+			// select the last option added
+			document.getElementById('serviceOrdersOptgroup').lastElementChild.innerText = ServiceOrder.Name;
+
 
 		})
 	})
@@ -258,51 +263,6 @@ function getProducts() {
 }
 
 
-function newEvent() {
-	console.log('Creating new event...');
-
-	// POST to 'Make' webhook - Can be accessed at: https://us1.make.com/145062/scenarios/517441/edit (only with account cookie)
-	const eventOptions = {
-		method: 'POST',
-		headers: {
-			'content-type': 'application/json'
-		},
-		body: JSON.stringify({
-			toDo: {
-				name: '123 Branch Ave (Home)', // always
-				type: 'Task', // always
-				progress: 'Not Started', // always
-				description: 'This is a test description', // if != null
-				client: {
-					name: 'Test Client', // if 'type' == 'Project'
-					id: '123456789' // if 'type' == 'Project'
-				}
-			},
-			vehicle: {
-				name: 'Test Vehicle', // always
-				vin: '123456789', // always
-				license: 'GDG36F3', // always
-			},
-			teamMember: {
-				firstName: 'Test', // always
-				lastName: 'User', // always
-				email: 'brandwield@gmail.com' // always
-			},
-			time: {
-				start: '2020-01-01T00:00:00', // always
-				end: '2022-01-01T00:00:00' // always
-			}
-		})
-	};
-	fetch('https://hook.us1.make.com/8il7zph12nsp5lkmdkx85fv5h2smwyb1', eventOptions)
-	.then(response => response.json())
-	.then(data => {
-		console.log(data);
-		}
-	)
-}
-
-
 // New Team Member
 function newTeamMember() {
 	console.log('Creating new team member...');
@@ -366,4 +326,114 @@ function resetModalForm(){
 	document.getElementById("fname").value = "";
 	document.getElementById("lname").value = "";
 	document.getElementById("email").value = "";
+}
+
+function confirmAssignment() {
+	// ask for confirmation
+	let c = confirm("Are you sure?");
+	if (c === true) {
+
+		// if yes, start the magic
+		console.log("Event Confirmed");
+
+		// POST to 'Make' webhook - Can be accessed at: https://us1.make.com/145062/scenarios/517441/edit (only with account cookie)
+		const eventOptions = {
+			method: 'POST',
+			headers: {
+				'content-type': 'application/json'
+			},
+			body: JSON.stringify({
+				toDo: {
+					name: '123 Branch Ave (Home)', // always
+					type: 'Task', // always
+					progress: 'Not Started', // always
+					description: 'This is a test description', // if != null
+					client: {
+						name: 'Test Client', // if 'type' == 'Project'
+						id: '123456789' // if 'type' == 'Project'
+					}
+				},
+				vehicle: {
+					name: 'Test Vehicle', // always
+					vin: '123456789', // always
+					license: 'GDG36F3', // always
+				},
+				teamMember: {
+					firstName: 'Test', // always
+					lastName: 'User', // always
+					email: 'brandwield@gmail.com' // always
+				},
+				time: {
+					start: '2020-01-01T00:00:00', // always
+					end: '2022-01-01T00:00:00' // always
+				}
+			})
+		};
+		fetch('https://hook.us1.make.com/8il7zph12nsp5lkmdkx85fv5h2smwyb1', eventOptions)
+		.then(response => response.json())
+		.then(data => {
+				console.log(data);
+			}
+		)
+	} else {
+		// if no, do nothing
+	}
+}
+
+// Assignment Values Update
+function updateAnyValues() {
+	updateTeamMember();
+	updateVehicle();
+	updateToDo();
+	updateDate();
+	updateStartTime();
+	updateEndTime();
+}
+function updateTeamMember() {
+	console.log('Updating team member...');
+	// For ALL elements with the class 'teamMemberHere', update the text to the selected team member
+	var teamMemberHere = document.getElementsByClassName("teamMemberHere");
+	for (var i = 0; i < teamMemberHere.length; i++) {
+		teamMemberHere[i].innerText = document.getElementById("teamMembersSelect").value;
+	}
+}
+function updateVehicle() {
+	console.log('Updating vehicle...');
+	// For ALL elements with the class 'vehicleHere', update the text to the selected vehicle
+	var vehicleHere = document.getElementsByClassName("vehicleHere");
+	for (var i = 0; i < vehicleHere.length; i++) {
+		vehicleHere[i].innerText = document.getElementById("vehiclesSelect").value;
+	}
+}
+function updateToDo() {
+	console.log('Updating to do...');
+	// For ALL elements with the class 'toDoHere', update the text to the selected to do
+	var toDoHere = document.getElementsByClassName("toDoHere");
+	for (var i = 0; i < toDoHere.length; i++) {
+		toDoHere[i].innerText = document.getElementById("toDoSelect").value;
+	}
+}
+function updateDate() {
+	console.log('Updating date...');
+	// For ALL elements with the class 'dateHere', update the text to the selected date
+	var dateHere = document.getElementsByClassName("dateHere");
+	for (var i = 0; i < dateHere.length; i++) {
+		dateHere[i].innerText = document.getElementById("datePicker").value;
+	}
+}
+function updateStartTime() {
+	console.log('Updating start time...');
+	// For ALL elements with the class 'startTimeHere', update the text to the selected start time
+	var startTimeHere = document.getElementsByClassName("startTimeHere");
+	for (var i = 0; i < startTimeHere.length; i++) {
+		startTimeHere[i].innerText = document.getElementById("startTimePicker").value;
+	}
+}
+function updateEndTime() {
+	console.log('Updating end time...');
+	// For ALL elements with the class 'endTimeHere', update the text to the selected end time
+	var endTimeHere = document.getElementsByClassName("endTimeHere");
+	for (var i = 0; i < endTimeHere.length; i++) {
+		endTimeHere[i].innerText = document.getElementById("endTimePicker").value;
+	}
 }
