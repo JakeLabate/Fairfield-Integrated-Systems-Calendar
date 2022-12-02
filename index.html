@@ -54,15 +54,12 @@
 
 			snapshot.forEach((childSnapshot) => {
 				var childData = childSnapshot.val();
-			//	addTeamMemberToDOM({id: childSnapshot.key, ...childData})
+				addTeamMemberToDOM({id: childSnapshot.key, ...childData})
 
-				// Add an 'option' for each vehicle to the 'select' with the #id of 'teamMembersSelect' <-- has an 's' in the #id
+				// Add an 'option' for each vehicle to the search input with the #id of 'teamMembersList' <-- has an 's' in the #id
 				var option = document.createElement("option");
 				option.value = childData.firstName + ' ' + childData.lastName;
-				document.getElementById("teamMembersSelect").appendChild(option);
-				// select the last option added
-				document.getElementById('teamMembersSelect').lastElementChild.innerText = childData.firstName + ' ' + childData.lastName;
-
+				document.getElementById("teamMembersList").appendChild(option);
 			});
 		});
 
@@ -78,42 +75,7 @@
 			console.log('Loading vehicles...');
 			snapshot.forEach((childSnapshot) => {
 				var childData = childSnapshot.val();
-
-/*				// Create a div for the 'lists' tab
-				var vehicle = document.createElement("div");
-				vehicle.innerHTML =
-					'<div draggable="true" class="card" style="cursor: pointer;">' +
-					'<text class="topCardLabel">Vehicle</text><br>' +
-					'<text>' + childData.vehicleName + '</text><br>' +
-					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">License: ' + childData.license + '</text><br>' +
-					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">VIN: ' + childData.vin + '</text> <br>' +
-					'</div>';
-
-				// Place the div
-				document.getElementById("vehicles").appendChild(vehicle);
-
-				// Create a div for the 'today' tab
-				var vehicleToday = document.createElement("div");
-				vehicleToday.innerHTML =
-					'<div draggable="true" class="card" style="cursor: pointer;">' +
-					'<text class="topCardLabel">Vehicle</text><br>' +
-					'<text>' + childData.vehicleName + '</text><br>' +
-					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">License: ' + childData.license + '</text><br>' +
-					'<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">VIN: ' + childData.vin + '</text> <br>' +
-					'</div>';
-
-				// Place the div
-				document.getElementById("vehiclesToday").appendChild(vehicleToday);*/
-
-				// Add an 'option' for each vehicle to the 'select' with the id of 'vehiclesSelect' <-- has an 's' in the #id
-				let option = document.createElement('option');
-				option.value = childData.vehicleName;
-				document.getElementById('vehiclesSelect').appendChild(option);
-				// select the last option added
-				document.getElementById('vehiclesSelect').lastElementChild.innerText = childData.vehicleName + ' - Lic: ' + childData.license;
-
-				// Console log the created items
-				console.log('Vehicle loaded: ' + childData.vehicleName);
+				addVehicleToDOM({id: childSnapshot.key, ...childData});
 			});
 		});
 		
@@ -131,11 +93,11 @@
 			set(newTeamMemberRef, {firstName, lastName, email})
 				.then((res) => {
 					addTeamMemberToDOM({firstName, lastName, email, id: newTeamMemberRef.key})
-					resetModalForm()
+					resetModalForm('modal-team')
 				})
 				.catch(err => {
 					console.log("Could not create Team member...",err)
-				}).finally(toggleModal)
+				}).finally(() => toggleModal('modal-team'))
 		}
 
 		// Delete Team Member
@@ -156,7 +118,38 @@
 		
 		// New Vehicle
 		window.newVehicle = () => {
-			console.log('Creating new vehicle...');
+			const vehicleName = document.getElementById("vehicleName").value
+			const license = document.getElementById("license").value
+			const vin = document.getElementById("vin").value
+
+			if(!vehicleName || !license || !vin) return;
+
+			// Push is used to ensure we don't overwrite the vehicles list
+			const vehicleListRef = child(dbRef, 'vehicles' );
+			const newVehicleMemberRef = push(vehicleListRef)
+			set(newVehicleMemberRef, {vehicleName, license, vin})
+				.then((res) => {
+					addVehicleToDOM({vehicleName, license, vin, id: newVehicleMemberRef.key})
+					resetModalForm('modal-vehicle')
+				})
+				.catch(err => {
+					console.log("Could not create Vehicle... ",err)
+				}).finally(() => toggleModal('modal-vehicle'))
+		}
+
+		window.deleteVehicle = (id) => {
+			if(!id) return;
+			if(!confirm("Are you sure you want to delete?")){
+				return;
+			}
+			// Remove from the database
+			remove(child(dbRef, `vehicles/${id}`)).then((res) => {
+				// Remove from the frontend list
+				const toBeDeletedDivs = []
+				toBeDeletedDivs.push(document.getElementById(id));
+				toBeDeletedDivs.push(document.getElementById(`today-${id}`));
+				toBeDeletedDivs.forEach(el => el.parentNode.removeChild(el))
+			})
 		}
 
 	</script>
@@ -170,74 +163,120 @@
 <main>
 
 	<!-- Tabs -->
-	<button class="tablink" onclick="openPage('Assignments', this, 'black')" id="defaultOpen">Assignments</button>
+	<button class="tablink" onclick="openPage('Today', this, 'black')" id="defaultOpen">Today</button>
 	<button class="tablink" onclick="openPage('Upcoming', this, 'black')">Upcoming</button>
 	<button class="tablink" onclick="openPage('Lists', this, 'black')">Lists</button>
 	<!-- Refresh Page Button -->
 	<button class="tablinkRefresh" onclick="window.location.href = window.location.href"><img src="media/refreshWhite.png" height="16"/></button>
 
-	<!-- Assignments Tab -->
-	<section id="Assignments" class="tabcontent">
+	<!-- Today Tab -->
+	<section id="Today" class="tabcontent">
 		<div class="container">
 
-			<!-- Team Members -->
-			<div id="teamMembersSection">
-				<text> I want </text>
-				<select id="teamMembersSelect" class="smallShadow" onchange="updateTeamMember();"></select>
-			</div>
-
-			<!-- Vehicles -->
-			<div id="vehiclesSection">
-				<text> to take the </text>
-				<select id="vehiclesSelect" class="smallShadow" onchange="updateVehicle();"></select>
-			</div>
-
 			<!-- To Do  -->
-			<div id="toDoSection">
-				<text> to </text>
-				<select id="toDoSelect" class="smallShadow" onchange="updateToDo();">
-					<optgroup id="projectsOptgroup" label="Projects (Approved)"></optgroup>
-					<optgroup id="tasksOptgroup" label="Tasks"></optgroup>
-					<optgroup id="serviceOrdersOptgroup" label="Service Orders"></optgroup>
-				</select>
+			<div class="column18Percent">
+				<h3>To Do</h3>
+
+				<!-- To Dos Search -->
+				<label for="toDoSearch">Search To Dos</label>
+				<input id="toDoSearch" type="text" placeholder="Search To Dos" name="search" style="width: 90%" list="toDoList">
+				<datalist id="toDoList"></datalist>
+
+				<!-- To Dos Filter By 'Type' -->
+				<div id="myBtnContainer">
+					<button class="btn active" onclick="filterSelection('all')">All</button><button class="btn" onclick="filterSelection('project')">Projects</button><button class="btn" onclick="filterSelection('task')">Tasks</button><button class="btn" onclick="filterSelection('serviceOrder')">Service Orders</button>
+				</div>
 				<div id="Projects"></div>
 				<div id="ServiceOrders"></div>
 				<div id="Tasks"></div>
+
 			</div>
 
-			<!-- Date -->
-			<div id="dateSection">
-				<text> on </text>
-				<input type="date" id="datePicker" name="date" class="smallShadow" onchange="updateDate();">
+			<!-- Vehicles -->
+			<div id="vehiclesToday" class="column18Percent">
+				<h3 style="margin-bottom: 60px;">Vehicles</h3>
+
+				<!-- Vehicles Search -->
+				<label for="vehicleSearch">Search Vehicles</label>
+				<input id="vehicleSearch" type="text" placeholder="Search Vehicles..." name="search" style="width: 90%">
+				<datalist id="vehiclesList"></datalist>
+
+
 			</div>
 
-			<!-- Start Time -->
-			<div id="startTimeSection">
-				<text> from </text>
-				<input type="time" id="startTimePicker" name="startTime" class="smallShadow" value="08:00" onchange="updateStartTime();">
+			<!-- Team Members -->
+			<div id="teamMembersToday" class="column18Percent">
+				<h3 style="margin-bottom: 60px;">Team Members</h3>
+
+				<!-- Team Members Search -->
+				<label for="teamMemberSearch">Search Team Members</label>
+				<input id="teamMemberSearch" type="text" placeholder="Search Team Members..." name="search" style="width: 90%">
+				<datalist id="teamMembersList"></datalist>
+
 			</div>
 
-			<!-- End Time -->
-			<div id="endTimeSection">
-				<text> to </text>
-				<input type="time" id="endTimePicker" name="endTime" class="smallShadow" value="17:00" onchange="updateEndTime();">
+			<!-- Today -->
+			<div class="column46Percent">
+				<h3 style="margin-bottom: 60px;">Today</h3>
+
+				<div class="column33Percent">
+
+					<div id="newToDoSlot" style="padding-top: 10px;">
+						<div class="placeholder" ondragover="event.preventDefault();">
+							<text>Drop<br>To Do</text>
+						</div>
+					</div>
+
+					<br>
+					<div id="newVehicleSlot" style="padding-top: 10px;">
+						<div class="placeholder" ondragover="event.preventDefault();">
+							<text>Drop<br>Vehicle</text>
+						</div>
+					</div>
+
+					<br>
+					<div id="newTeamMemberSlot" style="padding-top: 10px;">
+						<div class="placeholder" ondragover="event.preventDefault();">
+							<text>Drop<br>Team Member</text>
+						</div>
+					</div>
+
+					<br>
+					<div id="newTimeSlot"><br>
+						<text>Start</text>
+						<input type="time" id="newTime" name="newTime" value="08:00"><br><br>
+						<text>End</text>
+						<input type="time" id="endTime" name="endTime" value="17:00"><br><br>
+					</div>
+
+					<br>
+					<div class="plusIcon" onclick="newEvent();" style="margin-bottom: 30px;">
+						<text>Submit Event</text>
+					</div>
+
+				</div>
+				<div class="column66Percent">
+					<iframe src="https://calendar.google.com/calendar/embed
+						?height=400
+						&wkst=1
+						&bgcolor=%23ffffff
+						&ctz=America%2FNew_York
+						&title=FIS
+						&showPrint=0
+						&showCalendars=0
+						&showTabs=1
+						&showTz=0
+						&showNav=0
+						&showTitle=0
+						&showDate=0
+						&mode=AGENDA
+						&src=MjMxODRkMWE1MTAyMmM4YzlmMmEwZWMxYmUwMTY2MDEyYzYxNDIxODQyMTNlNWI3OTlmMTBmZTRlNTM5OGI4MEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t
+						&color=%23C0CA33"
+						width="100%" height="100%" style="min-height: 500px;" frameborder="0" scrolling="no"></iframe>
+				</div>
+
 			</div>
 
-			<!-- Display -->
-			<!-- The inline JavaScript below is not working -->
-			<div id="display" contenteditable="true" class="smallShadow" style="padding: 10px 10px 10px 10px; width: 300px; border: 1px solid #868686; border-radius: 5px;">
-				Hi <text class="teamMemberHere" onload="this.innerText = document.getElementById('teamMemberSelect').value"></text>!
-				You are assigned to take the <text class="vehicleHere" onload="this.innerText = document.getElementById('vehiclesSelect').value"></text>
-				to <text class="toDoHere" onload="this.innerText = document.getElementById('toDoSelect').value"></text>
-				on <text class="dateHere" onload="this.innerText = document.getElementById('datePicker').value"></text>
-				from <text class="startTimeHere" onload="this.innerText = document.getElementById('startTimePicker').value"></text>
-				to <text class="endTimeHere" onload="this.innerText = document.getElementById('endTimePicker').value"></text>!
-			</div>
-
-			<!-- Confirm -->
-			<div id="confirmSection">
-				<button onclick="confirmAssignment();">Confirm</button>
-			</div>
 
 		</div>
 	</section>
@@ -252,7 +291,7 @@
 		<div id="vehicles" class="column33Percent" style="margin-top: 35px; max-width: 420px;">
 			<h3>Vehicles</h3>
 			<!-- Creat New Vehicle -->
-			<div id="newVehicle" class="plusIcon" onclick="newVehicle();">
+			<div id="newVehicle" class="plusIcon" onclick="toggleModal('modal-vehicle');">
 				<img src="media/plus.webp" width="15" height="15">
 				<text>New Vehicle</text>
 			</div>
@@ -262,16 +301,23 @@
 		<div id="team" class="column33Percent" style="margin-top: 35px; max-width: 420px;">
 			<h3>Team Members</h3>
 			<!-- Creat New Team Member -->
-			<div id="newTeamMember" class="plusIcon" onclick="toggleModal();">
+			<div id="newTeamMember" class="plusIcon" onclick="toggleModal('modal-team');">
 				<img src="media/plus.webp" width="15" height="15">
 				<text>New Team Member</text>
 			</div>
 		</div>
 
 	</section>
+	
+	
+	
+	
+
+
+
+
 
 </main>
-
 	<!-- Modal for Team Member Details -->
 	<div id="modal-team" class="modal" style="display: none;">		
 		<form>
@@ -286,10 +332,31 @@
 			<input type="email" id="email" name="email" placeholder="Your Email.." required>
 
 			<div class="modal-actions">
-				<button type="button" onclick="toggleModal()">Cancel</button>
+				<button type="button" onclick="toggleModal('modal-team')">Cancel</button>
 				<button type="button" onclick="newTeamMember()" >Save Team Member</button>
 			</div>
 	
+		</form>			          		
+	</div>
+
+	<!-- Modal for Vehicle Details -->
+	<div id="modal-vehicle" class="modal" style="display: none;">		
+		<form>
+
+			<label for="vehicleName">Vehicle Name</label>
+			<input type="text" id="vehicleName" name="vehicleName" placeholder="Your vehicle name.." required>
+
+			<label for="license">License Number</label>
+			<input type="text" id="license" name="license" placeholder="License..." required>
+
+			<label for="vin">VIN</label>
+			<input type="vin" id="vin" name="vin" placeholder="VIN..." required>
+
+			<div class="modal-actions">
+				<button type="button" onclick="toggleModal('modal-vehicle')">Cancel</button>
+				<button type="button" onclick="newVehicle()" >Save Vehicle</button>
+			</div>
+
 		</form>			          		
 	</div>
 
@@ -317,6 +384,60 @@
 		// Get the element with id="defaultOpen" and click on it
 		document.getElementById("defaultOpen").click();
 	</script>
+
+	<!-- To Do Filter -->
+	<script>
+
+	console.log('To Do Filter Loaded');
+
+	// Set default filter to 'all'
+	filterSelection("all");
+
+	// Filter by class
+	function filterSelection(c) {
+		var x, i;
+		x = document.getElementsByClassName("filterDiv");
+		if (c == "all") c = "";
+		for (i = 0; i < x.length; i++) {
+			w3RemoveClass(x[i], "show");
+			if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+		}
+	}
+
+	// Show non-filtered elements
+	function w3AddClass(element, name) {
+		var i, arr1, arr2;
+		arr1 = element.className.split(" ");
+		arr2 = name.split(" ");
+		for (i = 0; i < arr2.length; i++) {
+			if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+		}
+	}
+
+	// Remove filtered elements
+	function w3RemoveClass(element, name) {
+		var i, arr1, arr2;
+		arr1 = element.className.split(" ");
+		arr2 = name.split(" ");
+		for (i = 0; i < arr2.length; i++) {
+			while (arr1.indexOf(arr2[i]) > -1) {
+				arr1.splice(arr1.indexOf(arr2[i]), 1);
+			}
+		}
+		element.className = arr1.join(" ");
+	}
+
+	// Add active class to the current button (highlight it)
+	var btnContainer = document.getElementById("myBtnContainer");
+	var btns = btnContainer.getElementsByClassName("btn");
+	for (var i = 0; i < btns.length; i++) {
+		btns[i].addEventListener("click", function(){
+			var current = document.getElementsByClassName("active");
+			current[0].className = current[0].className.replace(" active", "");
+			this.className += " active";
+		});
+	}
+</script>
 
 </body>
 </html>
