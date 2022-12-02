@@ -321,7 +321,7 @@ function addTeamMemberToDOM(payload){
 	<div draggable="true" class="card" style="cursor: pointer;">
 	<div class="topCardLabel" style="position:relative;  margin-bottom: 20px;">
 		<span style="position:absolute; top:8px; right: 8px;" onclick="deleteTeamMember('${payload.id}')">X</span>
-		<text >Team Member</text>
+		<text>Team Member</text>
 	</div>
 		<text> ${payload.firstName}&nbsp${payload.lastName}</text><br>
 		<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">${payload.email}</text>
@@ -364,6 +364,6 @@ function toggleModal(e){
 
 function resetModalForm(){
 	document.getElementById("fname").value = "";
-  document.getElementById("lname").value = "";
-  document.getElementById("email").value = "";
+	document.getElementById("lname").value = "";
+	document.getElementById("email").value = "";
 }

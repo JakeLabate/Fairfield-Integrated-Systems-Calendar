@@ -5,7 +5,7 @@
 	<!-- Title & Meta Data -->
 	<meta charset="UTF-8">
 	<title>Fairfield Integrated Systems Calendar</title>
-	<meta name="robots" content="index, follow">
+	<meta name="robots" content="noindex, nofollow">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="title" content="Fairfield Integrated Systems Calendar">
 	<meta name="description" content="Fairfield Integrated Systems Calendar">
@@ -18,9 +18,7 @@
 
 	<!-- Firebase Real Time Database -->
 	<script type="module">
-
 		console.log("Firebase Real Time Database Script Loaded");
-
 		// Full list of functions: https://firebase.google.com/docs/web/setup#available-libraries
 		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
 		import { getDatabase, ref, child, get, set, push, remove } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
@@ -53,9 +51,15 @@
 
 			// For all team members, create divs
 			console.log('Loading team members...');
+
 			snapshot.forEach((childSnapshot) => {
 				var childData = childSnapshot.val();
 				addTeamMemberToDOM({id: childSnapshot.key, ...childData})
+
+				// Add an 'option' for each vehicle to the search input with the #id of 'teamMembersList' <-- has an 's' in the #id
+				var option = document.createElement("option");
+				option.value = childData.firstName + ' ' + childData.lastName;
+				document.getElementById("teamMembersList").appendChild(option);
 			});
 		});
 
@@ -98,6 +102,11 @@
 				// Place the div
 				document.getElementById("vehiclesToday").appendChild(vehicleToday);
 
+				// Add an 'option' for each vehicle to the search input with the id of 'vehicleList'
+				let option = document.createElement('option');
+				option.value = childData.vehicleName;
+				document.getElementById('vehiclesList').appendChild(option);
+
 				// Console log the created items
 				console.log('Vehicle loaded: ' + childData.vehicleName);
 			});
@@ -124,6 +133,7 @@
 				}).finally(toggleModal)
 		}
 
+		// Delete Team Member
 		window.deleteTeamMember = (id) => {
 			if(!id) return;
 			if(!confirm("Are you sure you want to delete?")){
@@ -215,21 +225,21 @@
 
 					<div id="newToDoSlot" style="padding-top: 10px;">
 						<div class="placeholder" ondragover="event.preventDefault();">
-							<text>To Do</text>
+							<text>Drop<br>To Do</text>
 						</div>
 					</div>
 
 					<br>
 					<div id="newVehicleSlot" style="padding-top: 10px;">
 						<div class="placeholder" ondragover="event.preventDefault();">
-							<text>Vehicle</text>
+							<text>Drop<br>Vehicle</text>
 						</div>
 					</div>
 
 					<br>
 					<div id="newTeamMemberSlot" style="padding-top: 10px;">
 						<div class="placeholder" ondragover="event.preventDefault();">
-							<text>Team Member</text>
+							<text>Drop<br>Team Member</text>
 						</div>
 					</div>
 
