@@ -29,49 +29,50 @@ function getProjects() {
 	.then(response => response.json())
 	.then(data => {
 		data.Projects.forEach(Project => {
+
+			// Console log ALL projects
 			console.log(Project);
 
-			// Create a new div for each project
-			let div = document.createElement('div');
-			div.innerHTML =
-				'<div draggable="true" class="card filterDiv ' + Project.Progress.toLowerCase() + ' project" style="cursor: pointer;">' +
-				'<text class="topCardLabel">Project</text><br>' +
-				'<text class="ProjectProgress chip">' + Project.Progress + '</text> <br>' +
-				//	'<text class="ProjectPrice">$' + Project.Price + '</text> <br>' +
-				'<text class="ProjectName">' + Project.Name + '</text> <br>' +
-				'<details>' +
-				'<summary>Project Details</summary>' +
-				'<text class="ProjectNumber"><u>Project Number:</u> ' + Project.Number + '</text> <br>' +
-				'<text class="ProjectId"><u>Project ID:</u> ' + Project.Id + '</text> <br>' +
-				'<text class="ProjectPublishedOn"><u>Published On:</u> ' + Project.PublishedOn + '</text> <br>' +
-				'</details>' +
-				'<details>' +
-				'<summary class="ProjectClient">' + Project.Client + '</summary>' +
-				'<text class="ProjectClientId"><u>Client ID:</u> ' + Project.ClientId + '</text> <br>' +
-				'</details>' +
-				//	'<text class="ProjectApproved">Approved: ' + Project.Approved + '</text> <br>' +
-				//	'<text class="ProjectCONumber">CO Number: ' + Project.CONumber + '</text> <br>' +
-				//	'<text class="ProjectCurrencyCode">Currency Code: ' + Project.CurrencyCode + '</text> <br>' +
-				//	'<text class="ProjectIntegrationProjectId">IntegrationProjectId: ' + Project.IntegrationProjectId + '</text> <br>' +
-				//	'<text class="ProjectImportedOn">Imported On: ' + Project.ImportedOn + '</text> <br>' +
-				//	'<text class="ProjectDeleted">Deleted: ' + Project.Deleted + '</text> <br>' +
-				'</div>';
-
-			// add the new div to the section with the id of "projects"
-			document.getElementById('Projects').appendChild(div);
-
-			// change the color of the progress chip based on their value
+			// If the project's progress is 'Approved'
 			if (Project.Progress == 'Approved') {
+
+				// Create a new div for each project
+				let div = document.createElement('div');
+				div.innerHTML =
+					'<div draggable="true" class="card filterDiv ' + Project.Progress.toLowerCase() + ' project" style="cursor: pointer;">' +
+					'<text class="topCardLabel">Project</text><br>' +
+					'<text class="ProjectProgress chip">' + Project.Progress + '</text> <br>' +
+					//	'<text class="ProjectPrice">$' + Project.Price + '</text> <br>' +
+					'<text class="ProjectName">' + Project.Name + '</text> <br>' +
+					'<details>' +
+					'<summary>Project Details</summary>' +
+					'<text class="ProjectNumber"><u>Project Number:</u> ' + Project.Number + '</text> <br>' +
+					'<text class="ProjectId"><u>Project ID:</u> ' + Project.Id + '</text> <br>' +
+					'<text class="ProjectPublishedOn"><u>Published On:</u> ' + Project.PublishedOn + '</text> <br>' +
+					'</details>' +
+					'<details>' +
+					'<summary class="ProjectClient">' + Project.Client + '</summary>' +
+					'<text class="ProjectClientId"><u>Client ID:</u> ' + Project.ClientId + '</text> <br>' +
+					'</details>' +
+					//	'<text class="ProjectApproved">Approved: ' + Project.Approved + '</text> <br>' +
+					//	'<text class="ProjectCONumber">CO Number: ' + Project.CONumber + '</text> <br>' +
+					//	'<text class="ProjectCurrencyCode">Currency Code: ' + Project.CurrencyCode + '</text> <br>' +
+					//	'<text class="ProjectIntegrationProjectId">IntegrationProjectId: ' + Project.IntegrationProjectId + '</text> <br>' +
+					//	'<text class="ProjectImportedOn">Imported On: ' + Project.ImportedOn + '</text> <br>' +
+					//	'<text class="ProjectDeleted">Deleted: ' + Project.Deleted + '</text> <br>' +
+					'</div>';
+
+				// add the new div to the section with the id of "projects"
+				document.getElementById('Projects').appendChild(div);
+
 				// Set the background color of the ProjectProgress .chip to green
 				div.getElementsByClassName('ProjectProgress')[0].style.backgroundColor = '#1e8123';
-			}
-			if (Project.Progress == 'Estimating') {
-				// Set the background color of the ProjectProgress .chip to orange
-				div.getElementsByClassName('ProjectProgress')[0].style.backgroundColor = '#c27312';
-			}
-			if (Project.Progress == 'Completed') {
-				// Set the background color of the ProjectProgress .chip to blue
-				div.getElementsByClassName('ProjectProgress')[0].style.backgroundColor = '#264c9b';
+
+				// Add an 'option' for each project to the search input with the id of 'toDoList'
+				let option = document.createElement('option');
+				option.value = Project.Name;
+				document.getElementById('toDoList').appendChild(option);
+
 			}
 		})
 	})
@@ -117,6 +118,12 @@ function getTasks() {
 				// Set the background color of the ProjectProgress .chip to orange
 				div.getElementsByClassName('TaskProgress')[0].style.backgroundColor = '#c27312';
 			}
+
+			// Add an 'option' for each task to the search input with the id of 'toDoList'
+			let option = document.createElement('option');
+			option.value = Task.Name;
+			document.getElementById('toDoList').appendChild(option);
+
 		})
 	})
 }
@@ -172,6 +179,12 @@ function getServiceOrders() {
 				// Set the background color of the ProjectProgress .chip to orange
 				div.getElementsByClassName('ServiceOrderProgress')[0].style.backgroundColor = '#c27312';
 			}
+
+			// Add an 'option' for each service order to the search input with the id of 'toDoList'
+			let option = document.createElement('option');
+			option.value = ServiceOrder.Name;
+			document.getElementById('toDoList').appendChild(option);
+
 		})
 	})
 }

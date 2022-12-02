@@ -168,22 +168,43 @@
 			<!-- To Do  -->
 			<div class="column18Percent">
 				<h3>To Do</h3>
+
+				<!-- To Dos Search -->
+				<label for="toDoSearch">Search To Dos</label>
+				<input id="toDoSearch" type="text" placeholder="Search To Dos" name="search" style="width: 90%" list="toDoList">
+				<datalist id="toDoList"></datalist>
+
+				<!-- To Dos Filter By 'Type' -->
 				<div id="myBtnContainer">
 					<button class="btn active" onclick="filterSelection('all')">All</button><button class="btn" onclick="filterSelection('project')">Projects</button><button class="btn" onclick="filterSelection('task')">Tasks</button><button class="btn" onclick="filterSelection('serviceOrder')">Service Orders</button>
 				</div>
 				<div id="Projects"></div>
 				<div id="ServiceOrders"></div>
 				<div id="Tasks"></div>
+
 			</div>
 
 			<!-- Vehicles -->
 			<div id="vehiclesToday" class="column18Percent">
 				<h3 style="margin-bottom: 60px;">Vehicles</h3>
+
+				<!-- Vehicles Search -->
+				<label for="vehicleSearch">Search Vehicles</label>
+				<input id="vehicleSearch" type="text" placeholder="Search Vehicles..." name="search" style="width: 90%">
+				<datalist id="vehiclesList"></datalist>
+
+
 			</div>
 
 			<!-- Team Members -->
 			<div id="teamMembersToday" class="column18Percent">
 				<h3 style="margin-bottom: 60px;">Team Members</h3>
+
+				<!-- Team Members Search -->
+				<label for="teamMemberSearch">Search Team Members</label>
+				<input id="teamMemberSearch" type="text" placeholder="Search Team Members..." name="search" style="width: 90%">
+				<datalist id="teamMembersList"></datalist>
+
 			</div>
 
 			<!-- Today -->
@@ -191,32 +212,33 @@
 				<h3 style="margin-bottom: 60px;">Today</h3>
 
 				<div class="column33Percent">
-					<div id="newToDoSlot">
+
+					<div id="newToDoSlot" style="padding-top: 10px;">
 						<div class="placeholder" ondragover="event.preventDefault();">
 							<text>To Do</text>
 						</div>
 					</div>
 
 					<br>
-					<div id="newVehicleSlot">
+					<div id="newVehicleSlot" style="padding-top: 10px;">
 						<div class="placeholder" ondragover="event.preventDefault();">
 							<text>Vehicle</text>
 						</div>
 					</div>
 
 					<br>
-					<div id="newTeamMemberSlot">
+					<div id="newTeamMemberSlot" style="padding-top: 10px;">
 						<div class="placeholder" ondragover="event.preventDefault();">
 							<text>Team Member</text>
 						</div>
 					</div>
 
 					<br>
-					<div id="newTimeSlot">
+					<div id="newTimeSlot"><br>
 						<text>Start</text>
-						<input type="time" id="newTime" name="newTime" value="00:00"><br>
+						<input type="time" id="newTime" name="newTime" value="08:00"><br><br>
 						<text>End</text>
-						<input type="time" id="endTime" name="endTime" value="00:00">
+						<input type="time" id="endTime" name="endTime" value="17:00"><br><br>
 					</div>
 
 					<br>
@@ -277,12 +299,6 @@
 			</div>
 		</div>
 
-		<!-- Garbage -->
-		<div id="garbage" style="position: absolute; bottom: 20px; right: 20px;" onmouseover="this.style.scale = 1.15; this.style.transition = '.2s ease-in-out'" onmouseleave="this.style.scale = 1; this.style.transition = '.2s ease-in-out'">
-			<img src="media/trash.png" width="35" height="35">
-		</div>
-
-		
 	</section>
 	
 	
