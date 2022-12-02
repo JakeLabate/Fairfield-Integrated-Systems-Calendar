@@ -336,7 +336,6 @@ function addTeamMemberToDOM(payload){
 	teamMemberToday.innerHTML = `
 	<div draggable="true" class="card" style="cursor: pointer;">
 	<div class="topCardLabel" style="position:relative; margin-bottom: 20px;">
-		<span style="position:absolute; top:8px; right: 8px;" onclick="deleteTeamMember('${payload.id}')">X</span>
 		<text >Team Member</text><br>
 	</div>
 		<text> ${payload.firstName}&nbsp${payload.lastName}</text><br>
@@ -352,7 +351,10 @@ function addTeamMemberToDOM(payload){
 
 function addVehicleToDOM(payload){
 
-	const template = `
+	// Create a div for the 'lists' tab
+	var vehicle = document.createElement("div");
+	vehicle.id = payload.id
+	vehicle.innerHTML = `
 	<div draggable="true" class="card" style="cursor: pointer;">
 	<div class="topCardLabel" style="position:relative;  margin-bottom: 20px;">
 		<span style="position:absolute; top:8px; right: 8px;" onclick="deleteVehicle('${payload.id}')">X</span>
@@ -362,12 +364,7 @@ function addVehicleToDOM(payload){
 	<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">License: ${payload.license}</text><br>
 	<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">VIN: ${payload.vin}</text> <br>
 	</div>
-	`
-
-	// Create a div for the 'lists' tab
-	var vehicle = document.createElement("div");
-	vehicle.id = payload.id
-	vehicle.innerHTML = template;
+	`;
 
 	// Place the div
 	document.getElementById("vehicles").appendChild(vehicle);
@@ -375,7 +372,16 @@ function addVehicleToDOM(payload){
 	// Create a div for the 'today' tab
 	var vehicleToday = document.createElement("div");
 	vehicleToday.id = `today-${payload.id}`
-	vehicleToday.innerHTML = template;
+	vehicleToday.innerHTML = `
+	<div draggable="true" class="card" style="cursor: pointer;">
+	<div class="topCardLabel" style="position:relative;  margin-bottom: 20px;">
+		<text >Vehicle</text>
+	</div>
+	<text>${payload.vehicleName}</text><br>
+	<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">License: ${payload.license}</text><br>
+	<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">VIN: ${payload.vin}</text> <br>
+	</div>
+	`;
 
 	// Place the div
 	document.getElementById("vehiclesToday").appendChild(vehicleToday);
