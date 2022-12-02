@@ -183,19 +183,19 @@
 			<!-- Team Members -->
 			<div id="teamMembersSection">
 				<text> I want </text>
-				<select id="teamMembersSelect" onchange="updateTeamMember();"></select>
+				<select id="teamMembersSelect" class="smallShadow" onchange="updateTeamMember();"></select>
 			</div>
 
 			<!-- Vehicles -->
 			<div id="vehiclesSection">
 				<text> to take the </text>
-				<select id="vehiclesSelect" onchange="updateVehicle();"></select>
+				<select id="vehiclesSelect" class="smallShadow" onchange="updateVehicle();"></select>
 			</div>
 
 			<!-- To Do  -->
 			<div id="toDoSection">
 				<text> to </text>
-				<select id="toDoSelect" onchange="updateToDo();">
+				<select id="toDoSelect" class="smallShadow" onchange="updateToDo();">
 					<optgroup id="projectsOptgroup" label="Projects (Approved)"></optgroup>
 					<optgroup id="tasksOptgroup" label="Tasks"></optgroup>
 					<optgroup id="serviceOrdersOptgroup" label="Service Orders"></optgroup>
@@ -208,29 +208,30 @@
 			<!-- Date -->
 			<div id="dateSection">
 				<text> on </text>
-				<input type="date" id="datePicker" name="date" onchange="updateDate();">
+				<input type="date" id="datePicker" name="date" class="smallShadow" onchange="updateDate();">
 			</div>
 
 			<!-- Start Time -->
 			<div id="startTimeSection">
 				<text> from </text>
-				<input type="time" id="startTimePicker" name="startTime" value="08:00" onchange="updateStartTime();">
+				<input type="time" id="startTimePicker" name="startTime" class="smallShadow" value="08:00" onchange="updateStartTime();">
 			</div>
 
 			<!-- End Time -->
 			<div id="endTimeSection">
 				<text> to </text>
-				<input type="time" id="endTimePicker" name="endTime" value="17:00" onchange="updateEndTime();">
+				<input type="time" id="endTimePicker" name="endTime" class="smallShadow" value="17:00" onchange="updateEndTime();">
 			</div>
 
 			<!-- Display -->
-			<div id="display" contenteditable="true" style="padding: 10px 10px 10px 10px; width: 300px; border: 1px solid #868686; border-radius: 5px;">
-				Hi <text class="teamMemberHere"></text>!
-				You are assigned to take the <text class="vehicleHere"></text>
-				to <text class="toDoHere"></text>
-				on <text class="dateHere"></text>
-				from <text class="startTimeHere"></text>
-				to <text class="endTimeHere"></text>!
+			<!-- The inline JavaScript below is not working -->
+			<div id="display" contenteditable="true" class="smallShadow" style="padding: 10px 10px 10px 10px; width: 300px; border: 1px solid #868686; border-radius: 5px;">
+				Hi <text class="teamMemberHere" onload="this.innerText = document.getElementById('teamMemberSelect').value"></text>!
+				You are assigned to take the <text class="vehicleHere" onload="this.innerText = document.getElementById('vehiclesSelect').value"></text>
+				to <text class="toDoHere" onload="this.innerText = document.getElementById('toDoSelect').value"></text>
+				on <text class="dateHere" onload="this.innerText = document.getElementById('datePicker').value"></text>
+				from <text class="startTimeHere" onload="this.innerText = document.getElementById('startTimePicker').value"></text>
+				to <text class="endTimeHere" onload="this.innerText = document.getElementById('endTimePicker').value"></text>!
 			</div>
 
 			<!-- Confirm -->

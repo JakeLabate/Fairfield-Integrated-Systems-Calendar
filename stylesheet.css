@@ -420,3 +420,8 @@ button:hover {
 	background-color: #656565;
 	transition: .2s ease-in-out;
 }
+
+.smallShadow {
+	/* offset-x | offset-y | blur-radius | spread-radius | color */
+	box-shadow: 2px 2px 5px 1px #e3e3e3;
+}
