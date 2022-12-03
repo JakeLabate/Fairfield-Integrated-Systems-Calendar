@@ -231,13 +231,13 @@
 
 					<div id="newTimeSlot"><br>
 						<text>Start</text>
-						<input type="time" id="newTime" name="newTime" value="08:00"><br><br>
+						<input type="datetime-local" id="startTime" name="startTime" value="08:00"><br><br>
 						<text>End</text>
-						<input type="time" id="endTime" name="endTime" value="17:00"><br><br>
+						<input type="datetime-local" id="endTime" name="endTime" value="17:00"><br><br>
 					</div>
 
 					<br>
-					<div class="plusIcon" onclick="newEvent();" style="margin-bottom: 30px;">
+					<div class="plusIcon" onclick="createNewEvent();" style="margin-bottom: 30px;">
 						<text>Submit Event</text>
 					</div>
 
@@ -372,9 +372,17 @@
 		document.getElementById("defaultOpen").click();
 	</script>
 
-	<!-- To Do Filter -->
-	<script>
+<!-- To Do Filter -->
+<script>
+	const today = new Date();
+	today.setHours(8)
+	let startTime = today.toISOString()
+	document.getElementById('startTime').value = startTime.substring(0, startTime.indexOf('Z'))
 
+	today.setHours(17)
+	let endTime = today.toISOString()
+	document.getElementById('endTime').value = endTime.substring(0, endTime.indexOf('Z'))
+	
 	console.log('To Do Filter Loaded');
 
 	// Set default filter to 'all'
