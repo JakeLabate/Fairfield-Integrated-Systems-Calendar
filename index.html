@@ -109,9 +109,7 @@
 			// Remove from the database
 			remove(child(dbRef, `team/${id}`)).then((res) => {
 				// Remove from the frontend list
-				const toBeDeletedDivs = []
-				toBeDeletedDivs.push(document.getElementById(id));
-				toBeDeletedDivs.push(document.getElementById(`today-${id}`));
+				const toBeDeletedDivs = document.querySelectorAll(`[data-id=${id}]`)
 				toBeDeletedDivs.forEach(el => el.parentNode.removeChild(el))
 			})
 		}
@@ -145,9 +143,7 @@
 			// Remove from the database
 			remove(child(dbRef, `vehicles/${id}`)).then((res) => {
 				// Remove from the frontend list
-				const toBeDeletedDivs = []
-				toBeDeletedDivs.push(document.getElementById(id));
-				toBeDeletedDivs.push(document.getElementById(`today-${id}`));
+				const toBeDeletedDivs = document.querySelectorAll(`[data-id=${id}]`)
 				toBeDeletedDivs.forEach(el => el.parentNode.removeChild(el))
 			})
 		}
@@ -221,36 +217,27 @@
 
 				<div class="column33Percent">
 
-					<div id="newToDoSlot" style="padding-top: 10px;">
-						<div class="placeholder" ondragover="event.preventDefault();">
-							<text>Drop<br>To Do</text>
-						</div>
+					<div id="newToDoSlot" data-type="todo" class="placeholder" ondrop="dropCard(event)" ondragover="onDragOver(event)">
+						Drop<br>To Do
 					</div>
 
-					<br>
-					<div id="newVehicleSlot" style="padding-top: 10px;">
-						<div class="placeholder" ondragover="event.preventDefault();">
-							<text>Drop<br>Vehicle</text>
-						</div>
+					<div id="newVehicleSlot" data-type="vehicle" class="placeholder" ondrop="dropCard(event)" ondragover="onDragOver(event)">
+						Drop<br>Vehicle
 					</div>
 
-					<br>
-					<div id="newTeamMemberSlot" style="padding-top: 10px;">
-						<div class="placeholder" ondragover="event.preventDefault();">
-							<text>Drop<br>Team Member</text>
-						</div>
+					<div id="newTeamMemberSlot" data-type="teammember" class="placeholder" ondrop="dropCard(event)" ondragover="onDragOver(event)">
+						Drop<br>Team Member
 					</div>
 
-					<br>
 					<div id="newTimeSlot"><br>
 						<text>Start</text>
-						<input type="time" id="newTime" name="newTime" value="08:00"><br><br>
+						<input type="datetime-local" id="startTime" name="startTime" value="08:00"><br><br>
 						<text>End</text>
-						<input type="time" id="endTime" name="endTime" value="17:00"><br><br>
+						<input type="datetime-local" id="endTime" name="endTime" value="17:00"><br><br>
 					</div>
 
 					<br>
-					<div class="plusIcon" onclick="newEvent();" style="margin-bottom: 30px;">
+					<div class="plusIcon" onclick="createNewEvent();" style="margin-bottom: 30px;">
 						<text>Submit Event</text>
 					</div>
 
@@ -385,9 +372,17 @@
 		document.getElementById("defaultOpen").click();
 	</script>
 
-	<!-- To Do Filter -->
-	<script>
+<!-- To Do Filter -->
+<script>
+	const today = new Date();
+	today.setHours(8)
+	let startTime = today.toISOString()
+	document.getElementById('startTime').value = startTime.substring(0, startTime.indexOf('Z'))
 
+	today.setHours(17)
+	let endTime = today.toISOString()
+	document.getElementById('endTime').value = endTime.substring(0, endTime.indexOf('Z'))
+	
 	console.log('To Do Filter Loaded');
 
 	// Set default filter to 'all'
