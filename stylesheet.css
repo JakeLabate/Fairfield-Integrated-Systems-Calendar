@@ -74,8 +74,7 @@ h3 {
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	margin-left: 10px;
-	padding-right: 10px;
+	margin: 10px;
 }
 
 /* Style the tab content (and add height:100% for full page content) */

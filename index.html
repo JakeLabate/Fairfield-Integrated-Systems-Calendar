@@ -109,9 +109,7 @@
 			// Remove from the database
 			remove(child(dbRef, `team/${id}`)).then((res) => {
 				// Remove from the frontend list
-				const toBeDeletedDivs = []
-				toBeDeletedDivs.push(document.getElementById(id));
-				toBeDeletedDivs.push(document.getElementById(`today-${id}`));
+				const toBeDeletedDivs = document.querySelectorAll(`[data-id=${id}]`)
 				toBeDeletedDivs.forEach(el => el.parentNode.removeChild(el))
 			})
 		}
@@ -145,9 +143,7 @@
 			// Remove from the database
 			remove(child(dbRef, `vehicles/${id}`)).then((res) => {
 				// Remove from the frontend list
-				const toBeDeletedDivs = []
-				toBeDeletedDivs.push(document.getElementById(id));
-				toBeDeletedDivs.push(document.getElementById(`today-${id}`));
+				const toBeDeletedDivs = document.querySelectorAll(`[data-id=${id}]`)
 				toBeDeletedDivs.forEach(el => el.parentNode.removeChild(el))
 			})
 		}
@@ -221,27 +217,18 @@
 
 				<div class="column33Percent">
 
-					<div id="newToDoSlot" style="padding-top: 10px;">
-						<div class="placeholder" ondragover="event.preventDefault();">
-							<text>Drop<br>To Do</text>
-						</div>
+					<div id="newToDoSlot" class="placeholder" ondragover="event.preventDefault();">
+						Drop<br>To Do
 					</div>
 
-					<br>
-					<div id="newVehicleSlot" style="padding-top: 10px;">
-						<div class="placeholder" ondragover="event.preventDefault();">
-							<text>Drop<br>Vehicle</text>
-						</div>
+					<div id="newVehicleSlot" class="placeholder" ondragover="event.preventDefault();">
+						Drop<br>Vehicle
 					</div>
 
-					<br>
-					<div id="newTeamMemberSlot" style="padding-top: 10px;">
-						<div class="placeholder" ondragover="event.preventDefault();">
-							<text>Drop<br>Team Member</text>
-						</div>
+					<div id="newTeamMemberSlot" class="placeholder" ondragover="event.preventDefault();">
+						Drop<br>Team Member
 					</div>
 
-					<br>
 					<div id="newTimeSlot"><br>
 						<text>Start</text>
 						<input type="time" id="newTime" name="newTime" value="08:00"><br><br>

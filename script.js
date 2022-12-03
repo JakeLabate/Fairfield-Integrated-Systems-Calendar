@@ -316,9 +316,9 @@ function newVehicle() {
 function addTeamMemberToDOM(payload){
 	// Create a div for the 'lists' tab
 	var teamMember = document.createElement("div");
-	teamMember.id = payload.id;
+	teamMember.setAttribute('data-id',payload.id);
 	teamMember.innerHTML = `
-	<div draggable="true" class="card" style="cursor: pointer;">
+	<div class="card">
 	<div class="topCardLabel" style="position:relative;  margin-bottom: 20px;">
 		<span style="position:absolute; top:8px; right: 8px;" onclick="deleteTeamMember('${payload.id}')">X</span>
 		<text>Team Member</text>
@@ -332,9 +332,9 @@ function addTeamMemberToDOM(payload){
 
 	// Create a div for the 'today' tab
 	var teamMemberToday = document.createElement("div");
-	teamMemberToday.id = `today-${payload.id}`;
+	teamMemberToday.setAttribute('data-id',payload.id);
 	teamMemberToday.innerHTML = `
-	<div draggable="true" class="card" style="cursor: pointer;">
+	<div class="card" draggable="true" style="cursor: pointer;">
 	<div class="topCardLabel" style="position:relative; margin-bottom: 20px;">
 		<text >Team Member</text><br>
 	</div>
@@ -353,9 +353,9 @@ function addVehicleToDOM(payload){
 
 	// Create a div for the 'lists' tab
 	var vehicle = document.createElement("div");
-	vehicle.id = payload.id
+	vehicle.setAttribute('data-id',payload.id);
 	vehicle.innerHTML = `
-	<div draggable="true" class="card" style="cursor: pointer;">
+	<div class="card">
 	<div class="topCardLabel" style="position:relative;  margin-bottom: 20px;">
 		<span style="position:absolute; top:8px; right: 8px;" onclick="deleteVehicle('${payload.id}')">X</span>
 		<text >Vehicle</text>
@@ -371,9 +371,9 @@ function addVehicleToDOM(payload){
 
 	// Create a div for the 'today' tab
 	var vehicleToday = document.createElement("div");
-	vehicleToday.id = `today-${payload.id}`
+	vehicleToday.setAttribute('data-id',payload.id);
 	vehicleToday.innerHTML = `
-	<div draggable="true" class="card" style="cursor: pointer;">
+	<div class="card" draggable="true" style="cursor: pointer;">
 	<div class="topCardLabel" style="position:relative;  margin-bottom: 20px;">
 		<text >Vehicle</text>
 	</div>
