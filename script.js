@@ -428,13 +428,30 @@ function onDragOver(event){
 	}
 }
 
-function dropCard(event){
-	let dropZone = event.target
-	console.log(dropZone)
-	while(dropZone.firstChild){
-		console.log(dropZone.firstChild);
-		dropZone.removeChild(dropZone.firstChild)
+function removeAllChildren(element){
+	while(element.firstChild){
+		element.removeChild(element.firstChild)
 	}
-	dropZone.appendChild(dragNode.cloneNode(true))
+}
+
+function dropCard(event, eventType){
+	let dropZone = event.target
+	const clone = dragNode.cloneNode(true);
+	clone.querySelector('[draggable="true"]').setAttribute('draggable', false)
+	const type = eventType? eventType : event.dataTransfer.types[0]
+
+	clone.ondragover = function (e) {
+		if(e.dataTransfer.types[0] === type){
+			e.preventDefault()
+		}
+	}
+
+	clone.ondrop = (e) => {
+		dropCard(event, type)
+		e.stopPropagation()
+	}
+
+	removeAllChildren(dropZone)
+	dropZone.appendChild(clone)
 	
 }
