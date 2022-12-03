@@ -77,6 +77,10 @@ h3 {
 	margin: 10px;
 }
 
+.placeholder>div{
+	text-align: left;
+}
+
 /* Style the tab content (and add height:100% for full page content) */
 .tabcontent {
 	color: #000000;

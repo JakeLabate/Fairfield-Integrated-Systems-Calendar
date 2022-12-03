@@ -38,6 +38,11 @@ function getProjects() {
 
 				// Create a new div for each project
 				let div = document.createElement('div');
+				div.setAttribute('data-id',Project.Id);
+				div.addEventListener('dragstart', (event) => {
+					event.dataTransfer.setData("text/todo", "project")
+					window.dragNode = div
+				})
 				div.innerHTML =
 					'<div draggable="true" class="card filterDiv ' + Project.Progress.toLowerCase() + ' project" style="cursor: pointer;">' +
 					'<text class="topCardLabel">Project</text><br>' +
@@ -94,8 +99,12 @@ function getTasks() {
 		data.Tasks.forEach(Task => {
 			console.log(Task);
 
-			// Create a new div for each project
+			// Create a new div for each task
 			let div = document.createElement('div');
+			div.addEventListener('dragstart', (event) => {
+				event.dataTransfer.setData("text/todo", "task")
+				window.dragNode = div
+			})
 			div.innerHTML =
 				'<div draggable="true" ondragstart="dragToDo()" class="card filterDiv ' + Task.Progress.toLowerCase() + ' task" style="cursor: pointer;">' +
 				'<text class="topCardLabel">Task</text><br>' +
@@ -146,6 +155,10 @@ function getServiceOrders() {
 
 			// Create a new div for each serviceOrder
 			let div = document.createElement('div');
+			div.addEventListener('dragstart', (event) => {
+				event.dataTransfer.setData("text/todo", "serviceorder")
+				window.dragNode = div
+			})
 			div.innerHTML =
 				'<div draggable="true" class="card filterDiv ' + ServiceOrder.Progress.toLowerCase() + ' serviceOrder" style="cursor: pointer;">' +
 				'<text class="topCardLabel">Service Order</text><br>' +
@@ -302,17 +315,6 @@ function newEvent() {
 	)
 }
 
-
-// New Team Member
-function newTeamMember() {
-	console.log('Creating new team member...');
-}
-
-// New Vehicle
-function newVehicle() {
-	console.log('Creating new vehicle...');
-}
-
 function addTeamMemberToDOM(payload){
 	// Create a div for the 'lists' tab
 	var teamMember = document.createElement("div");
@@ -333,6 +335,10 @@ function addTeamMemberToDOM(payload){
 	// Create a div for the 'today' tab
 	var teamMemberToday = document.createElement("div");
 	teamMemberToday.setAttribute('data-id',payload.id);
+	teamMemberToday.addEventListener('dragstart', (event) => {
+		event.dataTransfer.setData("text/teamMember", "teamMember")
+		window.dragNode = teamMemberToday
+	})
 	teamMemberToday.innerHTML = `
 	<div class="card" draggable="true" style="cursor: pointer;">
 	<div class="topCardLabel" style="position:relative; margin-bottom: 20px;">
@@ -372,6 +378,11 @@ function addVehicleToDOM(payload){
 	// Create a div for the 'today' tab
 	var vehicleToday = document.createElement("div");
 	vehicleToday.setAttribute('data-id',payload.id);
+	vehicleToday.addEventListener('dragstart', (event) => {
+		event.dataTransfer.setData("text/vehicle", "vehicle")
+		window.dragNode = vehicleToday
+		// console.log(vehicleToday, window.dragNode)
+	})
 	vehicleToday.innerHTML = `
 	<div class="card" draggable="true" style="cursor: pointer;">
 	<div class="topCardLabel" style="position:relative;  margin-bottom: 20px;">
@@ -406,4 +417,24 @@ function resetModalForm(modalID = 'modal-team'){
 	const modal = document.getElementById(modalID)
 	const inputs = modal.querySelectorAll('input')
 	inputs.forEach(input => input.value = "")
+}
+
+function onDragOver(event){
+	const type = event.dataTransfer.types[0].substring(5)
+	
+	// Only allow drop in the correct drop zone
+	if(type === event.target.getAttribute('data-type')){
+		event.preventDefault()
+	}
+}
+
+function dropCard(event){
+	let dropZone = event.target
+	console.log(dropZone)
+	while(dropZone.firstChild){
+		console.log(dropZone.firstChild);
+		dropZone.removeChild(dropZone.firstChild)
+	}
+	dropZone.appendChild(dragNode.cloneNode(true))
+	
 }

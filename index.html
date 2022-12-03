@@ -217,15 +217,15 @@
 
 				<div class="column33Percent">
 
-					<div id="newToDoSlot" class="placeholder" ondragover="event.preventDefault();">
+					<div id="newToDoSlot" data-type="todo" class="placeholder" ondrop="dropCard(event)" ondragover="onDragOver(event)">
 						Drop<br>To Do
 					</div>
 
-					<div id="newVehicleSlot" class="placeholder" ondragover="event.preventDefault();">
+					<div id="newVehicleSlot" data-type="vehicle" class="placeholder" ondrop="dropCard(event)" ondragover="onDragOver(event)">
 						Drop<br>Vehicle
 					</div>
 
-					<div id="newTeamMemberSlot" class="placeholder" ondragover="event.preventDefault();">
+					<div id="newTeamMemberSlot" data-type="teammember" class="placeholder" ondrop="dropCard(event)" ondragover="onDragOver(event)">
 						Drop<br>Team Member
 					</div>
 
