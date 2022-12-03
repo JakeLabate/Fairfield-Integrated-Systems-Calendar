@@ -1,7 +1,7 @@
 console.log('script.js loaded');
 
 getAll();
-newEvent();
+const EVENT_URL = 'https://hook.us1.make.com/8il7zph12nsp5lkmdkx85fv5h2smwyb1'
 
 // GET all lists from D-Tools
 function getAll() {
@@ -39,6 +39,7 @@ function getProjects() {
 				// Create a new div for each project
 				let div = document.createElement('div');
 				div.setAttribute('data-id',Project.Id);
+				div.setAttribute('data-payload',JSON.stringify({type: 'Project', ...Project}))
 				div.addEventListener('dragstart', (event) => {
 					event.dataTransfer.setData("text/todo", "project")
 					window.dragNode = div
@@ -101,12 +102,13 @@ function getTasks() {
 
 			// Create a new div for each task
 			let div = document.createElement('div');
+			div.setAttribute('data-payload',JSON.stringify({type: 'Task', ...Task}))
 			div.addEventListener('dragstart', (event) => {
 				event.dataTransfer.setData("text/todo", "task")
 				window.dragNode = div
 			})
 			div.innerHTML =
-				'<div draggable="true" ondragstart="dragToDo()" class="card filterDiv ' + Task.Progress.toLowerCase() + ' task" style="cursor: pointer;">' +
+				'<div draggable="true" class="card filterDiv ' + Task.Progress.toLowerCase() + ' task" style="cursor: pointer;">' +
 				'<text class="topCardLabel">Task</text><br>' +
 				'<text class="TaskProgress chip">' + Task.Progress + '</text> <br>' +
 				'<text class="TaskName">' + Task.Name + '</text> <br>' +
@@ -155,6 +157,7 @@ function getServiceOrders() {
 
 			// Create a new div for each serviceOrder
 			let div = document.createElement('div');
+			div.setAttribute('data-payload',JSON.stringify({type: 'ServiceOrder', ...ServiceOrder}))
 			div.addEventListener('dragstart', (event) => {
 				event.dataTransfer.setData("text/todo", "serviceorder")
 				window.dragNode = div
@@ -307,7 +310,7 @@ function newEvent() {
 			}
 		})
 	};
-	fetch('https://hook.us1.make.com/8il7zph12nsp5lkmdkx85fv5h2smwyb1', eventOptions)
+	fetch(EVENT_URL, eventOptions)
 	.then(response => response.json())
 	.then(data => {
 		console.log(data);
@@ -335,6 +338,7 @@ function addTeamMemberToDOM(payload){
 	// Create a div for the 'today' tab
 	var teamMemberToday = document.createElement("div");
 	teamMemberToday.setAttribute('data-id',payload.id);
+	teamMemberToday.setAttribute('data-payload',JSON.stringify(payload))
 	teamMemberToday.addEventListener('dragstart', (event) => {
 		event.dataTransfer.setData("text/teamMember", "teamMember")
 		window.dragNode = teamMemberToday
@@ -378,6 +382,7 @@ function addVehicleToDOM(payload){
 	// Create a div for the 'today' tab
 	var vehicleToday = document.createElement("div");
 	vehicleToday.setAttribute('data-id',payload.id);
+	vehicleToday.setAttribute('data-payload',JSON.stringify(payload))
 	vehicleToday.addEventListener('dragstart', (event) => {
 		event.dataTransfer.setData("text/vehicle", "vehicle")
 		window.dragNode = vehicleToday
@@ -454,4 +459,71 @@ function dropCard(event, eventType){
 	removeAllChildren(dropZone)
 	dropZone.appendChild(clone)
 	
+}
+
+function createNewEvent(){
+	const payload = {};
+	let buffer;
+	let empty = true;
+	let newTodo = document.querySelector("#newToDoSlot div");
+	let newVehicle = document.querySelector("#newVehicleSlot div");
+	let newTeamMember = document.querySelector("#newTeamMemberSlot div");
+
+	if(newTodo){
+		buffer = JSON.parse(newTodo.getAttribute('data-payload'))
+		payload.toDo = {
+			name: buffer.Name,
+			type: buffer.type,
+			progress: buffer.Progress,
+			description: buffer.Description
+		}
+		if(buffer.type === 'Project'){
+			payload.toDo.client = {
+				name: buffer.Client,
+				id: buffer.ClientId
+			}
+		}
+		empty = false;
+	}
+	if(newVehicle){
+		buffer = JSON.parse(newVehicle.getAttribute('data-payload'));
+		payload.vehicle = {
+			name: buffer.vehicleName,
+			vin: buffer.vin,
+			license: buffer.license
+		}
+		empty = false;
+	}
+	if(newTeamMember){
+		buffer = JSON.parse(newTeamMember.getAttribute('data-payload'));
+		payload.teamMember = {
+			firstName: buffer.firstName,
+			lastName: buffer.lastName,
+			email: buffer.email
+		}
+		empty = false;
+	}
+
+	if(empty)	return // if all the drop locations are empty
+
+	payload.time = {
+		start: document.getElementById('startTime').value,
+		end: document.getElementById('endTime').value
+	}
+
+	console.log(payload);
+
+	const eventOptions = {
+		method: 'POST',
+		headers: {
+			'content-type': 'application/json'
+		},
+		body: JSON.stringify(payload)
+	};
+	fetch(EVENT_URL, eventOptions)
+	.then(response => response.json())
+	.then(data => {
+		console.log(data);
+		}
+	)	
 }
