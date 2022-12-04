@@ -179,7 +179,7 @@
 				<h3>To Do</h3>
 
 				<label for="todoSort">Sort:</label>
-				<select name="todoSort" id="todoSort" oninput="sortTodo(event)">
+				<select name="todoSort" id="todoSort" data-type="todos" oninput="handleSortEvent(event)">
 					<option hidden disabled selected value> -- select an option -- </option>
 					<option value="id-asc">Id Ascending</option>
 					<option value="id-desc">Id Descending</option>
@@ -203,24 +203,41 @@
 
 			<!-- Vehicles -->
 			<div id="vehiclesToday" class="column18Percent">
-				<h3 style="margin-bottom: 60px;">Vehicles</h3>
+				<h3>Vehicles</h3>
 
+				<label for="todoSort">Sort:</label>
+				<select name="todoSort" id="todoSort" data-type="vehicles" oninput="handleSortEvent(event)">
+					<option hidden disabled selected value> -- select an option -- </option>
+					<option value="id-asc">Id Ascending</option>
+					<option value="id-desc">Id Descending</option>
+					<option value="name-asc">Name Ascending</option>
+					<option value="name-desc">Name Descending</option>
+				</select><br/><br/>
 				<!-- Vehicles Search -->
 				<label for="vehicleSearch">Search Vehicles</label>
 				<input id="vehicleSearch" type="text" placeholder="Search Vehicles..." name="search" style="width: 90%" oninput="searchVehicles(event)">
 				<datalist id="vehiclesList"></datalist>
+				<div id="Vehicles"></div>
 
 
 			</div>
 
 			<!-- Team Members -->
 			<div id="teamMembersToday" class="column18Percent">
-				<h3 style="margin-bottom: 60px;">Team Members</h3>
-
+				<h3>Team Members</h3>
+				<label for="todoSort">Sort:</label>
+				<select name="todoSort" id="todoSort" data-type="teamMembers" oninput="handleSortEvent(event)">
+					<option hidden disabled selected value> -- select an option -- </option>
+					<option value="id-asc">Id Ascending</option>
+					<option value="id-desc">Id Descending</option>
+					<option value="name-asc">Name Ascending</option>
+					<option value="name-desc">Name Descending</option>
+				</select><br/><br/>
 				<!-- Team Members Search -->
 				<label for="teamMemberSearch">Search Team Members</label>
 				<input id="teamMemberSearch" type="text" placeholder="Search Team Members..." name="search" style="width: 90%" oninput="searchTeamMembers(event)">
 				<datalist id="teamMembersList"></datalist>
+				<div id="TeamMembers"></div>
 
 			</div>
 

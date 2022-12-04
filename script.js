@@ -359,7 +359,7 @@ function addTeamMemberToDOM(payload){
 	</div>
 	`
 	// Place the div
-	document.getElementById("teamMembersToday").appendChild(teamMemberToday);
+	document.getElementById("TeamMembers").appendChild(teamMemberToday);
 
 	// Console log the created items
 	console.log('Team member loaded: ' + payload.firstName + ' ' + payload.lastName + ' ' + payload.lastName);
@@ -407,7 +407,7 @@ function addVehicleToDOM(payload){
 	`;
 
 	// Place the div
-	document.getElementById("vehiclesToday").appendChild(vehicleToday);
+	document.getElementById("Vehicles").appendChild(vehicleToday);
 
 	// Console log the created items
 	console.log('Vehicle loaded: ' + payload.vehicleName);
@@ -556,7 +556,7 @@ function searchVehicles(e){
 	keyword = keyword.trim()
 	keyword = keyword.toLowerCase()
 
-	const vehiclesList = Array.from(document.querySelectorAll('#vehiclesToday .card'))
+	const vehiclesList = Array.from(document.querySelectorAll('#Vehicles .card'))
 
 	vehiclesList.forEach(vehicle => {
 		const vehicleName = vehicle.childNodes[3].innerText.trim().toLowerCase()
@@ -574,7 +574,7 @@ function searchTeamMembers(e){
 	keyword = keyword.trim()
 	keyword = keyword.toLowerCase()
 
-	const teamMembersList = Array.from(document.querySelectorAll('#teamMembersToday .card'))
+	const teamMembersList = Array.from(document.querySelectorAll('#TeamMembers .card'))
 
 	teamMembersList.forEach(teamMember => {
 		const teamMemberName = teamMember.childNodes[3].innerText.trim().toLowerCase()
@@ -638,10 +638,23 @@ function sortCards({containerId = 'Projects', sortBy = 'name', sortOrder = 'asc'
 
 }
 
-function sortTodo(e){
+function handleSortEvent(e){
 	const [sortBy, sortOrder] = e.target.value.split('-')
-	const containerIds = ['Projects', 'ServiceOrders', 'Tasks']
-	containerIds.forEach( containerId => {
-		sortCards({containerId, sortBy,sortOrder})
-	})
+	const type = e.target.getAttribute('data-type')
+	switch(type){
+		case 'todos':
+			const containerIds = ['Projects', 'ServiceOrders', 'Tasks']
+			containerIds.forEach( containerId => {
+				sortCards({containerId, sortBy,sortOrder})
+			})
+			break;
+
+		case 'vehicles':
+			sortCards({containerId:'Vehicles', sortBy, sortOrder})
+			break;
+		
+		case 'teamMembers':
+			sortCards({containerId:'TeamMembers', sortBy, sortOrder})
+			break;
+	}
 }
