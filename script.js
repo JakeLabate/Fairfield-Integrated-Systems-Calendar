@@ -524,9 +524,7 @@ function createNewEvent(){
 		body: JSON.stringify(payload)
 	};
 	fetch(EVENT_URL, eventOptions)
-	.then(response => response.json())
-	.then(data => {
-		console.log(data);
+	.then(response => {
 		alert("Event Successfully Created")
 		clearCards()
 		}

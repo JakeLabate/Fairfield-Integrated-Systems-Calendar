@@ -235,9 +235,12 @@
 					</div>
 
 					<div id="newTimeSlot"><br>
-						<text>Start</text>
-						<input type="datetime-local" id="startTime" name="startTime" value="08:00"><br><br>
-						<text>End</text>
+						Start
+						<div class="time-container">
+							<input type="datetime-local" id="startTime" name="startTime" value="08:00">
+							<div class="displayStartTime"></div>
+						</div><br /><br/>
+						End
 						<input type="datetime-local" id="endTime" name="endTime" value="17:00" format-value="yyyy-MM-ddThh:mm"><br><br>
 					</div>
 
@@ -379,16 +382,15 @@
 
 <!-- To Do Filter -->
 <script>
-	function getDateTimeValue(offset){
+	function getDateTimeValue(time){
 		const today = new Date();
-		today.setHours(offset)
-		today.setMinutes(today.getMinutes() - today.getTimezoneOffset())
-		today.setSeconds(0)
-		return today.toISOString().substring(0,16)
+		let result = today.toISOString().substring(0,11)
+		result = result + time
+		return result
 	}
 
-	document.getElementById('startTime').value = getDateTimeValue(5)
-	document.getElementById('endTime').value = getDateTimeValue(17)
+	document.getElementById('startTime').value = getDateTimeValue("08:00")
+	document.getElementById('endTime').value = getDateTimeValue("17:00")
 	
 	console.log('To Do Filter Loaded');
 
