@@ -39,6 +39,7 @@ function getProjects() {
 				// Create a new div for each project
 				let div = document.createElement('div');
 				div.setAttribute('data-id',Project.Id);
+				div.setAttribute('data-name',Project.Name);
 				div.setAttribute('data-payload',JSON.stringify({type: 'Project', ...Project}))
 				div.addEventListener('dragstart', (event) => {
 					event.dataTransfer.setData("text/todo", "project")
@@ -102,6 +103,8 @@ function getTasks() {
 
 			// Create a new div for each task
 			let div = document.createElement('div');
+			div.setAttribute('data-id',Task.Id);
+			div.setAttribute('data-name',Task.Name);
 			div.setAttribute('data-payload',JSON.stringify({type: 'Task', ...Task}))
 			div.addEventListener('dragstart', (event) => {
 				event.dataTransfer.setData("text/todo", "task")
@@ -157,6 +160,8 @@ function getServiceOrders() {
 
 			// Create a new div for each serviceOrder
 			let div = document.createElement('div');
+			div.setAttribute('data-id',ServiceOrder.Id);
+			div.setAttribute('data-name',ServiceOrder.Name);
 			div.setAttribute('data-payload',JSON.stringify({type: 'ServiceOrder', ...ServiceOrder}))
 			div.addEventListener('dragstart', (event) => {
 				event.dataTransfer.setData("text/todo", "serviceorder")
@@ -338,6 +343,7 @@ function addTeamMemberToDOM(payload){
 	// Create a div for the 'today' tab
 	var teamMemberToday = document.createElement("div");
 	teamMemberToday.setAttribute('data-id',payload.id);
+	teamMemberToday.setAttribute('data-name',`${payload.firstName} ${payload.lastName}`);
 	teamMemberToday.setAttribute('data-payload',JSON.stringify(payload))
 	teamMemberToday.addEventListener('dragstart', (event) => {
 		event.dataTransfer.setData("text/teamMember", "teamMember")
@@ -382,6 +388,7 @@ function addVehicleToDOM(payload){
 	// Create a div for the 'today' tab
 	var vehicleToday = document.createElement("div");
 	vehicleToday.setAttribute('data-id',payload.id);
+	vehicleToday.setAttribute('data-name',payload.vehicleName);
 	vehicleToday.setAttribute('data-payload',JSON.stringify(payload))
 	vehicleToday.addEventListener('dragstart', (event) => {
 		event.dataTransfer.setData("text/vehicle", "vehicle")
@@ -598,5 +605,35 @@ function searchTodos(e){
 			project.classList.add('hidden')
 		}
 	})
+
+}
+
+function sortCards({containerId = 'Projects', sortBy = 'name', sortOrder = 'asc' } = {}){
+	const container = document.getElementById(containerId)
+	const cards = Array.from(container.children)
+
+	cards.sort((a, b) => {
+		const val1 = a.getAttribute(`data-${sortBy}`).toUpperCase();
+		const val2 = b.getAttribute(`data-${sortBy}`).toUpperCase();
+		if (val1 < val2) {
+			return -1;
+		}
+		if (val1 > val2) {
+			return 1;
+		}
+		return 0;
+	});
+
+	removeAllChildren(container);
+	
+	if(sortOrder === 'asc'){
+		for(let i = 0; i < cards.length; i++){
+			container.appendChild(cards[i])
+		}
+	}else{
+		for(let i = cards.length-1; i >= 0; i--){
+			container.appendChild(cards[i])
+		}
+	}
 
 }
