@@ -637,3 +637,11 @@ function sortCards({containerId = 'Projects', sortBy = 'name', sortOrder = 'asc'
 	}
 
 }
+
+function sortTodo(e){
+	const [sortBy, sortOrder] = e.target.value.split('-')
+	const containerIds = ['Projects', 'ServiceOrders', 'Tasks']
+	containerIds.forEach( containerId => {
+		sortCards({containerId, sortBy,sortOrder})
+	})
+}

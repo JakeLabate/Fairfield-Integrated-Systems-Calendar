@@ -178,6 +178,14 @@
 			<div class="column18Percent">
 				<h3>To Do</h3>
 
+				<label for="todoSort">Sort:</label>
+				<select name="todoSort" id="todoSort" oninput="sortTodo(event)">
+					<option hidden disabled selected value> -- select an option -- </option>
+					<option value="id-asc">Id Ascending</option>
+					<option value="id-desc">Id Descending</option>
+					<option value="name-asc">Name Ascending</option>
+					<option value="name-desc">Name Descending</option>
+				</select><br/><br/>
 				<!-- To Dos Search -->
 				<label for="toDoSearch">Search To Dos</label>
 				<input id="toDoSearch" type="text" placeholder="Search To Dos" name="search" style="width: 90%" oninput="searchTodos(event)">
