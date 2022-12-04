@@ -504,7 +504,12 @@ function createNewEvent(){
 		empty = false;
 	}
 
-	if(empty)	return // if all the drop locations are empty
+	if(empty)	{ // if all the drop locations are empty
+		alert("No card selected");
+		return;
+	}else if(!confirm("Are you sure you want to create the event?")){
+		return;
+	}
 
 	payload.time = {
 		start: document.getElementById('startTime').value,
@@ -526,4 +531,17 @@ function createNewEvent(){
 		console.log(data);
 		}
 	)	
+}
+
+function clearCards(){
+	const placeholderIds = ['newToDoSlot', 'newVehicleSlot', 'newTeamMemberSlot']
+
+	placeholderIds.forEach((id, index) => {
+		const placeholder = document.getElementById(id)
+		removeAllChildren(placeholder)
+		placeholder.innerHTML = `Drop<br>
+		${index === 0? 'To Do': index=== 1? 'Vehicle':'Team Member'}`
+
+	})
+
 }
