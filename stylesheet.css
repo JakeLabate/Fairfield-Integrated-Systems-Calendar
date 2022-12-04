@@ -412,3 +412,7 @@ summary {
 [type="datetime-local"]{
 	padding: 4px;
 }
+
+.hidden{
+	display: none;
+}

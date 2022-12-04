@@ -76,6 +76,11 @@
 			snapshot.forEach((childSnapshot) => {
 				var childData = childSnapshot.val();
 				addVehicleToDOM({id: childSnapshot.key, ...childData});
+
+				// Add an 'option' for each vehicle to the search input with the #id of 'teamMembersList' <-- has an 's' in the #id
+				var option = document.createElement("option");
+				option.value = childData.vehicleName;
+				document.getElementById("vehiclesList").appendChild(option);
 			});
 		});
 		
@@ -175,7 +180,7 @@
 
 				<!-- To Dos Search -->
 				<label for="toDoSearch">Search To Dos</label>
-				<input id="toDoSearch" type="text" placeholder="Search To Dos" name="search" style="width: 90%" list="toDoList">
+				<input id="toDoSearch" type="text" placeholder="Search To Dos" name="search" style="width: 90%">
 				<datalist id="toDoList"></datalist>
 
 				<!-- To Dos Filter By 'Type' -->
@@ -194,7 +199,7 @@
 
 				<!-- Vehicles Search -->
 				<label for="vehicleSearch">Search Vehicles</label>
-				<input id="vehicleSearch" type="text" placeholder="Search Vehicles..." name="search" style="width: 90%">
+				<input id="vehicleSearch" type="text" placeholder="Search Vehicles..." name="search" style="width: 90%" oninput="searchVehicles(event)">
 				<datalist id="vehiclesList"></datalist>
 
 
@@ -206,7 +211,7 @@
 
 				<!-- Team Members Search -->
 				<label for="teamMemberSearch">Search Team Members</label>
-				<input id="teamMemberSearch" type="text" placeholder="Search Team Members..." name="search" style="width: 90%">
+				<input id="teamMemberSearch" type="text" placeholder="Search Team Members..." name="search" style="width: 90%" oninput="searchTeamMembers(event)">
 				<datalist id="teamMembersList"></datalist>
 
 			</div>

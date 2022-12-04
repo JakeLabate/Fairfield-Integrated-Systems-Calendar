@@ -516,8 +516,6 @@ function createNewEvent(){
 		end: document.getElementById('endTime').value
 	}
 
-	console.log(payload);
-
 	const eventOptions = {
 		method: 'POST',
 		headers: {
@@ -529,6 +527,8 @@ function createNewEvent(){
 	.then(response => response.json())
 	.then(data => {
 		console.log(data);
+		alert("Event Successfully Created")
+		clearCards()
 		}
 	)	
 }
@@ -542,6 +542,42 @@ function clearCards(){
 		placeholder.innerHTML = `Drop<br>
 		${index === 0? 'To Do': index=== 1? 'Vehicle':'Team Member'}`
 
+	})
+
+}
+
+function searchVehicles(e){
+	let keyword = e.target.value;
+	keyword = keyword.trim()
+	keyword = keyword.toLowerCase()
+
+	const vehiclesList = Array.from(document.querySelectorAll('#vehiclesToday .card'))
+
+	vehiclesList.forEach(vehicle => {
+		const vehicleName = vehicle.childNodes[3].innerText.trim().toLowerCase()
+		if(vehicleName.includes(keyword)){
+			vehicle.classList.remove('hidden')
+		}else{
+			vehicle.classList.add('hidden')
+		}
+	})
+
+}
+
+function searchTeamMembers(e){
+	let keyword = e.target.value;
+	keyword = keyword.trim()
+	keyword = keyword.toLowerCase()
+
+	const teamMembersList = Array.from(document.querySelectorAll('#teamMembersToday .card'))
+
+	teamMembersList.forEach(teamMember => {
+		const teamMemberName = teamMember.childNodes[3].innerText.trim().toLowerCase()
+		if(teamMemberName.includes(keyword)){
+			teamMember.classList.remove('hidden')
+		}else{
+			teamMember.classList.add('hidden')
+		}
 	})
 
 }
