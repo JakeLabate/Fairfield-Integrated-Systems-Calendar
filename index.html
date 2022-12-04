@@ -233,7 +233,7 @@
 						<text>Start</text>
 						<input type="datetime-local" id="startTime" name="startTime" value="08:00"><br><br>
 						<text>End</text>
-						<input type="datetime-local" id="endTime" name="endTime" value="17:00"><br><br>
+						<input type="datetime-local" id="endTime" name="endTime" value="17:00" format-value="yyyy-MM-ddThh:mm"><br><br>
 					</div>
 
 					<br>
@@ -374,14 +374,16 @@
 
 <!-- To Do Filter -->
 <script>
-	const today = new Date();
-	today.setHours(8)
-	let startTime = today.toISOString()
-	document.getElementById('startTime').value = startTime.substring(0, startTime.indexOf('Z'))
+	function getDateTimeValue(offset){
+		const today = new Date();
+		today.setHours(offset)
+		today.setMinutes(today.getMinutes() - today.getTimezoneOffset())
+		today.setSeconds(0)
+		return today.toISOString().substring(0,16)
+	}
 
-	today.setHours(17)
-	let endTime = today.toISOString()
-	document.getElementById('endTime').value = endTime.substring(0, endTime.indexOf('Z'))
+	document.getElementById('startTime').value = getDateTimeValue(5)
+	document.getElementById('endTime').value = getDateTimeValue(17)
 	
 	console.log('To Do Filter Loaded');
 
