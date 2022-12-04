@@ -581,3 +581,24 @@ function searchTeamMembers(e){
 	})
 
 }
+
+function searchTodos(e){
+	let keyword = e.target.value;
+	keyword = keyword.trim()
+	keyword = keyword.toLowerCase()
+
+	const projectList = Array.from(document.querySelectorAll('#Projects .card'))
+	const taskList = Array.from(document.querySelectorAll('#Tasks .card'))
+	const serviceOrderList = Array.from(document.querySelectorAll('#ServiceOrders .card'))
+	const combinedList = [...projectList,...taskList,...serviceOrderList]
+
+	combinedList.forEach(project => {
+		const projectName = project.children[4].innerText.trim().toLowerCase()
+		if(projectName.includes(keyword)){
+			project.classList.remove('hidden')
+		}else{
+			project.classList.add('hidden')
+		}
+	})
+
+}
