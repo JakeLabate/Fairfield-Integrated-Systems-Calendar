@@ -551,62 +551,62 @@ function clearCards(){
 
 }
 
-function searchVehicles(e){
-	let keyword = e.target.value;
-	keyword = keyword.trim()
-	keyword = keyword.toLowerCase()
+// function searchVehicles(e){
+// 	let keyword = e.target.value;
+// 	keyword = keyword.trim()
+// 	keyword = keyword.toLowerCase()
 
-	const vehiclesList = Array.from(document.querySelectorAll('#Vehicles .card'))
+// 	const vehiclesList = Array.from(document.querySelectorAll('#Vehicles .card'))
 
-	vehiclesList.forEach(vehicle => {
-		const vehicleName = vehicle.childNodes[3].innerText.trim().toLowerCase()
-		if(vehicleName.includes(keyword)){
-			vehicle.classList.remove('hidden')
-		}else{
-			vehicle.classList.add('hidden')
-		}
-	})
+// 	vehiclesList.forEach(vehicle => {
+// 		const vehicleName = vehicle.childNodes[3].innerText.trim().toLowerCase()
+// 		if(vehicleName.includes(keyword)){
+// 			vehicle.classList.remove('hidden')
+// 		}else{
+// 			vehicle.classList.add('hidden')
+// 		}
+// 	})
 
-}
+// }
 
-function searchTeamMembers(e){
-	let keyword = e.target.value;
-	keyword = keyword.trim()
-	keyword = keyword.toLowerCase()
+// function searchTeamMembers(e){
+// 	let keyword = e.target.value;
+// 	keyword = keyword.trim()
+// 	keyword = keyword.toLowerCase()
 
-	const teamMembersList = Array.from(document.querySelectorAll('#TeamMembers .card'))
+// 	const teamMembersList = Array.from(document.querySelectorAll('#TeamMembers .card'))
 
-	teamMembersList.forEach(teamMember => {
-		const teamMemberName = teamMember.childNodes[3].innerText.trim().toLowerCase()
-		if(teamMemberName.includes(keyword)){
-			teamMember.classList.remove('hidden')
-		}else{
-			teamMember.classList.add('hidden')
-		}
-	})
+// 	teamMembersList.forEach(teamMember => {
+// 		const teamMemberName = teamMember.childNodes[3].innerText.trim().toLowerCase()
+// 		if(teamMemberName.includes(keyword)){
+// 			teamMember.classList.remove('hidden')
+// 		}else{
+// 			teamMember.classList.add('hidden')
+// 		}
+// 	})
 
-}
+// }
 
-function searchTodos(e){
-	let keyword = e.target.value;
-	keyword = keyword.trim()
-	keyword = keyword.toLowerCase()
+// function searchTodos(e){
+// 	let keyword = e.target.value;
+// 	keyword = keyword.trim()
+// 	keyword = keyword.toLowerCase()
 
-	const projectList = Array.from(document.querySelectorAll('#Projects .card'))
-	const taskList = Array.from(document.querySelectorAll('#Tasks .card'))
-	const serviceOrderList = Array.from(document.querySelectorAll('#ServiceOrders .card'))
-	const combinedList = [...projectList,...taskList,...serviceOrderList]
+// 	const projectList = Array.from(document.querySelectorAll('#Projects .card'))
+// 	const taskList = Array.from(document.querySelectorAll('#Tasks .card'))
+// 	const serviceOrderList = Array.from(document.querySelectorAll('#ServiceOrders .card'))
+// 	const combinedList = [...projectList,...taskList,...serviceOrderList]
 
-	combinedList.forEach(project => {
-		const projectName = project.children[4].innerText.trim().toLowerCase()
-		if(projectName.includes(keyword)){
-			project.classList.remove('hidden')
-		}else{
-			project.classList.add('hidden')
-		}
-	})
+// 	combinedList.forEach(project => {
+// 		const projectName = project.children[4].innerText.trim().toLowerCase()
+// 		if(projectName.includes(keyword)){
+// 			project.classList.remove('hidden')
+// 		}else{
+// 			project.classList.add('hidden')
+// 		}
+// 	})
 
-}
+// }
 
 function padTo2Digits(num) {
   return num.toString().padStart(2, '0');
