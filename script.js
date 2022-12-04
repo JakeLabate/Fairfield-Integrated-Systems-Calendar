@@ -608,6 +608,20 @@ function searchTodos(e){
 
 }
 
+function padTo2Digits(num) {
+  return num.toString().padStart(2, '0');
+}
+
+function formatDate(date) {
+  return (
+    [
+      date.getFullYear(),
+      padTo2Digits(date.getMonth()),
+      padTo2Digits(date.getDate()),
+    ].join('-')
+  );
+}
+
 function sortCards({containerId = 'Projects', sortBy = 'name', sortOrder = 'asc' } = {}){
 	const container = document.getElementById(containerId)
 	const cards = Array.from(container.children)
