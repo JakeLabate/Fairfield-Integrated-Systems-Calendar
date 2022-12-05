@@ -65,7 +65,7 @@ h3 {
 
 .placeholder {
 	background-color: #ececec;
-	height: 150px;
+	height: 104px;
 	width: 250px;
 	color: #000000;
 	border-radius: 10px;
@@ -432,4 +432,8 @@ summary {
 #Upcoming{
 	padding: 24px;
 	height: 80vh;
+}
+
+#newVehicleSlot{
+	margin: 96px 10px;
 }
