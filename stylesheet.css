@@ -95,9 +95,9 @@ h3 {
 	margin-left: 8px;
 }
 
-.column18Percent {
+.column25Percent {
 	float: left;
-	width: 18%;
+	width: 25%;
 }
 .column44Percent {
 	float:left;
@@ -416,4 +416,20 @@ summary {
 
 .hidden{
 	display: none;
+}
+
+.column25Percent, 
+#Projects, 
+#ServiceOrders, 
+#Tasks,
+#Vehicles,
+#TeamMembers{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#Upcoming{
+	padding: 24px;
+	height: 80vh;
 }
