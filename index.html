@@ -175,17 +175,18 @@
 		<div class="container">
 
 			<!-- To Do  -->
-			<div class="column18Percent">
+			<div class="column25Percent">
 				<h3>To Do</h3>
-
-				<label for="todoSort">Sort:</label>
-				<select name="todoSort" id="todoSort" data-type="todos" oninput="handleSortEvent(event)">
-					<option hidden disabled selected value> -- select an option -- </option>
-					<option value="id-asc">Id Ascending</option>
-					<option value="id-desc">Id Descending</option>
-					<option value="name-asc">Name Ascending</option>
+				
+				<label for="todoSort">Sort:
+					<select name="todoSort" id="todoSort" data-type="todos" oninput="handleSortEvent(event)">
+						<option hidden disabled selected value> -- select an option -- </option>
+						<option value="id-asc">Id Ascending</option>
+						<option value="id-desc">Id Descending</option>
+						<option value="name-asc">Name Ascending</option>
 					<option value="name-desc">Name Descending</option>
-				</select><br/><br/>
+				</select>
+			</label><br/>
 				<!-- To Dos Search -->
 				<!-- <label for="toDoSearch">Search To Dos</label>
 				<input id="toDoSearch" type="text" placeholder="Search To Dos" name="search" style="width: 90%" oninput="searchTodos(event)"> -->
@@ -202,7 +203,7 @@
 			</div>
 
 			<!-- Vehicles -->
-			<div id="vehiclesToday" class="column18Percent">
+			<div id="vehiclesToday" class="column25Percent">
 				<h3>Vehicles</h3>
 
 				<!-- <label for="todoSort">Sort:</label>
@@ -224,7 +225,7 @@
 			</div>
 
 			<!-- Team Members -->
-			<div id="teamMembersToday" class="column18Percent">
+			<div id="teamMembersToday" class="column25Percent">
 				<h3>Team Members</h3>
 				<!-- <label for="todoSort">Sort:</label>
 				<select name="todoSort" id="todoSort" data-type="teamMembers" oninput="handleSortEvent(event)">
@@ -244,10 +245,8 @@
 			</div>
 
 			<!-- Today -->
-			<div class="column46Percent">
+			<div class="column25Percent">
 				<h3 style="margin-bottom: 60px;">Today</h3>
-
-				<div class="column33Percent">
 
 					<div id="newToDoSlot" data-type="todo" class="placeholder" ondrop="dropCard(event)" ondragover="onDragOver(event)">
 						Drop<br>To Do
@@ -272,14 +271,22 @@
 					</div>
 
 					<br>
-					<button onclick="clearCards()" style="padding: 8px; cursor: pointer;">Clear All</button>
-					<div class="plusIcon" onclick="createNewEvent();" style="margin-bottom: 30px;">
-						<text>Submit Event</text>
+					<div>
+						<button onclick="clearCards()" style="padding: 8px; cursor: pointer;">Clear All</button>
+						<div class="plusIcon" onclick="createNewEvent();" style="margin-bottom: 30px;">
+							<text>Submit Event</text>
+						</div>
 					</div>
 
-				</div>
-				<div class="column66Percent">
-					<iframe src="https://calendar.google.com/calendar/embed
+			</div>
+
+
+		</div>
+	</section>
+
+	<!-- Upcoming Tab -->
+	<section id="Upcoming" class="tabcontent">
+		<iframe src="https://calendar.google.com/calendar/embed
 						?height=400
 						&wkst=1
 						&bgcolor=%23ffffff
@@ -296,16 +303,7 @@
 						&src=MjMxODRkMWE1MTAyMmM4YzlmMmEwZWMxYmUwMTY2MDEyYzYxNDIxODQyMTNlNWI3OTlmMTBmZTRlNTM5OGI4MEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t
 						&color=%23C0CA33"
 						width="100%" height="100%" style="min-height: 500px;" frameborder="0" scrolling="no"></iframe>
-				</div>
-
-			</div>
-
-
-		</div>
 	</section>
-
-	<!-- Upcoming Tab -->
-	<section id="Upcoming" class="tabcontent"></section>
 
 	<!-- Lists Tab -->
 	<section id="Lists" class="tabcontent">
