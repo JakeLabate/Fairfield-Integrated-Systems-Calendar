@@ -549,6 +549,13 @@ function createNewEvent(){
 		end: document.getElementById('endTime').value
 	}
 
+	const repeat = parseInt(document.getElementById('repeatInput').value, 10);
+	if(!repeat || repeat <= 1){
+		payload.repeat = 1;
+	}else{
+		payload.repeat = repeat
+	}
+
 	const eventOptions = {
 		method: 'POST',
 		headers: {
