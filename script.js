@@ -498,7 +498,7 @@ function createNewEvent(){
 	let empty = true;
 	let newTodo = document.querySelector("#newToDoSlot div");
 	let newVehicle = document.querySelector("#newVehicleSlot div");
-	let newTeamMember = document.querySelector(".newTeamMemberSlot div");
+	let newTeamMembers = document.querySelectorAll(".newTeamMemberSlot>div");
 
 	if(newTodo){
 		buffer = JSON.parse(newTodo.getAttribute('data-payload'))
@@ -525,16 +525,18 @@ function createNewEvent(){
 		}
 		empty = false;
 	}
-	if(newTeamMember){
-		buffer = JSON.parse(newTeamMember.getAttribute('data-payload'));
-		payload.teamMember = {
-			firstName: buffer.firstName,
-			lastName: buffer.lastName,
-			email: buffer.email
-		}
+	if(newTeamMembers.length){
+		payload.teamMembers = []
+		newTeamMembers.forEach( newTeamMember => {
+			buffer = JSON.parse(newTeamMember.getAttribute('data-payload'));
+			payload.teamMembers.push( {
+				name: `${buffer.firstName} ${buffer.lastName}`,
+				email: buffer.email
+			})
+		})
 		empty = false;
 	}
-
+		
 	if(empty)	{ // if all the drop locations are empty
 		alert("No card selected");
 		return;
@@ -574,6 +576,8 @@ function clearCards(){
 		})
 
 	})
+	
+	window.selectedTeamMembers = []
 
 }
 
