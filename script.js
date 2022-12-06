@@ -2,6 +2,7 @@ console.log('script.js loaded');
 
 getAll();
 const EVENT_URL = 'https://hook.us1.make.com/8il7zph12nsp5lkmdkx85fv5h2smwyb1'
+selectedTeamMembers = []
 
 // GET all lists from D-Tools
 function getAll() {
@@ -478,6 +479,14 @@ function dropCard(event, eventType){
 		e.stopPropagation()
 	}
 
+	if(type === "text/teammember" && selectedTeamMembers.includes(clone.getAttribute('data-id'))){
+		// If team member is already selected in one of the placeholders
+		alert("You cannot add same team member twice")
+		return;
+	}else{
+		window.selectedTeamMembers.push(clone.getAttribute('data-id'))
+	}
+	
 	removeAllChildren(dropZone)
 	dropZone.appendChild(clone)
 	
@@ -489,7 +498,7 @@ function createNewEvent(){
 	let empty = true;
 	let newTodo = document.querySelector("#newToDoSlot div");
 	let newVehicle = document.querySelector("#newVehicleSlot div");
-	let newTeamMember = document.querySelector("#newTeamMemberSlot div");
+	let newTeamMember = document.querySelector(".newTeamMemberSlot div");
 
 	if(newTodo){
 		buffer = JSON.parse(newTodo.getAttribute('data-payload'))
@@ -554,13 +563,15 @@ function createNewEvent(){
 }
 
 function clearCards(){
-	const placeholderIds = ['newToDoSlot', 'newVehicleSlot', 'newTeamMemberSlot']
+	const placeholderSelectors = ['#newToDoSlot', '#newVehicleSlot', '.newTeamMemberSlot']
 
-	placeholderIds.forEach((id, index) => {
-		const placeholder = document.getElementById(id)
-		removeAllChildren(placeholder)
-		placeholder.innerHTML = `Drop<br>
-		${index === 0? 'To Do': index=== 1? 'Vehicle':'Team Member'}`
+	placeholderSelectors.forEach((selector, index) => {
+		const placeholderList = document.querySelectorAll(selector)
+		placeholderList.forEach( placeholder => {
+			removeAllChildren(placeholder)
+			placeholder.innerHTML = `Drop<br>
+			${index === 0? 'To Do': index=== 1? 'Vehicle':'Team Member'}`
+		})
 
 	})
 
@@ -631,7 +642,7 @@ function formatDate(date) {
   return (
     [
       date.getFullYear(),
-      padTo2Digits(date.getMonth()),
+      padTo2Digits(date.getMonth() + 1),
       padTo2Digits(date.getDate()),
     ].join('-')
   );
