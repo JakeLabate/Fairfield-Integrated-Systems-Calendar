@@ -350,7 +350,6 @@ summary {
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 	height: 30px;
-	background-color: black;
 	color: white;
 	text-align: center;
 	margin: -5px -20px 0 -20px;
@@ -410,6 +409,48 @@ summary {
 	transition: .2s ease-in-out;
 }
 
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -150px;
+  background-color: #333;
+  color: #fff;
+  text-align: center; 
+  border-radius: 8px; 
+  padding: 16px; 
+  position: fixed;
+  z-index: 1; 
+  left: 50%; 
+  top: 40px;
+	font-size: 1.2rem;
+}
+
+#snackbar.show {
+  visibility: visible; 
+  -webkit-animation: fadein 1s, fadeout 1s 4.5s;
+  animation: fadein 1s, fadeout 1s 4.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {top: 0; opacity: 0;}
+  to {top: 40px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {top: 0; opacity: 0;}
+  to {top: 40px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {top: 40px; opacity: 1;}
+  to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {top: 40px; opacity: 1;}
+  to {top: 0; opacity: 0;}
+}
+
 [type="datetime-local"]{
 	padding: 4px;
 }
@@ -442,4 +483,21 @@ summary {
 	font-size: 0.9rem;
 	width: 100px;
 	margin-left: 8px;
+}
+
+#Projects .topCardLabel, 
+#ServiceOrders .topCardLabel, 
+#Tasks .topCardLabel,
+#newToDoSlot .topCardLabel{
+	background-color: #BD9302;
+}
+
+#Vehicles .topCardLabel,
+#newVehicleSlot .topCardLabel{
+	background-color: #0A6A56;
+}
+
+#TeamMembers .topCardLabel,
+.newTeamMemberSlot .topCardLabel{
+	background-color: #A82B11;
 }

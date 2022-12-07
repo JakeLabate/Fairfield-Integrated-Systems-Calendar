@@ -492,6 +492,19 @@ function dropCard(event, eventType){
 	
 }
 
+function replaceUndefined(obj, replaceToken = '') {
+	Object.keys(obj).forEach(function(key) {
+		let value = obj[key];
+		let type = typeof value;
+			if (type === "object") {
+					replaceUndefined(obj[key], replaceToken);
+			}
+			else if (type === "undefined") {
+					obj[key] = replaceToken;
+			}
+	});
+}
+
 function createNewEvent(){
 	const payload = {};
 	let buffer;
@@ -556,19 +569,33 @@ function createNewEvent(){
 		payload.repeat = repeat
 	}
 
-	const eventOptions = {
-		method: 'POST',
-		headers: {
-			'content-type': 'application/json'
-		},
-		body: JSON.stringify(payload)
-	};
-	fetch(EVENT_URL, eventOptions)
+	replaceUndefined(payload); // Because undefined values are not allowed.
+	
+	saveEventToDatabase(payload)
 	.then(response => {
-		alert("Event Successfully Created")
+		showSnackbar({message: "Shit is GUCCI"})
 		clearCards()
-		}
-	)	
+		createConfetti()
+	}).catch(err => {
+		console.log(err);
+		alert("Failed to create the event")
+	})	
+}
+
+function createConfetti(){
+	if(!party) {
+		return;
+	}
+	
+	let mouseEvent = new MouseEvent("click", {
+    view: window,
+    bubbles: true,
+    cancelable: true,
+    clientX: window.innerWidth / 2,
+    clientY: window.innerHeight / 6
+    /* whatever properties you want to give it */
+	});
+	party.confetti(mouseEvent, {count: 70, size: 1.5, spread: 80})
 }
 
 function clearCards(){
@@ -708,4 +735,12 @@ function handleSortEvent(e){
 			sortCards({containerId:'TeamMembers', sortBy, sortOrder})
 			break;
 	}
+}
+
+function showSnackbar({message, timeout = 5000} = {}) {
+  let snackbar = document.getElementById("snackbar");
+	snackbar.innerText = message
+  snackbar.className = "show";
+
+  setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, timeout);
 }
