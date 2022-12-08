@@ -276,7 +276,50 @@
 
 
 <script src="calendar_script.js"></script>
+<script type="module">
+	console.log("Firebase Real Time Database Script Loaded");
+	// Full list of functions: https://firebase.google.com/docs/web/setup#available-libraries
+	import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+	import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
 
+	// Firebase configuration
+	const firebaseConfig = {
+		apiKey: "AIzaSyA076_DdfgtN-UFPRysbn-3ca7khvOSx6E",
+		authDomain: "fairfield-integrated-systems.firebaseapp.com",
+		databaseURL: "https://fairfield-integrated-systems-default-rtdb.firebaseio.com",
+		projectId: "fairfield-integrated-systems",
+		storageBucket: "fairfield-integrated-systems.appspot.com",
+		messagingSenderId: "358421826101",
+		appId: "1:358421826101:web:b8b89c26da56a64731ff7c"
+	};
+	
+	// Initialize Firebase
+	const app = initializeApp(firebaseConfig);
+	const firestore = getFirestore(app);
+	
+	async function getEvents(){
+		const querySnapshot = await getDocs(collection(firestore, "events"));
+		let index = 0;
+		querySnapshot.forEach(doc => {
+			// doc.data() is never undefined for query doc snapshots
+			const data = doc.data();
+			const startMinute = getMinutes(data.time.start.split("T")[1])
+			const endMinute = getMinutes(data.time.end.split("T")[1])
+			
+			let teamMembersName = data.teamMembers?.map(e => e.name)?.join(", ");
+			addCardToday({
+				id: data.id, startMinute, endMinute,
+				teamMember: teamMembersName,
+				vehicle: data.vehicle?.name,
+				todo: data.toDo?.name,
+				numberOfEvents: querySnapshot.size,
+				eventIndex: index++
+			})
+		});
+	}
+	
+	getEvents()
+	</script>
 
 
 

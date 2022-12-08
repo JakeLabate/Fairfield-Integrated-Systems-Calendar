@@ -111,35 +111,51 @@ document.querySelectorAll('.currentYear').forEach(function (element) {
 });
 
 // some constants:
-const NUMBER_OF_COLUMNS = 7;
 const MIN_WIDTH_RECT = 400;
 const HEIGHT_15MIN_BLOCK = 24;
 const PIXELS_PER_MINUTE = HEIGHT_15MIN_BLOCK / 15;
 
 function addCardToday({
-  startMinute = 30, 
-  endMinute = 240, 
-  message = "Abhinav Mishra", 
-  numberOfEvents = 12, 
-  eventIndex = 0}){
-  
-  const container = document.querySelector(".singleDayCalendar>.events-container")
-  const eventRect = document.createElement('div');
-  
-  const height = (endMinute - startMinute) * PIXELS_PER_MINUTE + 'px';
-  eventRect.classList.add('event');
+  id,
+  startMinute,
+  endMinute,
+  teamMember,
+  vehicle,
+  todo,
+  numberOfEvents,
+  eventIndex,
+}) {
+  const container = document.querySelector(
+    ".singleDayCalendar>.events-container"
+  );
+  const eventRect = document.createElement("div");
+  eventRect.id = id;
+
+  const height = (endMinute - startMinute) * PIXELS_PER_MINUTE + "px";
+  eventRect.classList.add("event");
   eventRect.style.height = height;
-  eventRect.innerText = message;
-  eventRect.style.top = startMinute * PIXELS_PER_MINUTE + 'px';
+  eventRect.innerHTML = "";
+  if (teamMember) {
+    eventRect.innerHTML += `<span>${teamMember}</span>`;
+  }
+  if (vehicle) {
+    eventRect.innerHTML += `<span>${vehicle}</span>`;
+  }
+  if (todo) {
+    eventRect.innerHTML += `<span> ${todo}</span>`;
+  }
+
+  eventRect.style.top = startMinute * PIXELS_PER_MINUTE + "px";
+  eventRect.style.zIndex = eventIndex + 100;
 
   const availableSpace = container.clientWidth - MIN_WIDTH_RECT;
   const columnOffsetStepper = availableSpace / numberOfEvents;
-  eventRect.style.left = columnOffsetStepper * eventIndex + 'px';
+  eventRect.style.left = columnOffsetStepper * eventIndex + "px";
 
-  container.append(eventRect)
-
+  container.append(eventRect);
 }
 
-for(let i = 3; i >=0 ; i--){
-  addCardToday({eventIndex:i, numberOfEvents: 4})
+function getMinutes(time){
+  const [hour, minute] = time.split(":").map((e) => parseInt(e, 10));
+  return hour * 60 + minute;
 }
