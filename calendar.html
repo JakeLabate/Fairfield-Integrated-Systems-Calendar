@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="UTF-8">
+	<title>Title</title>
+
+	<link rel="stylesheet" href="calendar_style.css">
+
+</head>
+<body>
+
+<section id="today">
+	<div>
+		<h2>Today</h2>
+		<text class="currentDayOfWeek"></text>
+		<text class="currentMonth"></text>
+		<text class="currentDayOfMonth"></text>
+		<text class="currentYear"></text>
+		<br><br>
+		<div class="singleDayCalendar">
+      <div class="events-container">
+      </div>
+			<div class="hour">
+				<div>00:00 AM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>1:00 AM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>2:00 AM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>3:00 AM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>4:00 AM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>5:00 AM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>6:00 AM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>7:00 AM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>8:00 AM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>9:00 AM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>10:00 AM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>11:00 AM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>12:00 PM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>1:00 PM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>2:00 PM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>3:00 PM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>4:00 PM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>5:00 PM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>6:00 PM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>7:00 PM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>8:00 PM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>9:00 PM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>10:00 PM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+			<div class="hour">
+				<div>11:00 PM</div>
+				<div class="fifteenMinuteBlock">:15</div>
+				<div class="fifteenMinuteBlock">:30</div>
+				<div class="fifteenMinuteBlock">:45</div>
+			</div>
+		</div>
+	</div>
+	<div>
+
+	</div>
+</section>
+
+<section id="3weeksView">
+	<div>Tomorrow</div>
+	<div id="week1" style="display: flex; flex-direction: row;">
+		<div class="dayCard">
+			<text class="currentDayOfWeekPlus1"></text>
+			<div class="smallHour">00:00 AM</div>
+			<div class="smallHour">01:00 AM</div>
+			<div class="smallHour">02:00 AM</div>
+			<div class="smallHour">03:00 AM</div>
+			<div class="smallHour">04:00 AM</div>
+			<div class="smallHour">05:00 AM</div>
+			<div class="smallHour">06:00 AM</div>
+			<div class="smallHour">07:00 AM</div>
+			<div class="smallHour">08:00 AM</div>
+			<div class="smallHour">09:00 AM</div>
+			<div class="smallHour">10:00 AM</div>
+			<div class="smallHour">11:00 AM</div>
+			<div class="smallHour">12:00 PM</div>
+			<div class="smallHour">01:00 PM</div>
+			<div class="smallHour">02:00 PM</div>
+			<div class="smallHour">03:00 PM</div>
+			<div class="smallHour">04:00 PM</div>
+			<div class="smallHour">05:00 PM</div>
+			<div class="smallHour">06:00 PM</div>
+			<div class="smallHour">07:00 PM</div>
+			<div class="smallHour">08:00 PM</div>
+			<div class="smallHour">09:00 PM</div>
+			<div class="smallHour">10:00 PM</div>
+			<div class="smallHour">11:00 PM</div>
+		</div>
+		<div class="dayCard">
+			<text class="currentDayOfWeekPlus2"></text>
+		</div>
+		<div class="dayCard">
+			<text class="currentDayOfWeekPlus3"></text>
+		</div>
+		<div class="dayCard">
+			<text class="currentDayOfWeekPlus4"></text>
+		</div>
+		<div class="dayCard">
+			<text class="currentDayOfWeekPlus5"></text>
+		</div>
+		<div class="dayCard">
+			<text class="currentDayOfWeekPlus6"></text>
+		</div>
+		<div class="dayCard">
+			<text class="currentDayOfWeek"></text>
+		</div>
+	</div>
+
+	<div>Week of 15th</div>
+	<div id="week2" style="display: flex; flex-direction: row;">
+		<div class="dayCard">
+			Sunday
+		</div>
+		<div class="dayCard">
+			Monday
+		</div>
+		<div class="dayCard">
+			Tuesday
+		</div>
+		<div class="dayCard">
+			Wednesday
+		</div>
+		<div class="dayCard">
+			Thursday
+		</div>
+		<div class="dayCard">
+			Friday
+		</div>
+		<div class="dayCard">
+			Saturday
+		</div>
+	</div>
+
+	<div>Week of 15th</div>
+	<div id="week3" style="display: flex; flex-direction: row;">
+		<div class="dayCard">
+			Sunday
+		</div>
+		<div class="dayCard">
+			Monday
+		</div>
+		<div class="dayCard">
+			Tuesday
+		</div>
+		<div class="dayCard">
+			Wednesday
+		</div>
+		<div class="dayCard">
+			Thursday
+		</div>
+		<div class="dayCard">
+			Friday
+		</div>
+		<div class="dayCard">
+			Saturday
+		</div>
+	</div>
+
+</section>
+
+
+<script src="calendar_script.js"></script>
+
+
+
+
+</body>
+</html>
