@@ -66,7 +66,7 @@ h3 {
 .placeholder {
 	background-color: #ececec;
 	height: 104px;
-	width: 250px;
+	width: 336px;
 	color: #000000;
 	border-radius: 10px;
 	border: 2px dashed #7e7e7e;
@@ -493,11 +493,13 @@ summary {
 }
 
 #Vehicles .topCardLabel,
-#newVehicleSlot .topCardLabel{
+#newVehicleSlot .topCardLabel,
+#vehicles .topCardLabel{
 	background-color: #0A6A56;
 }
 
 #TeamMembers .topCardLabel,
+#team .topCardLabel,
 .newTeamMemberSlot .topCardLabel{
 	background-color: #A82B11;
 }
