@@ -26,7 +26,7 @@ body {
 }
 
 .dayCard {
-	width: 14%;
+	width: 20%;
 	height: 696px;
 	border: 1px solid black;
 }
@@ -74,16 +74,21 @@ body {
 /* My css begins here */
 
 :root{
-  --min-width-rect: 400px;
+  --offset-events-container-today: 100px;
+  --offset-events-container-week: 75px;
+  --min-width-event-today: 400px;
+  --min-width-event-week: 50px;
   --min-height-15min-block: 24px;
-  --event-colour: #0A6A56;
+  --event-today-colour: #0A6A56;
+  --event-week-colour: #6c5ce7;
 }
 
 *{
   box-sizing: border-box;
 }
 
-.singleDayCalendar{
+.singleDayCalendar,
+.dayCard{
   position: relative;
 }
 
@@ -95,19 +100,19 @@ body {
   height: var(--min-height-15min-block);
 }
 
-.events-container{
+.events-container-today{
   position: absolute;
   top: 0;
-  left: 100px;
-  width: calc(100% - 100px);
+  left: var(--offset-events-container-today);
+  width: calc(100% - var(--offset-events-container-today));
   height: 100%;
 }
 
 .event{
   position: absolute;
-  min-width: var(--min-width-rect);
+  min-width: var(--min-width-event-today);
   min-height: var(--min-height-15min-block) ;
-  background-color: var(--event-colour);
+  background-color: var(--event-today-colour);
   border: 1px solid #C4E538;
   color: #fff;
   padding: 12px;
@@ -123,6 +128,80 @@ body {
 
 .event:hover{
   transform: scale(1.08);
-  min-height: var(--min-width-rect);
+  min-height: var(--min-width-event-today);
   z-index: 9999 !important;
+}
+
+.events-container-week{
+  position: absolute;
+  top: 0;
+  height: 100%;
+  left: var(--offset-events-container-week);
+  width: calc(100% - var(--offset-events-container-week));
+  overflow: hidden;
+}
+
+.event-week{
+  position: absolute;
+  top: 20px;
+  min-width: var(--min-width-event-week);
+  max-width: 150px;
+  /* min-height: var(--min-height-15min-block) ; */
+  min-height: 200px;
+  background-color: var(--event-week-colour);
+  border: 1px solid #C4E538;
+  color: #fff;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform .2s;
+}
+
+.event-week:hover{
+  transform: scale(1.08);
+  z-index: 9999 !important;
+}
+
+.modal{
+	position: fixed;
+  z-index: 99999999;
+  left: 0;
+  top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.modal-content{
+  background-color: #6c5ce7;
+  color: #fff;
+  padding: 96px;
+  font-size: 2rem;
+  font-weight: 500;
+  position: relative;
+}
+
+.modal-content>div{
+  margin: 16px;
+}
+
+.modal-content-row>span{
+  font-weight: bold;
+}
+
+.modal-close{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  cursor: pointer;
+  color: #c7ecee;
 }

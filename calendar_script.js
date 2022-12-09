@@ -126,7 +126,7 @@ function addCardToday({
   eventIndex,
 }) {
   const container = document.querySelector(
-    ".singleDayCalendar>.events-container"
+    ".singleDayCalendar>.events-container-today"
   );
   const eventRect = document.createElement("div");
   eventRect.id = id;

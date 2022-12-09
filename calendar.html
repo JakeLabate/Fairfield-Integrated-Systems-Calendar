@@ -19,7 +19,7 @@
 		<text class="currentYear"></text>
 		<br><br>
 		<div class="singleDayCalendar">
-      <div class="events-container">
+      <div class="events-container-today">
       </div>
 			<div class="hour">
 				<div>00:00 AM</div>
@@ -176,7 +176,24 @@
 	<div>Tomorrow</div>
 	<div id="week1" style="display: flex; flex-direction: row;">
 		<div class="dayCard">
-			<text class="currentDayOfWeekPlus1"></text>
+			<div class="events-container-week">
+				<div class="event-week" style="top: 50px; left: 10px;" onclick="document.querySelector('.modal').style.display='flex'">
+					<span>Jake Labate</span><span>Blue Van</span><span> 22 Dairy - Pre-Wire and Savant Lighting</span>
+				</div>
+				<div class="event-week" style="top: 450px; left: 15px;" onclick="document.querySelector('.modal').style.display='flex'">
+					<span>Jake Labate</span><span>Blue Van</span><span> 22 Dairy - Pre-Wire and Savant Lighting</span>
+				</div>
+				<div class="event-week" style="top: 290px; left: 0px;" onclick="document.querySelector('.modal').style.display='flex'">
+					<span>Jake Labate</span><span>Blue Van</span><span> 22 Dairy - Pre-Wire and Savant Lighting</span>
+				</div>
+				<div class="event-week" style="top: 40px; left: 45px;" onclick="document.querySelector('.modal').style.display='flex'">
+					<span>Jake Labate</span><span>Blue Van</span><span> 22 Dairy - Pre-Wire and Savant Lighting</span>
+				</div>
+				<div class="event-week" style="top: 90px; left: 150px;" onclick="document.querySelector('.modal').style.display='flex'">
+					<span>Jake Labate</span><span>Blue Van</span><span> 22 Dairy - Pre-Wire and Savant Lighting</span>
+				</div>
+			</div>
+			<text class="currentDayOfWeekPlus3"></text>
 			<div class="smallHour">00:00 AM</div>
 			<div class="smallHour">01:00 AM</div>
 			<div class="smallHour">02:00 AM</div>
@@ -203,12 +220,6 @@
 			<div class="smallHour">11:00 PM</div>
 		</div>
 		<div class="dayCard">
-			<text class="currentDayOfWeekPlus2"></text>
-		</div>
-		<div class="dayCard">
-			<text class="currentDayOfWeekPlus3"></text>
-		</div>
-		<div class="dayCard">
 			<text class="currentDayOfWeekPlus4"></text>
 		</div>
 		<div class="dayCard">
@@ -225,9 +236,6 @@
 	<div>Week of 15th</div>
 	<div id="week2" style="display: flex; flex-direction: row;">
 		<div class="dayCard">
-			Sunday
-		</div>
-		<div class="dayCard">
 			Monday
 		</div>
 		<div class="dayCard">
@@ -241,18 +249,12 @@
 		</div>
 		<div class="dayCard">
 			Friday
-		</div>
-		<div class="dayCard">
-			Saturday
 		</div>
 	</div>
 
 	<div>Week of 15th</div>
 	<div id="week3" style="display: flex; flex-direction: row;">
 		<div class="dayCard">
-			Sunday
-		</div>
-		<div class="dayCard">
 			Monday
 		</div>
 		<div class="dayCard">
@@ -267,12 +269,17 @@
 		<div class="dayCard">
 			Friday
 		</div>
-		<div class="dayCard">
-			Saturday
-		</div>
 	</div>
 
 </section>
+<div class="modal" style="display: none;" onclick="document.querySelector('.modal').style.display='none'">		
+	<div class="modal-content" onclick="insideModal(event)">
+		<div class="modal-close" onclick="document.querySelector('.modal').style.display='none'">X</div>
+		<div class="modal-content-row"><span>Todo: </span> 22 Dairy - Pre-Wire and Savant Lighting</div>
+		<div class="modal-content-row"><span>Team Member: </span> Jake Labate</div>
+		<div class="modal-content-row"><span>Vehicle: </span> Blue Van</div>
+	</div>
+</div>
 
 
 <script src="calendar_script.js"></script>
@@ -308,7 +315,7 @@
 			
 			let teamMembersName = data.teamMembers?.map(e => e.name)?.join(", ");
 			addCardToday({
-				id: data.id, startMinute, endMinute,
+				id: doc.id, startMinute, endMinute,
 				teamMember: teamMembersName,
 				vehicle: data.vehicle?.name,
 				todo: data.toDo?.name,
@@ -322,6 +329,11 @@
 	</script>
 
 
-
+<script>
+	function insideModal(event){
+		console.log(event)
+		event.stopPropagation()
+	}
+</script>
 </body>
 </html>
