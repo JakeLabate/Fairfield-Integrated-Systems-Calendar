@@ -124,10 +124,14 @@ function addCardToday({
   todo,
   numberOfEvents,
   eventIndex,
+  clearAll = false
 }) {
   const container = document.querySelector(
     ".singleDayCalendar>.events-container-today"
   );
+  if(clearAll){
+    removeAllChildren(container);
+  }
   const eventRect = document.createElement("div");
   eventRect.id = id;
 

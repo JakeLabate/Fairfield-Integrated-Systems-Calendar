@@ -1,6 +1,11 @@
-body {
+#today {
 	padding: 20px;
 	font-weight: 600;
+}
+
+#today div,
+.dayCard div{
+  display: block;
 }
 
 .singleDayCalendar {
@@ -116,7 +121,7 @@ body {
   border: 1px solid #C4E538;
   color: #fff;
   padding: 12px;
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -167,20 +172,6 @@ body {
   z-index: 9999 !important;
 }
 
-.modal{
-	position: fixed;
-  z-index: 99999999;
-  left: 0;
-  top: 0;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
 .modal-content{
   background-color: #6c5ce7;
   color: #fff;
@@ -191,6 +182,7 @@ body {
 }
 
 .modal-content>div{
+  display: block;
   margin: 16px;
 }
 
