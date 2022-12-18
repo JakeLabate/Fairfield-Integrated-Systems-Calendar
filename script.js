@@ -744,3 +744,127 @@ function showSnackbar({message, timeout = 5000} = {}) {
 
   setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, timeout);
 }
+
+// The following is a hash function with good distribution and less collision
+function hash_fn(s) {
+  // Initialize the seed value to 0
+  let seed = 0;
+  // Convert the input string to a typed array
+  let data = new TextEncoder().encode(s);
+  // Compute the hash value using the typed array
+  let hash = murmur2_impl(data, seed);
+  // Take the modulus of the hash value with 19 and add 1 to ensure that the result is in the range from 1 to 19
+  return (hash % 19) + 1;
+}
+
+// Define a function to compute the MurmurHash2 value of an array of bytes
+function murmur2_impl(data, seed) {
+  let m = 0x5bd1e995;
+  let r = 24;
+  let h = seed ^ data.length;
+  let k;
+  for (let i = 0; i < data.length; i += 4) {
+    k = data[i];
+    if (i + 1 < data.length) {
+      k |= data[i + 1] << 8;
+    }
+    if (i + 2 < data.length) {
+      k |= data[i + 2] << 16;
+    }
+    if (i + 3 < data.length) {
+      k |= data[i + 3] << 24;
+    }
+    k = Math.imul(k, m);
+    k ^= k >>> r;
+    k = Math.imul(k, m);
+    h = Math.imul(h, m);
+    h ^= k;
+  }
+  h ^= h >>> 13;
+  h = Math.imul(h, m);
+  h ^= h >>> 15;
+  return h;
+}
+
+const colorPairs = [
+  {
+    backgroundColor: "turquoise",
+    textColor: "black"
+  },
+  {
+    backgroundColor: "salmon",
+    textColor: "black"
+  },
+  {
+    backgroundColor: "red",
+    textColor: "white"
+  },
+  {
+    backgroundColor: "green",
+    textColor: "white"
+  },
+  {
+    backgroundColor: "blue",
+    textColor: "white"
+  },
+  {
+    backgroundColor: "yellow",
+    textColor: "black"
+  },
+  {
+    backgroundColor: "purple",
+    textColor: "white"
+  },
+  {
+    backgroundColor: "orange",
+    textColor: "black"
+  },
+  {
+    backgroundColor: "pink",
+    textColor: "black"
+  },
+  {
+    backgroundColor: "palevioletred",
+    textColor: "white"
+  },
+  {
+    backgroundColor: "brown",
+    textColor: "white"
+  },
+  {
+    backgroundColor: "olive",
+    textColor: "white"
+  },
+  {
+    backgroundColor: "navy",
+    textColor: "white"
+  },
+  {
+    backgroundColor: "maroon",
+    textColor: "white"
+  },
+  {
+    backgroundColor: "teal",
+    textColor: "white"
+  },
+	{
+    backgroundColor: "peachpuff",
+    textColor: "black"
+  },
+  {
+    backgroundColor: "mediumorchid",
+    textColor: "white"
+  },
+  {
+    backgroundColor: "mediumturquoise",
+    textColor: "black"
+  },
+  {
+    backgroundColor: "palegreen",
+    textColor: "black"
+  },
+  {
+    backgroundColor: "mediumslateblue",
+    textColor: "white"
+  }
+]
