@@ -64,12 +64,21 @@
 			querySnapshot.forEach(doc => {
 				const data = doc.data();
 				const duration = getTimeDuration(data.time);
-				addEventCard({
+				events.push({
 					id: doc.id,
 					duration,
 					...data
 				})
 			})
+
+			events.sort((firstVal, secondVal) => {
+				const firstValFormatted = dayjs(firstVal.time.startTime, "HH:mm")
+				const secondValFormatted = dayjs(secondVal.time.startTime, "HH:mm")
+				return firstValFormatted.diff(secondValFormatted)
+			})
+
+			
+			events.forEach(addEventCard)
 		}
 		getEvents()
 	</script>
