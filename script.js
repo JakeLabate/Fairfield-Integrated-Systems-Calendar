@@ -506,7 +506,12 @@ function replaceUndefined(obj, replaceToken = '') {
 }
 
 function createNewEvent(){
-	const payload = {};
+	const payload = {
+		eventColor:{
+			backgroundColor: 'white',
+			textColor: 'black'
+		}
+	};
 	let buffer;
 	let empty = true;
 	let newTodo = document.querySelector("#newToDoSlot div");
@@ -519,8 +524,9 @@ function createNewEvent(){
 			name: buffer.Name,
 			type: buffer.type,
 			progress: buffer.Progress,
-			description: buffer.Description
+			description: buffer.Description,
 		}
+		payload.eventColor = colorPairs[hash_fn(buffer.Id)]
 		if(buffer.type === 'Project'){
 			payload.toDo.client = {
 				name: buffer.Client,
@@ -558,8 +564,9 @@ function createNewEvent(){
 	}
 
 	payload.time = {
-		start: document.getElementById('startTime').value,
-		end: document.getElementById('endTime').value
+		date: new Date(document.getElementById('eventDate').value),
+		startTime: document.getElementById('startTime').value,
+		endTime: document.getElementById('endTime').value
 	}
 
 	const repeat = parseInt(document.getElementById('repeatInput').value, 10);
@@ -745,8 +752,10 @@ function showSnackbar({message, timeout = 5000} = {}) {
   setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, timeout);
 }
 
+const NUMBER_OF_COLORS = 20;
 // The following is a hash function with good distribution and less collision
 function hash_fn(s) {
+	const range = NUMBER_OF_COLORS - 1;
   // Initialize the seed value to 0
   let seed = 0;
   // Convert the input string to a typed array
@@ -754,7 +763,7 @@ function hash_fn(s) {
   // Compute the hash value using the typed array
   let hash = murmur2_impl(data, seed);
   // Take the modulus of the hash value with 19 and add 1 to ensure that the result is in the range from 1 to 19
-  return (hash % 19) + 1;
+  return (hash % range) + (hash < 0 ? range: 0);
 }
 
 // Define a function to compute the MurmurHash2 value of an array of bytes

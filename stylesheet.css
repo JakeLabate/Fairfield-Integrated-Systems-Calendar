@@ -503,3 +503,22 @@ summary {
 .newTeamMemberSlot .topCardLabel{
 	background-color: #A82B11;
 }
+
+#newTimeSlot{
+	display: flex;
+	flex-direction: column;
+	width: 336px;
+}
+
+.time-container{
+	margin: 8px;
+	font-size: 1.1rem;
+	display: flex;
+	align-items: center;
+}
+
+.time-container input{
+	flex: 1;
+	margin-left: 16px;
+	font-size: 1.1rem;
+}
