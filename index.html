@@ -157,7 +157,6 @@
 		}
 
 		window.saveEventToDatabase = (payload) => {
-			console.log(payload);
 			return new Promise((resolve, reject) => {
 
 				addDoc(collection(firestore, "events"),payload)
@@ -307,14 +306,19 @@
 						Drop<br>Team Member
 					</div>
 					
-					<div id="newTimeSlot"><br>
-						Start
+					<div id="newTimeSlot">
 						<div class="time-container">
-							<input type="datetime-local" id="startTime" name="startTime" value="08:00">
-							<div class="displayStartTime"></div>
-						</div><br /><br/>
-						End
-						<input type="datetime-local" id="endTime" name="endTime" value="17:00" format-value="yyyy-MM-ddThh:mm"><br><br>
+							Date
+							<input type="date" id="eventDate" name="eventDate">
+						</div>
+						<div class="time-container">
+							Start Time
+							<input type="time" id="startTime" name="startTime" value="08:00">
+						</div>
+						<div class="time-container">
+							End Time
+							<input type="time" id="endTime" name="endTime" value="17:00" format-value="yyyy-MM-ddThh:mm"><br><br>
+						</div>
 					</div>
 					<div class="repeat"> 
 						<text>Repeat (days) </text>
@@ -717,15 +721,13 @@
 
 <!-- To Do Filter -->
 <script>
-	function getDateTimeValue(time){
+	function setInitialDateTime(){
 		const today = new Date();
-		let result = formatDate(today)
-		result = result + 'T' + time
-		return result
+		document.getElementById('eventDate').value = today.toISOString().substring(0, 10);
+		document.getElementById('startTime').value = "08:00";
+		document.getElementById('endTime').value = "17:00";
 	}
-
-	document.getElementById('startTime').value = getDateTimeValue("08:00")
-	document.getElementById('endTime').value = getDateTimeValue("17:00")
+	setInitialDateTime();
 	
 	console.log('To Do Filter Loaded');
 

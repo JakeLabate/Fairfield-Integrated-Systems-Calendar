@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="today.css">
+	<title>Today</title>
+</head>
+
+<body>
+	<div id="date-header">
+		<span class="date"></span>
+		<span class="time"></span>
+	</div>
+	<!-- <div class="event-container">
+		<div class="datetime">
+			<span>Mon, 19 Dec 2022 08:28</span> to <span>Mon, 19 Dec 2022 08:28</span>
+		</div>
+		<div class="event-info">
+			<div class="project">
+				8 Laurel Lane - Prewire and Lutron
+			</div>
+			<div class="vehicle">
+				Blue Van
+			</div>
+			<div class="team">
+				Jake Labate
+			</div>
+		</div>
+	</div> -->
+	<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/customParseFormat.js"></script>
+	<script>dayjs.extend(window.dayjs_plugin_customParseFormat)</script>
+	<script src="./today.js"></script>
+	<script type="module">
+
+		// Full list of functions: https://firebase.google.com/docs/web/setup#available-libraries
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+		import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+
+		// Firebase configuration
+		const firebaseConfig = {
+			apiKey: "AIzaSyA076_DdfgtN-UFPRysbn-3ca7khvOSx6E",
+			authDomain: "fairfield-integrated-systems.firebaseapp.com",
+			databaseURL: "https://fairfield-integrated-systems-default-rtdb.firebaseio.com",
+			projectId: "fairfield-integrated-systems",
+			storageBucket: "fairfield-integrated-systems.appspot.com",
+			messagingSenderId: "358421826101",
+			appId: "1:358421826101:web:b8b89c26da56a64731ff7c"
+		};
+
+		// Initialize Firebase
+		const app = initializeApp(firebaseConfig);
+		const firestore = getFirestore(app);
+
+		window.getEvents = async () => {
+			const eventsRef = collection(firestore, "events");
+			const q = query(eventsRef, where("time.date", "==", new Date(dayjs().startOf('D').format("YYYY-MM-DD")))); 
+			const querySnapshot = await getDocs(q);
+			let totalDuration = 0, events = [];
+
+			querySnapshot.forEach(doc => {
+				const data = doc.data();
+				const duration = getTimeDuration(data.time);
+				events.push({
+					id: doc.id,
+					duration,
+					...data
+				})
+			})
+
+			events.sort((firstVal, secondVal) => {
+				const firstValFormatted = dayjs(firstVal.time.startTime, "HH:mm")
+				const secondValFormatted = dayjs(secondVal.time.startTime, "HH:mm")
+				return firstValFormatted.diff(secondValFormatted)
+			})
+
+			
+			events.forEach(addEventCard)
+		}
+		getEvents()
+	</script>
+</body>
+
+</html>
