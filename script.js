@@ -817,29 +817,29 @@ const colorPairs = [
     textColor: "white"
   },
   {
-    backgroundColor: "yellow",
-    textColor: "black"
-  },
-  {
-    backgroundColor: "purple",
+		backgroundColor: "palevioletred",
     textColor: "white"
   },
   {
-    backgroundColor: "orange",
-    textColor: "black"
-  },
-  {
-    backgroundColor: "pink",
-    textColor: "black"
-  },
-  {
-    backgroundColor: "palevioletred",
+		backgroundColor: "brown",
     textColor: "white"
   },
-  {
-    backgroundColor: "brown",
-    textColor: "white"
-  },
+	{
+		backgroundColor: "yellow",
+		textColor: "black"
+	},
+	{
+		backgroundColor: "purple",
+		textColor: "white"
+	},
+	{
+		backgroundColor: "orange",
+		textColor: "black"
+	},
+	{
+		backgroundColor: "pink",
+		textColor: "black"
+	},
   {
     backgroundColor: "olive",
     textColor: "white"

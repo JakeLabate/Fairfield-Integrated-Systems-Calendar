@@ -38,7 +38,7 @@
 
 		// Full list of functions: https://firebase.google.com/docs/web/setup#available-libraries
 		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
-		import { getFirestore, collection, addDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+		import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
 
 		// Firebase configuration
 		const firebaseConfig = {
@@ -56,8 +56,9 @@
 		const firestore = getFirestore(app);
 
 		window.getEvents = async () => {
-			const querySnapshot = await getDocs(collection(firestore, "events"),
-				where("time.date", "==", dayjs().startOf('D').toDate()));
+			const eventsRef = collection(firestore, "events");
+			const q = query(eventsRef, where("time.date", "==", new Date(dayjs().startOf('D').format("YYYY-MM-DD")))); 
+			const querySnapshot = await getDocs(q);
 			let totalDuration = 0, events = [];
 
 			querySnapshot.forEach(doc => {

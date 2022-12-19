@@ -23,7 +23,6 @@ body {
 }
 
 .event-container {
-  height: 30%;
   padding: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 24px;
@@ -34,7 +33,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 90%;
+  height: calc(100% - 46px);
   text-align: center;
 }
 

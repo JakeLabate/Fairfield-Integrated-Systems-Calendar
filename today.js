@@ -11,6 +11,8 @@ function addEventCard(event) {
   const newEventElement = document.createElement("div");
   newEventElement.classList.add("event-container");
   newEventElement.style.flex = event.duration;
+  newEventElement.style.backgroundColor = event.eventColor.backgroundColor;
+  newEventElement.style.color = event.eventColor.textColor;
 
   const parsedTime = {
     startTime: dayjs(event.time.startTime, "HH:mm"),
@@ -29,22 +31,20 @@ function addEventCard(event) {
   if (event.toDo) {
     innerHTML += `
     <div class="project">
-    8 Laurel Lane - Prewire and Lutron
+    ${event.toDo.name}
     </div>`;
   }
   if (event.vehicle) {
     innerHTML += `
     <div class="vehicle">
-      Blue Van
+      ${event.vehicle.name}
     </div>`;
   }
-  if (Array.isArray(event.teamMembers)) {
-    event.teamMembers.forEach((member) => {
+  if (Array.isArray(event.teamMembers) && event.teamMembers.length > 0) {
       innerHTML += `
       <div class="team">
-      Jake Labate
+      ${event.teamMembers.map(el => el.name).join(", ")}
       </div>`;
-    });
   }
   innerHTML += "</div>"; // Closing the event info tag
   newEventElement.innerHTML = innerHTML;
