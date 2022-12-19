@@ -10,7 +10,11 @@
 </head>
 
 <body>
-	<div class="event-container">
+	<div id="date-header">
+		<span class="date"></span>
+		<span class="time"></span>
+	</div>
+	<!-- <div class="event-container">
 		<div class="datetime">
 			<span>Mon, 19 Dec 2022 08:28</span> to <span>Mon, 19 Dec 2022 08:28</span>
 		</div>
@@ -25,8 +29,48 @@
 				Jake Labate
 			</div>
 		</div>
-	</div>
+	</div> -->
+	<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/customParseFormat.js"></script>
+	<script>dayjs.extend(window.dayjs_plugin_customParseFormat)</script>
 	<script src="./today.js"></script>
+	<script type="module">
+
+		// Full list of functions: https://firebase.google.com/docs/web/setup#available-libraries
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+		import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+
+		// Firebase configuration
+		const firebaseConfig = {
+			apiKey: "AIzaSyA076_DdfgtN-UFPRysbn-3ca7khvOSx6E",
+			authDomain: "fairfield-integrated-systems.firebaseapp.com",
+			databaseURL: "https://fairfield-integrated-systems-default-rtdb.firebaseio.com",
+			projectId: "fairfield-integrated-systems",
+			storageBucket: "fairfield-integrated-systems.appspot.com",
+			messagingSenderId: "358421826101",
+			appId: "1:358421826101:web:b8b89c26da56a64731ff7c"
+		};
+
+		// Initialize Firebase
+		const app = initializeApp(firebaseConfig);
+		const firestore = getFirestore(app);
+
+		window.getEvents = async () => {
+			const querySnapshot = await getDocs(collection(firestore, "events"));
+			let totalDuration = 0, events = [];
+
+			querySnapshot.forEach(doc => {
+				const data = doc.data();
+				const duration = getTimeDuration(data.time);
+				addEventCard({
+					id: doc.id,
+					duration,
+					...data
+				})
+			})
+		}
+		getEvents()
+	</script>
 </body>
 
 </html>
