@@ -575,6 +575,7 @@ function createNewEvent(){
 	}else{
 		payload.repeat = repeat
 	}
+	payload.repeatDates = createRepeatDates(payload.time.date, payload.repeat);
 
 	replaceUndefined(payload); // Because undefined values are not allowed.
 	
@@ -587,6 +588,21 @@ function createNewEvent(){
 		console.log(err);
 		alert("Failed to create the event")
 	})	
+}
+
+function createRepeatDates(startDate, repeatDays = 1){
+	// Include the start date as well
+	const repeatDatesArr = [startDate];
+	const date = new Date(startDate);
+	while(repeatDays > 1){
+		const currentDate = date.getDate();
+		date.setDate(currentDate + 1);
+		if (date.getDay() !== 0 && date.getDay() !== 6) {
+			repeatDatesArr.push(new Date(date));
+			repeatDays--;
+		}
+	}
+	return repeatDatesArr;
 }
 
 function createConfetti(){
