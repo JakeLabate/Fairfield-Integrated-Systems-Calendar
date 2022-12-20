@@ -578,9 +578,10 @@ function createNewEvent(){
 	payload.repeatDates = createRepeatDates(payload.time.date, payload.repeat);
 
 	replaceUndefined(payload); // Because undefined values are not allowed.
-	
+
 	saveEventToDatabase(payload)
 	.then(response => {
+		saveEventToCalendar(payload)
 		showSnackbar({message: "Shit is GUCCI"})
 		clearCards()
 		createConfetti()
@@ -590,52 +591,73 @@ function createNewEvent(){
 	})	
 }
 
-function createRepeatDates(startDate, repeatDays = 1){
-	// Include the start date as well
-	const repeatDatesArr = [startDate];
-	const date = new Date(startDate);
-	while(repeatDays > 1){
-		const currentDate = date.getDate();
-		date.setDate(currentDate + 1);
-		if (date.getDay() !== 0 && date.getDay() !== 6) {
-			repeatDatesArr.push(new Date(date));
-			repeatDays--;
-		}
-	}
-	return repeatDatesArr;
+function saveEventToCalendar(payload) {
+  const { date, startTime, endTime } = payload.time;
+  const start = date.toISOString().substring(0, 11) + startTime;
+  const end = date.toISOString().substring(0, 11) + endTime;
+  payload.time = {
+    start,
+    end,
+  };
+  console.log(payload);
+  const eventOptions = {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  };
+  fetch(EVENT_URL, eventOptions);
 }
 
-function createConfetti(){
-	if(!party) {
-		return;
-	}
-	
-	let mouseEvent = new MouseEvent("click", {
+function createRepeatDates(startDate, repeatDays = 1) {
+  // Include the start date as well
+  const repeatDatesArr = [startDate];
+  const date = new Date(startDate);
+  while (repeatDays > 1) {
+    const currentDate = date.getDate();
+    date.setDate(currentDate + 1);
+    if (date.getDay() !== 0 && date.getDay() !== 6) {
+      repeatDatesArr.push(new Date(date));
+      repeatDays--;
+    }
+  }
+  return repeatDatesArr;
+}
+
+function createConfetti() {
+  if (!party) {
+    return;
+  }
+
+  let mouseEvent = new MouseEvent("click", {
     view: window,
     bubbles: true,
     cancelable: true,
     clientX: window.innerWidth / 2,
-    clientY: window.innerHeight / 6
+    clientY: window.innerHeight / 6,
     /* whatever properties you want to give it */
-	});
-	party.confetti(mouseEvent, {count: 70, size: 1.5, spread: 80})
+  });
+  party.confetti(mouseEvent, { count: 70, size: 1.5, spread: 80 });
 }
 
-function clearCards(){
-	const placeholderSelectors = ['#newToDoSlot', '#newVehicleSlot', '.newTeamMemberSlot']
+function clearCards() {
+  const placeholderSelectors = [
+    "#newToDoSlot",
+    "#newVehicleSlot",
+    ".newTeamMemberSlot",
+  ];
 
-	placeholderSelectors.forEach((selector, index) => {
-		const placeholderList = document.querySelectorAll(selector)
-		placeholderList.forEach( placeholder => {
-			removeAllChildren(placeholder)
-			placeholder.innerHTML = `Drop<br>
-			${index === 0? 'To Do': index=== 1? 'Vehicle':'Team Member'}`
-		})
+  placeholderSelectors.forEach((selector, index) => {
+    const placeholderList = document.querySelectorAll(selector);
+    placeholderList.forEach((placeholder) => {
+      removeAllChildren(placeholder);
+      placeholder.innerHTML = `Drop<br>
+			${index === 0 ? "To Do" : index === 1 ? "Vehicle" : "Team Member"}`;
+    });
+  });
 
-	})
-	
-	window.selectedTeamMembers = []
-
+  window.selectedTeamMembers = [];
 }
 
 // function searchVehicles(e){
@@ -696,82 +718,85 @@ function clearCards(){
 // }
 
 function padTo2Digits(num) {
-  return num.toString().padStart(2, '0');
+  return num.toString().padStart(2, "0");
 }
 
 function formatDate(date) {
-  return (
-    [
-      date.getFullYear(),
-      padTo2Digits(date.getMonth() + 1),
-      padTo2Digits(date.getDate()),
-    ].join('-')
-  );
+  return [
+    date.getFullYear(),
+    padTo2Digits(date.getMonth() + 1),
+    padTo2Digits(date.getDate()),
+  ].join("-");
 }
 
-function sortCards({containerId = 'Projects', sortBy = 'name', sortOrder = 'asc' } = {}){
-	const container = document.getElementById(containerId)
-	const cards = Array.from(container.children)
+function sortCards({
+  containerId = "Projects",
+  sortBy = "name",
+  sortOrder = "asc",
+} = {}) {
+  const container = document.getElementById(containerId);
+  const cards = Array.from(container.children);
 
-	cards.sort((a, b) => {
-		const val1 = a.getAttribute(`data-${sortBy}`).toUpperCase();
-		const val2 = b.getAttribute(`data-${sortBy}`).toUpperCase();
-		if (val1 < val2) {
-			return -1;
-		}
-		if (val1 > val2) {
-			return 1;
-		}
-		return 0;
-	});
+  cards.sort((a, b) => {
+    const val1 = a.getAttribute(`data-${sortBy}`).toUpperCase();
+    const val2 = b.getAttribute(`data-${sortBy}`).toUpperCase();
+    if (val1 < val2) {
+      return -1;
+    }
+    if (val1 > val2) {
+      return 1;
+    }
+    return 0;
+  });
 
-	removeAllChildren(container);
-	
-	if(sortOrder === 'asc'){
-		for(let i = 0; i < cards.length; i++){
-			container.appendChild(cards[i])
-		}
-	}else{
-		for(let i = cards.length-1; i >= 0; i--){
-			container.appendChild(cards[i])
-		}
-	}
+  removeAllChildren(container);
 
+  if (sortOrder === "asc") {
+    for (let i = 0; i < cards.length; i++) {
+      container.appendChild(cards[i]);
+    }
+  } else {
+    for (let i = cards.length - 1; i >= 0; i--) {
+      container.appendChild(cards[i]);
+    }
+  }
 }
 
-function handleSortEvent(e){
-	const [sortBy, sortOrder] = e.target.value.split('-')
-	const type = e.target.getAttribute('data-type')
-	switch(type){
-		case 'todos':
-			const containerIds = ['Projects', 'ServiceOrders', 'Tasks']
-			containerIds.forEach( containerId => {
-				sortCards({containerId, sortBy,sortOrder})
-			})
-			break;
+function handleSortEvent(e) {
+  const [sortBy, sortOrder] = e.target.value.split("-");
+  const type = e.target.getAttribute("data-type");
+  switch (type) {
+    case "todos":
+      const containerIds = ["Projects", "ServiceOrders", "Tasks"];
+      containerIds.forEach((containerId) => {
+        sortCards({ containerId, sortBy, sortOrder });
+      });
+      break;
 
-		case 'vehicles':
-			sortCards({containerId:'Vehicles', sortBy, sortOrder})
-			break;
-		
-		case 'teamMembers':
-			sortCards({containerId:'TeamMembers', sortBy, sortOrder})
-			break;
-	}
+    case "vehicles":
+      sortCards({ containerId: "Vehicles", sortBy, sortOrder });
+      break;
+
+    case "teamMembers":
+      sortCards({ containerId: "TeamMembers", sortBy, sortOrder });
+      break;
+  }
 }
 
-function showSnackbar({message, timeout = 5000} = {}) {
+function showSnackbar({ message, timeout = 5000 } = {}) {
   let snackbar = document.getElementById("snackbar");
-	snackbar.innerText = message
+  snackbar.innerText = message;
   snackbar.className = "show";
 
-  setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, timeout);
+  setTimeout(function () {
+    snackbar.className = snackbar.className.replace("show", "");
+  }, timeout);
 }
 
 const NUMBER_OF_COLORS = 20;
 // The following is a hash function with good distribution and less collision
 function hash_fn(s) {
-	const range = NUMBER_OF_COLORS - 1;
+  const range = NUMBER_OF_COLORS - 1;
   // Initialize the seed value to 0
   let seed = 0;
   // Convert the input string to a typed array
@@ -779,7 +804,7 @@ function hash_fn(s) {
   // Compute the hash value using the typed array
   let hash = murmur2_impl(data, seed);
   // Take the modulus of the hash value with 19 and add 1 to ensure that the result is in the range from 1 to 19
-  return (hash % range) + (hash < 0 ? range: 0);
+  return (hash % range) + (hash < 0 ? range : 0);
 }
 
 // Define a function to compute the MurmurHash2 value of an array of bytes
@@ -814,82 +839,82 @@ function murmur2_impl(data, seed) {
 const colorPairs = [
   {
     backgroundColor: "turquoise",
-    textColor: "black"
+    textColor: "black",
   },
   {
     backgroundColor: "salmon",
-    textColor: "black"
+    textColor: "black",
   },
   {
     backgroundColor: "red",
-    textColor: "white"
+    textColor: "white",
   },
   {
     backgroundColor: "green",
-    textColor: "white"
+    textColor: "white",
   },
   {
     backgroundColor: "blue",
-    textColor: "white"
+    textColor: "white",
   },
   {
-		backgroundColor: "palevioletred",
-    textColor: "white"
+    backgroundColor: "palevioletred",
+    textColor: "white",
   },
   {
-		backgroundColor: "brown",
-    textColor: "white"
+    backgroundColor: "brown",
+    textColor: "white",
   },
-	{
-		backgroundColor: "yellow",
-		textColor: "black"
-	},
-	{
-		backgroundColor: "purple",
-		textColor: "white"
-	},
-	{
-		backgroundColor: "orange",
-		textColor: "black"
-	},
-	{
-		backgroundColor: "pink",
-		textColor: "black"
-	},
+  {
+    backgroundColor: "yellow",
+    textColor: "black",
+  },
+  {
+    backgroundColor: "purple",
+    textColor: "white",
+  },
+  {
+    backgroundColor: "orange",
+    textColor: "black",
+  },
+  {
+    backgroundColor: "pink",
+    textColor: "black",
+  },
   {
     backgroundColor: "olive",
-    textColor: "white"
+    textColor: "white",
   },
   {
     backgroundColor: "navy",
-    textColor: "white"
+    textColor: "white",
   },
   {
     backgroundColor: "maroon",
-    textColor: "white"
+    textColor: "white",
   },
   {
     backgroundColor: "teal",
-    textColor: "white"
+    textColor: "white",
   },
-	{
+  {
     backgroundColor: "peachpuff",
-    textColor: "black"
+    textColor: "black",
   },
   {
     backgroundColor: "mediumorchid",
-    textColor: "white"
+    textColor: "white",
   },
   {
     backgroundColor: "mediumturquoise",
-    textColor: "black"
+    textColor: "black",
   },
   {
     backgroundColor: "palegreen",
-    textColor: "black"
+    textColor: "black",
   },
   {
     backgroundColor: "mediumslateblue",
-    textColor: "white"
-  }
-]
+    textColor: "white",
+  },
+];
