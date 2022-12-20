@@ -57,7 +57,7 @@
 
 		window.getEvents = async () => {
 			const eventsRef = collection(firestore, "events");
-			const q = query(eventsRef, where("time.date", "==", new Date(dayjs().startOf('D').format("YYYY-MM-DD")))); 
+			const q = query(eventsRef, where("repeatDates", "array-contains", new Date(dayjs().startOf('D').format("YYYY-MM-DD")))); 
 			const querySnapshot = await getDocs(q);
 			let totalDuration = 0, events = [];
 
