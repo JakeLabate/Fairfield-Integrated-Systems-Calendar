@@ -14,6 +14,8 @@ function getAll() {
 
 	Promise.all(promiseArray).then(res => {
 		filterSelection("all");
+		const todoContainer = document.querySelector(".todo-container");
+		addScollBarIfNecessary(todoContainer);
 	})
 
 	getPurchaseOrders();
@@ -377,6 +379,7 @@ function addTeamMemberToDOM(payload){
 	// Place the div
 	document.getElementById("TeamMembers").appendChild(teamMemberToday);
 
+	addScollBarIfNecessary(document.querySelector('#TeamMembers'));
 	// Console log the created items
 	console.log('Team member loaded: ' + payload.firstName + ' ' + payload.lastName + ' ' + payload.lastName);
 }
@@ -424,6 +427,8 @@ function addVehicleToDOM(payload){
 
 	// Place the div
 	document.getElementById("Vehicles").appendChild(vehicleToday);
+	
+	addScollBarIfNecessary(document.querySelector('#Vehicles'));
 
 	// Console log the created items
 	console.log('Vehicle loaded: ' + payload.vehicleName);
@@ -918,3 +923,14 @@ const colorPairs = [
     textColor: "white",
   },
 ];
+
+function addScollBarIfNecessary(element){
+	const styles = window.getComputedStyle(element);
+	const maxHeight = Number(styles.getPropertyValue('max-height').split('px')[0]);
+	console.log({maxHeight});
+	if( element.scrollHeight >= maxHeight){
+		element.classList.add("overflow-scroll")
+	}else{
+		element.classList.remove("overflow-scroll")
+	}
+}

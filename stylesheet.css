@@ -92,7 +92,7 @@ h3 {
 	width: 100%;
 	height: 100%;
 	margin-top: 0 !important;
-	margin-left: 8px;
+	padding-left: 8px;
 }
 
 .column25Percent {
@@ -470,6 +470,11 @@ summary {
 	align-items: center;
 }
 
+#Vehicles,
+#TeamMembers{
+	max-height: 85vh;
+}
+
 #Upcoming{
 	padding: 24px;
 	height: 80vh;
@@ -521,4 +526,13 @@ summary {
 	flex: 1;
 	margin-left: 16px;
 	font-size: 1.1rem;
+}
+
+.todo-container{
+	margin-top: 8px;
+	max-height: 80vh;
+}
+
+.overflow-scroll{
+	overflow-y: scroll;
 }
