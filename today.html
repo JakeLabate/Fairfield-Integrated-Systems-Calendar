@@ -16,7 +16,7 @@
 	</div>
 
 	<!-- Modal for Editing Events -->
-	<div id="modal-edit" class="modal" style="display: flex;">
+	<div id="modal-edit" class="modal" style="display: none;">
 		<form>
 			<div class="input-container">
 				<label for="todo">Todo</label>
@@ -62,7 +62,7 @@
 				<input type="time" id="endTime" name="endTime" value="17:00">
 			</div>
 			<div class="modal-actions">
-				<button type="button" onclick="toggleModal('modal-edit')">Cancel</button>
+				<button type="button" onclick="closeForm()">Cancel</button>
 				<button type="button" onclick="newVehicle()">Update Event</button>
 			</div>
 
@@ -152,7 +152,8 @@
 			})
 		}
 
-		getEvents()
+		getEvents();
+		getAllData();
 	</script>
 </body>
 

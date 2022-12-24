@@ -526,6 +526,7 @@ function createNewEvent(){
 	if(newTodo){
 		buffer = JSON.parse(newTodo.getAttribute('data-payload'))
 		payload.toDo = {
+			id: buffer.Id,
 			name: buffer.Name,
 			type: buffer.type,
 			progress: buffer.Progress,
@@ -543,6 +544,7 @@ function createNewEvent(){
 	if(newVehicle){
 		buffer = JSON.parse(newVehicle.getAttribute('data-payload'));
 		payload.vehicle = {
+			id: buffer.id,
 			name: buffer.vehicleName,
 			vin: buffer.vin,
 			license: buffer.license
@@ -554,6 +556,7 @@ function createNewEvent(){
 		newTeamMembers.forEach( newTeamMember => {
 			buffer = JSON.parse(newTeamMember.getAttribute('data-payload'));
 			payload.teamMembers.push( {
+				id: buffer.id,
 				name: `${buffer.firstName} ${buffer.lastName}`,
 				email: buffer.email
 			})

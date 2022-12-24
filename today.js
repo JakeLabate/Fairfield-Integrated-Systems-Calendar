@@ -9,10 +9,14 @@ function addEventCard(event) {
   const body = document.getElementsByTagName("body")[0];
 
   const newEventElement = document.createElement("div");
+  newEventElement.id = event.id;
+  newEventElement.setAttribute("data-payload", JSON.stringify(event));
   newEventElement.classList.add("event-container");
   newEventElement.style.flex = event.duration;
   newEventElement.style.backgroundColor = event.eventColor.backgroundColor;
   newEventElement.style.color = event.eventColor.textColor;
+
+  newEventElement.addEventListener("click", editEvent, true);
 
   const parsedTime = {
     startTime: dayjs(event.time.startTime, "HH:mm"),
@@ -57,13 +61,11 @@ function getTimeDuration(time = {}) {
   return Math.abs(endTime.diff(startTime, "m"));
 }
 
-function toggleModal(modalID = "modal-team") {
+function toggleModal(modalID = "modal-edit") {
   const modal = document.getElementById(modalID);
   if (modal.style.display === "none") {
-    console.log("Opening Modal");
     modal.style.display = "flex";
   } else {
-    console.log("Closing Modal");
     modal.style.display = "none";
   }
 }
@@ -131,7 +133,7 @@ function getServiceOrders() {
   });
 }
 
-async function getAll() {
+async function getAllData() {
   const promiseArray = [];
   promiseArray.push(getProjects());
   promiseArray.push(getTasks());
@@ -202,4 +204,51 @@ function setOptions({
     option.innerHTML = labels.join(" ");
     selectTag.appendChild(option);
   });
+}
+
+function editEvent(e) {
+  const eventContainer = e.currentTarget;
+  window.selectedEvent = JSON.parse(
+    eventContainer.getAttribute("data-payload")
+  );
+  toggleModal("modal-edit");
+  selectOption({
+    selectTagId: "todo",
+    optionId: selectedEvent.toDo ? selectedEvent.toDo.id : 0,
+  });
+  selectOption({
+    selectTagId: "vehicle",
+    optionId: selectedEvent.vehicle ? selectedEvent.vehicle.id : 0,
+  });
+  if (selectedEvent.teamMembers) {
+    selectedEvent.teamMembers.forEach((teamMember, index) => {
+      selectOption({
+        selectTagId: `teammember${index + 1}`,
+        optionId: teamMember.id,
+      });
+    });
+  }
+  document.querySelector(".modal #repeatInput").value = selectedEvent.repeat;
+  document.querySelector(".modal #startTime").value = selectedEvent.time.startTime;
+  document.querySelector(".modal #endTime").value = selectedEvent.time.endTime;
+
+}
+
+function selectOption({ selectTagId, optionId }) {
+  const selectElement = document.querySelector(`select#${selectTagId}`);
+  const options = Array.from(selectElement.options);
+  const index = options.findIndex((el) => el.id === optionId);
+  selectElement.selectedIndex = index;
+}
+
+function resetModalForm() {
+  const selects = Array.from(document.querySelectorAll("select"));
+  selects.forEach((select) => {
+    select.selectedIndex = 0;
+  });
+}
+
+function closeForm() {
+  resetModalForm();
+  toggleModal("modal-edit");
 }
