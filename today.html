@@ -21,26 +21,20 @@
 			<div class="input-container">
 				<label for="todo">Todo</label>
 				<select name="todo" id="todo" data-type="todos">
-					<option hidden disabled selected value> -- select an option -- </option>
-					<option value="id-asc">Vehicle Name</option>
-					<option disabled value> -- select an option -- </option>
+					<option hidden disabled selected value>Select an option</option>
 				</select>
 			</div>
 			<div class="input-container">
 				<label for="vehicle">Vehicle</label>
 				<select name="vehicle" id="vehicle" data-type="vehicles">
-					<option hidden disabled selected value> -- select an option -- </option>
-					<option value="id-asc">Id Ascending</option>
-					<option disabled value> -- select an option -- </option>
+					<option hidden disabled selected value>Select an option</option>
 				</select>
 			</div>
 
 			<div class="input-container">
 				<label for="teammember1">Team member 1</label>
 				<select name="teammember1" id="teammember1" data-type="teammembers">
-					<option hidden disabled selected value> -- select an option -- </option>
-					<option value="id-asc">Id Ascending</option>
-					<option disabled value> -- select an option -- </option>
+					<option hidden disabled selected value>Select an option</option>
 				</select>
 			</div>
 			<div class="input-container">
@@ -50,9 +44,7 @@
 			<div class="input-container">
 				<label for="teammember2">Team member 2</label>
 				<select name="teammember2" id="teammember2" data-type="teammembers">
-					<option hidden disabled selected value> -- select an option -- </option>
-					<option value="id-asc">Id Ascending</option>
-					<option disabled value> -- select an option -- </option>
+					<option hidden disabled selected value>Select an option</option>
 				</select>
 			</div>
 			<div class="input-container">
@@ -62,9 +54,7 @@
 			<div class="input-container">
 				<label for="teammember3">Team member 3</label>
 				<select name="teammember3" id="teammember3" data-type="teammembers">
-					<option hidden disabled selected value> -- select an option -- </option>
-					<option value="id-asc">Id Ascending</option>
-					<option disabled value> -- select an option -- </option>
+					<option hidden disabled selected value>Select an option</option>
 				</select>
 			</div>
 			<div class="input-container">
@@ -89,6 +79,7 @@
 		// Full list of functions: https://firebase.google.com/docs/web/setup#available-libraries
 		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
 		import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+		import { getDatabase, ref, child, get, set, push, remove } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
 
 		// Firebase configuration
 		const firebaseConfig = {
@@ -104,6 +95,8 @@
 		// Initialize Firebase
 		const app = initializeApp(firebaseConfig);
 		const firestore = getFirestore(app);
+		const db = getDatabase();
+		const dbRef = ref(getDatabase());
 
 		window.getEvents = async () => {
 			const eventsRef = collection(firestore, "events");
@@ -130,6 +123,35 @@
 
 			events.forEach(addEventCard)
 		}
+
+		// Get team members
+		window.getTeamMembers = function () {
+			return new Promise(resolve => {
+				get(child(dbRef, 'team')).then((snapshot) => {
+					const teamMembers = []
+					snapshot.forEach((childSnapshot) => {
+						var childData = childSnapshot.val();
+						teamMembers.push({ id: childSnapshot.key, ...childData })
+					});
+					resolve(teamMembers)
+				});
+			})
+		}
+
+		// Get vehicles
+		window.getVehicles = function () {
+			return new Promise(resolve => {
+				get(child(dbRef, 'vehicles')).then((snapshot) => {
+					const vehicles = [];
+					snapshot.forEach((childSnapshot) => {
+						var childData = childSnapshot.val();
+						vehicles.push({ id: childSnapshot.key, ...childData });
+					});
+					resolve(vehicles)
+				});
+			})
+		}
+
 		getEvents()
 	</script>
 </body>

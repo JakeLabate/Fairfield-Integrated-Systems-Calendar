@@ -42,7 +42,7 @@ body {
 
 .modal{
 	position: fixed;
-	z-index: 999999999;
+	z-index: 999999;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -61,8 +61,8 @@ body {
 	font-size: var(--primaryFontSize);
 	color: var(--primaryTextColor);
 	border-radius: 5px;
-	min-width: 300px;
-	max-width: 1000px;
+	min-width: 500px;
+	max-width: 1600px;
 }
 
 .modal>form input,
@@ -77,6 +77,7 @@ body {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+  margin: 8px;
   width: 100%;
 }
 
@@ -117,7 +118,7 @@ body {
   border-radius: 8px; 
   padding: 16px; 
   position: fixed;
-  z-index: 1; 
+  z-index: 999999999; 
   left: 50%; 
   top: 40px;
 	font-size: 1.2rem;
@@ -151,4 +152,9 @@ body {
 
 .hidden{
 	display: none;
+}
+
+option:disabled{
+  text-align: center;
+  font-size: 3rem;
 }
