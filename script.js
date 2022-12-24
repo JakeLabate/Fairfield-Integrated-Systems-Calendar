@@ -584,9 +584,9 @@ function createNewEvent(){
 
 	replaceUndefined(payload); // Because undefined values are not allowed.
 
-	saveEventToDatabase(payload)
-	.then(response => {
-		saveEventToCalendar(payload)
+	saveEventToCalendar(payload)
+	.then(data => {
+		saveEventToDatabase({...data, ...payload})
 		showSnackbar({message: "Shit is GUCCI"})
 		clearCards()
 		createConfetti()
@@ -600,19 +600,19 @@ function saveEventToCalendar(payload) {
   const { date, startTime, endTime } = payload.time;
   const start = date.toISOString().substring(0, 11) + startTime;
   const end = date.toISOString().substring(0, 11) + endTime;
-  payload.time = {
-    start,
-    end,
-  };
-  console.log(payload);
+
   const eventOptions = {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ ...payload, time: { start, end } }),
   };
-  fetch(EVENT_URL, eventOptions);
+  return new Promise((resolve) => {
+    fetch(EVENT_URL, eventOptions)
+      .then((res) => res.json())
+      .then((data) => resolve(data));
+  });
 }
 
 function createRepeatDates(startDate, repeatDays = 1) {
