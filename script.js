@@ -603,13 +603,17 @@ function saveEventToCalendar(payload) {
   const { date, startTime, endTime } = payload.time;
   const start = date.toISOString().substring(0, 11) + startTime;
   const end = date.toISOString().substring(0, 11) + endTime;
+	let repeat = payload.repeat;
+	if(date.getDay() === 0 || date.getDay() === 6){
+		repeat = repeat - 1;
+	}
 
   const eventOptions = {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
-    body: JSON.stringify({ ...payload, time: { start, end } }),
+    body: JSON.stringify({ ...payload, time: { start, end }, repeat }),
   };
   return new Promise((resolve) => {
     fetch(EVENT_URL, eventOptions)
