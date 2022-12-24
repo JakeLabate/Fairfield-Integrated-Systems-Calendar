@@ -725,7 +725,7 @@
 <script>
 	function setInitialDateTime(){
 		const today = new Date();
-		document.getElementById('eventDate').value = today.toISOString().substring(0, 10);
+		document.getElementById('eventDate').value = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
 		document.getElementById('startTime').value = "08:00";
 		document.getElementById('endTime').value = "17:00";
 	}
