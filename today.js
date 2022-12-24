@@ -56,3 +56,15 @@ function getTimeDuration(time = {}) {
   const endTime = dayjs(time.endTime, "HH:mm");
   return Math.abs(endTime.diff(startTime, "m"));
 }
+
+function toggleModal(modalID = 'modal-team'){
+
+	const modal = document.getElementById(modalID)
+	if(modal.style.display === "none"){
+		console.log("Opening Modal");
+		modal.style.display = "flex"
+	}else{
+		console.log("Closing Modal");
+		modal.style.display = "none"
+	}
+}

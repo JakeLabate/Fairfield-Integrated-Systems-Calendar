@@ -14,22 +14,72 @@
 		<span class="date"></span>
 		<span class="time"></span>
 	</div>
-	<!-- <div class="event-container">
-		<div class="datetime">
-			<span>Mon, 19 Dec 2022 08:28</span> to <span>Mon, 19 Dec 2022 08:28</span>
-		</div>
-		<div class="event-info">
-			<div class="project">
-				8 Laurel Lane - Prewire and Lutron
+
+	<!-- Modal for Editing Events -->
+	<div id="modal-edit" class="modal" style="display: flex;">
+		<form>
+			<div class="input-container">
+				<label for="todo">Todo</label>
+				<select name="todo" id="todo" data-type="todos">
+					<option hidden disabled selected value> -- select an option -- </option>
+					<option value="id-asc">Vehicle Name</option>
+					<option disabled value> -- select an option -- </option>
+				</select>
 			</div>
-			<div class="vehicle">
-				Blue Van
+			<div class="input-container">
+				<label for="vehicle">Vehicle</label>
+				<select name="vehicle" id="vehicle" data-type="vehicles">
+					<option hidden disabled selected value> -- select an option -- </option>
+					<option value="id-asc">Id Ascending</option>
+					<option disabled value> -- select an option -- </option>
+				</select>
 			</div>
-			<div class="team">
-				Jake Labate
+
+			<div class="input-container">
+				<label for="teammember1">Team member 1</label>
+				<select name="teammember1" id="teammember1" data-type="teammembers">
+					<option hidden disabled selected value> -- select an option -- </option>
+					<option value="id-asc">Id Ascending</option>
+					<option disabled value> -- select an option -- </option>
+				</select>
 			</div>
-		</div>
-	</div> -->
+			<div class="input-container">
+				<label for="repeat">Repeat (days)</label>
+				<input id="repeatInput" type="number" value="1" min="1">
+			</div>
+			<div class="input-container">
+				<label for="teammember2">Team member 2</label>
+				<select name="teammember2" id="teammember2" data-type="teammembers">
+					<option hidden disabled selected value> -- select an option -- </option>
+					<option value="id-asc">Id Ascending</option>
+					<option disabled value> -- select an option -- </option>
+				</select>
+			</div>
+			<div class="input-container">
+				<label for="startTime">Start Time</label>
+				<input type="time" id="startTime" name="startTime" value="08:00">
+			</div>
+			<div class="input-container">
+				<label for="teammember3">Team member 3</label>
+				<select name="teammember3" id="teammember3" data-type="teammembers">
+					<option hidden disabled selected value> -- select an option -- </option>
+					<option value="id-asc">Id Ascending</option>
+					<option disabled value> -- select an option -- </option>
+				</select>
+			</div>
+			<div class="input-container">
+				<label for="endTime">End Time</label>
+				<input type="time" id="endTime" name="endTime" value="17:00">
+			</div>
+			<div class="modal-actions">
+				<button type="button" onclick="toggleModal('modal-edit')">Cancel</button>
+				<button type="button" onclick="newVehicle()">Update Event</button>
+			</div>
+
+		</form>
+	</div>
+	<div id="snackbar"></div>
+
 	<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/customParseFormat.js"></script>
 	<script>dayjs.extend(window.dayjs_plugin_customParseFormat)</script>
@@ -57,7 +107,7 @@
 
 		window.getEvents = async () => {
 			const eventsRef = collection(firestore, "events");
-			const q = query(eventsRef, where("repeatDates", "array-contains", new Date(dayjs().startOf('D').format("YYYY-MM-DD")))); 
+			const q = query(eventsRef, where("repeatDates", "array-contains", new Date(dayjs().startOf('D').format("YYYY-MM-DD"))));
 			const querySnapshot = await getDocs(q);
 			let totalDuration = 0, events = [];
 
@@ -77,7 +127,7 @@
 				return firstValFormatted.diff(secondValFormatted)
 			})
 
-			
+
 			events.forEach(addEventCard)
 		}
 		getEvents()
