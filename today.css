@@ -58,6 +58,7 @@ body {
 	background-color: white;
 	padding: 24px;
 	display: flex;
+  align-items: center;
   flex-wrap: wrap;
 	font-size: var(--primaryFontSize);
 	color: var(--primaryTextColor);

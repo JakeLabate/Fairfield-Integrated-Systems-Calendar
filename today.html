@@ -48,22 +48,30 @@
 				</select>
 			</div>
 			<div class="input-container">
-				<label for="startTime">Start Time</label>
-				<input type="time" id="startTime" name="startTime" value="08:00">
+				<label for="eventDate">Date</label>
+				<input type="date" id="eventDate" name="eventDate">
 			</div>
-			<div class="input-container">
-				<label for="teammember3">Team member 3</label>
-				<select name="teammember3" id="teammember3" data-type="teammembers">
-					<option hidden disabled selected value>Select an option</option>
-				</select>
-			</div>
-			<div class="input-container">
-				<label for="endTime">End Time</label>
-				<input type="time" id="endTime" name="endTime" value="17:00">
-			</div>
+			<!-- <div class="input-container"> -->
+				<div class="input-container">
+					<label for="teammember3">Team member 3</label>
+					<select name="teammember3" id="teammember3" data-type="teammembers">
+						<option hidden disabled selected value>Select an option</option>
+					</select>
+				</div>
+				<div class="input-container" style="flex-direction: row;">
+					<div class="input-container">
+						<label for="startTime">Start Time</label>
+						<input type="time" id="startTime" name="startTime" value="08:00">
+					</div>
+					<div class="input-container">
+						<label for="endTime">End Time</label>
+						<input type="time" id="endTime" name="endTime" value="17:00">
+					</div>
+				</div>
+			<!-- </div> -->
 			<div class="modal-actions">
 				<button type="button" onclick="closeForm()">Cancel</button>
-				<button type="button" onclick="newVehicle()">Update Event</button>
+				<button type="button" onclick="updateEvent()">Update Event</button>
 			</div>
 
 		</form>

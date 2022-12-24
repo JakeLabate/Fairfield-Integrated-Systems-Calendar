@@ -1,3 +1,5 @@
+const EVENT_URL = "https://hook.us1.make.com/s7p9n5gdm4ixpewou15lueojpboa9f3s";
+
 setInterval(() => {
   document.querySelector("#date-header .date").innerHTML =
     dayjs().format("dddd, MMMM D, YYYY");
@@ -199,6 +201,7 @@ function setOptions({
   optionsArray.forEach((val) => {
     const option = document.createElement("option");
     option.id = val[idKey];
+    option.setAttribute('data-payload', JSON.stringify(val));
     const labels = labelKeys.map((key) => val[key]);
     option.value = val[idKey];
     option.innerHTML = labels.join(" ");
@@ -229,9 +232,16 @@ function editEvent(e) {
     });
   }
   document.querySelector(".modal #repeatInput").value = selectedEvent.repeat;
-  document.querySelector(".modal #startTime").value = selectedEvent.time.startTime;
+  document.querySelector(".modal #startTime").value =
+    selectedEvent.time.startTime;
   document.querySelector(".modal #endTime").value = selectedEvent.time.endTime;
 
+  const { seconds, nanoseconds } = selectedEvent.time.date;
+  const date = new Date(seconds * 1000 + nanoseconds);
+
+  document.querySelector(".modal #eventDate").value = date
+    .toISOString()
+    .substring(0, 10);
 }
 
 function selectOption({ selectTagId, optionId }) {
@@ -252,3 +262,275 @@ function closeForm() {
   resetModalForm();
   toggleModal("modal-edit");
 }
+
+function updateCalendarEvent(payload) {
+  const { date, startTime, endTime } = payload.time;
+  const start = date.toISOString().substring(0, 11) + startTime;
+  const end = date.toISOString().substring(0, 11) + endTime;
+
+  const eventOptions = {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({ ...payload, time: { start, end } }),
+  };
+  fetch(EVENT_URL, eventOptions)
+    .then((res) => res.json())
+    .then((data) => console.log(data));
+}
+
+function getSelectedOption({selectTagId}){
+  const selectElement = document.querySelector(`select#${selectTagId}`);
+  const options = Array.from(selectElement.options);
+  if(selectElement.selectedIndex > 0){
+    return options[selectElement.selectedIndex];
+  }
+}
+
+function updateEvent(){
+	const payload = {
+		eventColor:{
+			backgroundColor: 'white',
+			textColor: 'black'
+		}
+	};
+	let buffer;
+	let empty = true;
+	const newTodo = getSelectedOption({selectTagId: 'todo'});
+	const newVehicle = getSelectedOption({selectTagId: 'vehicle'});
+	const newTeamMember1 = getSelectedOption({selectTagId: 'teammember1'});
+	const newTeamMember2 = getSelectedOption({selectTagId: 'teammember2'});
+	const newTeamMember3 = getSelectedOption({selectTagId: 'teammember3'});
+
+	if(newTodo){
+		buffer = JSON.parse(newTodo.getAttribute('data-payload'))
+		payload.toDo = {
+			id: buffer.Id,
+			name: buffer.Name,
+			type: buffer.type,
+			progress: buffer.Progress,
+			description: buffer.Description,
+		}
+		payload.eventColor = colorPairs[hash_fn(buffer.Id)]
+		if(buffer.type === 'Project'){
+			payload.toDo.client = {
+				name: buffer.Client,
+				id: buffer.ClientId
+			}
+		}
+		empty = false;
+	}
+	if(newVehicle){
+		buffer = JSON.parse(newVehicle.getAttribute('data-payload'));
+		payload.vehicle = {
+			id: buffer.id,
+			name: buffer.vehicleName,
+			vin: buffer.vin,
+			license: buffer.license
+		}
+		empty = false;
+	}
+	if(newTeamMember1 || newTeamMember2 || newTeamMember3){
+		payload.teamMembers = [];
+		([newTeamMember1, newTeamMember2, newTeamMember3].forEach( newTeamMember => {
+			buffer = JSON.parse(newTeamMember.getAttribute('data-payload'));
+			payload.teamMembers.push( {
+				id: buffer.id,
+				name: `${buffer.firstName} ${buffer.lastName}`,
+				email: buffer.email
+			})
+		}))
+		empty = false;
+	}
+		
+	if(empty)	{ // if all the drop locations are empty
+		alert("No data selected");
+		return;
+	}else if(!confirm("Are you sure you want to update the event?")){
+		return;
+	}
+
+	payload.time = {
+		date: new Date(document.querySelector('.modal #eventDate').value),
+		startTime: document.querySelector('.modal #startTime').value,
+		endTime: document.querySelector('.modal #endTime').value
+	}
+
+	const repeat = parseInt(document.querySelector('.modal #repeatInput').value, 10);
+	if(!repeat || repeat <= 1){
+		payload.repeat = 1;
+	}else{
+		payload.repeat = repeat
+	}
+	payload.repeatDates = createRepeatDates(payload.time.date, payload.repeat);
+  payload.eventID = selectedEvent.eventID;
+	replaceUndefined(payload); // Because undefined values are not allowed.
+
+  console.log(payload);
+  return
+  
+	updateCalendarEvent(payload)
+	.then(res => {
+		saveEventToDatabase(payload)
+		showSnackbar({message: "Event updated successfully"})
+	}).catch(err => {
+		console.log(err);
+		alert("Failed to create the event")
+	})	
+}
+
+function createRepeatDates(startDate, repeatDays = 1) {
+  // Include the start date as well
+  const repeatDatesArr = [startDate];
+  const date = new Date(startDate);
+  while (repeatDays > 1) {
+    const currentDate = date.getDate();
+    date.setDate(currentDate + 1);
+    if (date.getDay() !== 0 && date.getDay() !== 6) {
+      repeatDatesArr.push(new Date(date));
+      repeatDays--;
+    }
+  }
+  return repeatDatesArr;
+}
+
+function replaceUndefined(obj, replaceToken = '') {
+	Object.keys(obj).forEach(function(key) {
+		let value = obj[key];
+		let type = typeof value;
+			if (type === "object") {
+					replaceUndefined(obj[key], replaceToken);
+			}
+			else if (type === "undefined") {
+					obj[key] = replaceToken;
+			}
+	});
+}
+
+
+const NUMBER_OF_COLORS = 20;
+// The following is a hash function with good distribution and less collision
+function hash_fn(s) {
+  const range = NUMBER_OF_COLORS - 1;
+  // Initialize the seed value to 0
+  let seed = 0;
+  // Convert the input string to a typed array
+  let data = new TextEncoder().encode(s);
+  // Compute the hash value using the typed array
+  let hash = murmur2_impl(data, seed);
+  // Take the modulus of the hash value with 19 and add 1 to ensure that the result is in the range from 1 to 19
+  return (hash % range) + (hash < 0 ? range : 0);
+}
+
+// Define a function to compute the MurmurHash2 value of an array of bytes
+function murmur2_impl(data, seed) {
+  let m = 0x5bd1e995;
+  let r = 24;
+  let h = seed ^ data.length;
+  let k;
+  for (let i = 0; i < data.length; i += 4) {
+    k = data[i];
+    if (i + 1 < data.length) {
+      k |= data[i + 1] << 8;
+    }
+    if (i + 2 < data.length) {
+      k |= data[i + 2] << 16;
+    }
+    if (i + 3 < data.length) {
+      k |= data[i + 3] << 24;
+    }
+    k = Math.imul(k, m);
+    k ^= k >>> r;
+    k = Math.imul(k, m);
+    h = Math.imul(h, m);
+    h ^= k;
+  }
+  h ^= h >>> 13;
+  h = Math.imul(h, m);
+  h ^= h >>> 15;
+  return h;
+}
+
+const colorPairs = [
+  {
+    backgroundColor: "turquoise",
+    textColor: "black",
+  },
+  {
+    backgroundColor: "salmon",
+    textColor: "black",
+  },
+  {
+    backgroundColor: "red",
+    textColor: "white",
+  },
+  {
+    backgroundColor: "green",
+    textColor: "white",
+  },
+  {
+    backgroundColor: "blue",
+    textColor: "white",
+  },
+  {
+    backgroundColor: "palevioletred",
+    textColor: "white",
+  },
+  {
+    backgroundColor: "brown",
+    textColor: "white",
+  },
+  {
+    backgroundColor: "yellow",
+    textColor: "black",
+  },
+  {
+    backgroundColor: "purple",
+    textColor: "white",
+  },
+  {
+    backgroundColor: "orange",
+    textColor: "black",
+  },
+  {
+    backgroundColor: "pink",
+    textColor: "black",
+  },
+  {
+    backgroundColor: "olive",
+    textColor: "white",
+  },
+  {
+    backgroundColor: "navy",
+    textColor: "white",
+  },
+  {
+    backgroundColor: "maroon",
+    textColor: "white",
+  },
+  {
+    backgroundColor: "teal",
+    textColor: "white",
+  },
+  {
+    backgroundColor: "peachpuff",
+    textColor: "black",
+  },
+  {
+    backgroundColor: "mediumorchid",
+    textColor: "white",
+  },
+  {
+    backgroundColor: "mediumturquoise",
+    textColor: "black",
+  },
+  {
+    backgroundColor: "palegreen",
+    textColor: "black",
+  },
+  {
+    backgroundColor: "mediumslateblue",
+    textColor: "white",
+  },
+];
