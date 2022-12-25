@@ -201,7 +201,7 @@ function setOptions({
   optionsArray.forEach((val) => {
     const option = document.createElement("option");
     option.id = val[idKey];
-    option.setAttribute('data-payload', JSON.stringify(val));
+    option.setAttribute("data-payload", JSON.stringify(val));
     const labels = labelKeys.map((key) => val[key]);
     option.value = val[idKey];
     option.innerHTML = labels.join(" ");
@@ -246,6 +246,11 @@ function editEvent(e) {
 
 function selectOption({ selectTagId, optionId }) {
   const selectElement = document.querySelector(`select#${selectTagId}`);
+  if (optionId === 0) {
+    selectElement.selectedIndex = 0;
+    return;
+  }
+
   const options = Array.from(selectElement.options);
   const index = options.findIndex((el) => el.id === optionId);
   selectElement.selectedIndex = index;
@@ -268,9 +273,9 @@ function updateCalendarEvent(payload) {
   const start = date.toISOString().substring(0, 11) + startTime;
   const end = date.toISOString().substring(0, 11) + endTime;
   let repeat = payload.repeat;
-	if(date.getDay() === 0 || date.getDay() === 6){
-		repeat = repeat - 1;
-	}
+  if (date.getDay() === 0 || date.getDay() === 6) {
+    repeat = repeat - 1;
+  }
 
   const eventOptions = {
     method: "POST",
@@ -287,107 +292,114 @@ function updateCalendarEvent(payload) {
   });
 }
 
-function getSelectedOption({selectTagId}){
+function getSelectedOption({ selectTagId }) {
   const selectElement = document.querySelector(`select#${selectTagId}`);
   const options = Array.from(selectElement.options);
-  if(selectElement.selectedIndex > 0){
+  if (selectElement.selectedIndex > 0) {
     return options[selectElement.selectedIndex];
   }
 }
 
-function updateEvent(){
-	const payload = {
-		eventColor:{
-			backgroundColor: 'white',
-			textColor: 'black'
-		}
-	};
-	let buffer;
-	let empty = true;
-	const newTodo = getSelectedOption({selectTagId: 'todo'});
-	const newVehicle = getSelectedOption({selectTagId: 'vehicle'});
-	const newTeamMember1 = getSelectedOption({selectTagId: 'teammember1'});
-	const newTeamMember2 = getSelectedOption({selectTagId: 'teammember2'});
-	const newTeamMember3 = getSelectedOption({selectTagId: 'teammember3'});
+function updateEvent() {
+  const payload = {
+    eventColor: {
+      backgroundColor: "white",
+      textColor: "black",
+    },
+  };
+  let buffer;
+  let empty = true;
+  const newTodo = getSelectedOption({ selectTagId: "todo" });
+  const newVehicle = getSelectedOption({ selectTagId: "vehicle" });
+  const newTeamMember1 = getSelectedOption({ selectTagId: "teammember1" });
+  const newTeamMember2 = getSelectedOption({ selectTagId: "teammember2" });
+  const newTeamMember3 = getSelectedOption({ selectTagId: "teammember3" });
 
-	if(newTodo){
-		buffer = JSON.parse(newTodo.getAttribute('data-payload'))
-		payload.toDo = {
-			id: buffer.Id,
-			name: buffer.Name,
-			type: buffer.type,
-			progress: buffer.Progress,
-			description: buffer.Description,
-		}
-		payload.eventColor = colorPairs[hash_fn(buffer.Id)]
-		if(buffer.type === 'Project'){
-			payload.toDo.client = {
-				name: buffer.Client,
-				id: buffer.ClientId
-			}
-		}
-		empty = false;
-	}
-	if(newVehicle){
-		buffer = JSON.parse(newVehicle.getAttribute('data-payload'));
-		payload.vehicle = {
-			id: buffer.id,
-			name: buffer.vehicleName,
-			vin: buffer.vin,
-			license: buffer.license
-		}
-		empty = false;
-	}
-	if(newTeamMember1 || newTeamMember2 || newTeamMember3){
-		payload.teamMembers = [];
-		([newTeamMember1, newTeamMember2, newTeamMember3].forEach( newTeamMember => {
-      if(!newTeamMember){
-        return;
+  if (newTodo) {
+    buffer = JSON.parse(newTodo.getAttribute("data-payload"));
+    payload.toDo = {
+      id: buffer.Id,
+      name: buffer.Name,
+      type: buffer.type,
+      progress: buffer.Progress,
+      description: buffer.Description,
+    };
+    payload.eventColor = colorPairs[hash_fn(buffer.Id)];
+    if (buffer.type === "Project") {
+      payload.toDo.client = {
+        name: buffer.Client,
+        id: buffer.ClientId,
+      };
+    }
+    empty = false;
+  }
+  if (newVehicle) {
+    buffer = JSON.parse(newVehicle.getAttribute("data-payload"));
+    payload.vehicle = {
+      id: buffer.id,
+      name: buffer.vehicleName,
+      vin: buffer.vin,
+      license: buffer.license,
+    };
+    empty = false;
+  }
+  if (newTeamMember1 || newTeamMember2 || newTeamMember3) {
+    payload.teamMembers = [];
+    [newTeamMember1, newTeamMember2, newTeamMember3].forEach(
+      (newTeamMember) => {
+        if (!newTeamMember) {
+          return;
+        }
+        buffer = JSON.parse(newTeamMember.getAttribute("data-payload"));
+        payload.teamMembers.push({
+          id: buffer.id,
+          name: `${buffer.firstName} ${buffer.lastName}`,
+          email: buffer.email,
+        });
       }
-			buffer = JSON.parse(newTeamMember.getAttribute('data-payload'));
-			payload.teamMembers.push( {
-				id: buffer.id,
-				name: `${buffer.firstName} ${buffer.lastName}`,
-				email: buffer.email
-			})
-		}))
-		empty = false;
-	}
-		
-	if(empty)	{ // if all the drop locations are empty
-		alert("No data selected");
-		return;
-	}else if(!confirm("Are you sure you want to update the event?")){
-		return;
-	}
+    );
+    empty = false;
+  }
 
-	payload.time = {
-		date: new Date(document.querySelector('.modal #eventDate').value),
-		startTime: document.querySelector('.modal #startTime').value,
-		endTime: document.querySelector('.modal #endTime').value
-	}
+  if (empty) {
+    // if all the drop locations are empty
+    alert("No data selected");
+    return;
+  } else if (!confirm("Are you sure you want to update the event?")) {
+    return;
+  }
 
-	const repeat = parseInt(document.querySelector('.modal #repeatInput').value, 10);
-	if(!repeat || repeat <= 1){
-		payload.repeat = 1;
-	}else{
-		payload.repeat = repeat
-	}
-	payload.repeatDates = createRepeatDates(payload.time.date, payload.repeat);
+  payload.time = {
+    date: new Date(document.querySelector(".modal #eventDate").value),
+    startTime: document.querySelector(".modal #startTime").value,
+    endTime: document.querySelector(".modal #endTime").value,
+  };
+
+  const repeat = parseInt(
+    document.querySelector(".modal #repeatInput").value,
+    10
+  );
+  if (!repeat || repeat <= 1) {
+    payload.repeat = 1;
+  } else {
+    payload.repeat = repeat;
+  }
+  payload.repeatDates = createRepeatDates(payload.time.date, payload.repeat);
   payload.eventID = selectedEvent.eventID;
   payload.id = selectedEvent.id;
-	replaceUndefined(payload); // Because undefined values are not allowed.
+  replaceUndefined(payload); // Because undefined values are not allowed.
 
-  console.log(payload);
-  
-	updateCalendarEvent(payload)
-	.then(data => {
-		updateEventInDatabase({...payload, ...data})
-		showSnackbar({message: "Event updated successfully"})
-	}).catch(err => {
-		console.log(err);
-		alert("Failed to update the event")
-	})	
+  updateCalendarEvent(payload)
+    .then((data) => updateEventInDatabase({ ...payload, ...data }))
+    .then((res) => {
+      getEvents();
+      toggleModal('modal-edit')
+      showSnackbar({ message: "Event updated successfully" });
+    })
+    .catch((err) => {
+      console.log(err);
+      alert("Failed to update the event");
+    });
 }
 
 function createRepeatDates(startDate, repeatDays = 1) {
@@ -405,19 +417,17 @@ function createRepeatDates(startDate, repeatDays = 1) {
   return repeatDatesArr;
 }
 
-function replaceUndefined(obj, replaceToken = '') {
-	Object.keys(obj).forEach(function(key) {
-		let value = obj[key];
-		let type = typeof value;
-			if (type === "object") {
-					replaceUndefined(obj[key], replaceToken);
-			}
-			else if (type === "undefined") {
-					obj[key] = replaceToken;
-			}
-	});
+function replaceUndefined(obj, replaceToken = "") {
+  Object.keys(obj).forEach(function (key) {
+    let value = obj[key];
+    let type = typeof value;
+    if (type === "object") {
+      replaceUndefined(obj[key], replaceToken);
+    } else if (type === "undefined") {
+      obj[key] = replaceToken;
+    }
+  });
 }
-
 
 const NUMBER_OF_COLORS = 20;
 // The following is a hash function with good distribution and less collision
@@ -544,3 +554,11 @@ const colorPairs = [
     textColor: "white",
   },
 ];
+
+function removeAllEvents() {
+  const events = document.querySelectorAll(".event-container");
+  const body = document.querySelector("body");
+  events.forEach((event) => {
+    body.removeChild(event);
+  });
+}
