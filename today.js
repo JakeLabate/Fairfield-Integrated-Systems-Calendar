@@ -267,17 +267,24 @@ function updateCalendarEvent(payload) {
   const { date, startTime, endTime } = payload.time;
   const start = date.toISOString().substring(0, 11) + startTime;
   const end = date.toISOString().substring(0, 11) + endTime;
+  let repeat = payload.repeat;
+	if(date.getDay() === 0 || date.getDay() === 6){
+		repeat = repeat - 1;
+	}
 
   const eventOptions = {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
-    body: JSON.stringify({ ...payload, time: { start, end } }),
+    body: JSON.stringify({ ...payload, time: { start, end }, repeat }),
   };
-  fetch(EVENT_URL, eventOptions)
-    .then((res) => res.json())
-    .then((data) => console.log(data));
+
+  return new Promise((resolve) => {
+    fetch(EVENT_URL, eventOptions)
+      .then((res) => res.json())
+      .then((data) => resolve(data));
+  });
 }
 
 function getSelectedOption({selectTagId}){
@@ -334,6 +341,9 @@ function updateEvent(){
 	if(newTeamMember1 || newTeamMember2 || newTeamMember3){
 		payload.teamMembers = [];
 		([newTeamMember1, newTeamMember2, newTeamMember3].forEach( newTeamMember => {
+      if(!newTeamMember){
+        return;
+      }
 			buffer = JSON.parse(newTeamMember.getAttribute('data-payload'));
 			payload.teamMembers.push( {
 				id: buffer.id,
@@ -365,18 +375,18 @@ function updateEvent(){
 	}
 	payload.repeatDates = createRepeatDates(payload.time.date, payload.repeat);
   payload.eventID = selectedEvent.eventID;
+  payload.id = selectedEvent.id;
 	replaceUndefined(payload); // Because undefined values are not allowed.
 
   console.log(payload);
-  return
   
 	updateCalendarEvent(payload)
-	.then(res => {
-		saveEventToDatabase(payload)
+	.then(data => {
+		updateEventInDatabase({...payload, ...data})
 		showSnackbar({message: "Event updated successfully"})
 	}).catch(err => {
 		console.log(err);
-		alert("Failed to create the event")
+		alert("Failed to update the event")
 	})	
 }
 
