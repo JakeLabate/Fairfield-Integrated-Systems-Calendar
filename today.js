@@ -261,6 +261,10 @@ function resetModalForm() {
   selects.forEach((select) => {
     select.selectedIndex = 0;
   });
+  const today = new Date();
+  document.querySelector(".modal #eventDate").value = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+  document.querySelector(".modal #startTime").value = "08:00";
+  document.querySelector(".modal #endTime").value = "17:00";
 }
 
 function closeForm() {
