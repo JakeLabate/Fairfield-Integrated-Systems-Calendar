@@ -526,6 +526,7 @@ function createNewEvent(){
 	if(newTodo){
 		buffer = JSON.parse(newTodo.getAttribute('data-payload'))
 		payload.toDo = {
+			id: buffer.Id,
 			name: buffer.Name,
 			type: buffer.type,
 			progress: buffer.Progress,
@@ -543,6 +544,7 @@ function createNewEvent(){
 	if(newVehicle){
 		buffer = JSON.parse(newVehicle.getAttribute('data-payload'));
 		payload.vehicle = {
+			id: buffer.id,
 			name: buffer.vehicleName,
 			vin: buffer.vin,
 			license: buffer.license
@@ -554,6 +556,7 @@ function createNewEvent(){
 		newTeamMembers.forEach( newTeamMember => {
 			buffer = JSON.parse(newTeamMember.getAttribute('data-payload'));
 			payload.teamMembers.push( {
+				id: buffer.id,
 				name: `${buffer.firstName} ${buffer.lastName}`,
 				email: buffer.email
 			})
@@ -584,9 +587,9 @@ function createNewEvent(){
 
 	replaceUndefined(payload); // Because undefined values are not allowed.
 
-	saveEventToDatabase(payload)
-	.then(response => {
-		saveEventToCalendar(payload)
+	saveEventToCalendar(payload)
+	.then(data => {
+		saveEventToDatabase({...data, ...payload})
 		showSnackbar({message: "Shit is GUCCI"})
 		clearCards()
 		createConfetti()
@@ -600,19 +603,23 @@ function saveEventToCalendar(payload) {
   const { date, startTime, endTime } = payload.time;
   const start = date.toISOString().substring(0, 11) + startTime;
   const end = date.toISOString().substring(0, 11) + endTime;
-  payload.time = {
-    start,
-    end,
-  };
-  console.log(payload);
+	let repeat = payload.repeat;
+	if(date.getDay() === 0 || date.getDay() === 6){
+		repeat = repeat - 1;
+	}
+
   const eventOptions = {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ ...payload, time: { start, end }, repeat }),
   };
-  fetch(EVENT_URL, eventOptions);
+  return new Promise((resolve) => {
+    fetch(EVENT_URL, eventOptions)
+      .then((res) => res.json())
+      .then((data) => resolve(data));
+  });
 }
 
 function createRepeatDates(startDate, repeatDays = 1) {
