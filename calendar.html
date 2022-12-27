@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="calendar.css">
+  <title>Calendar</title>
+</head>
+
+<body>
+
+  <section class="calendar-container">
+    <div class="week">
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container">
+          <div class="datetime">
+            <span>8:00 AM</span> to <span>5:00 PM</span>
+          </div>
+          <div class="event-info">
+
+            <div class="project">
+              10 Locust - Exterior Shower and Playroom
+            </div>
+            <div class="vehicle">
+              Red Truck
+            </div>
+            <div class="team">
+              Jake Labate
+            </div>
+          </div>
+        </div>
+        <div class="event-container"></div>
+      </div>
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container"></div>
+        <div class="event-container"></div>
+      </div>
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container"></div>
+        <div class="event-container"></div>
+      </div>
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container"></div>
+        <div class="event-container"></div>
+      </div>
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container"></div>
+        <div class="event-container"></div>
+      </div>
+    </div>
+    <div class="week">
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container"></div>
+        <div class="event-container"></div>
+      </div>
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container"></div>
+        <div class="event-container"></div>
+      </div>
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container"></div>
+        <div class="event-container"></div>
+      </div>
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container"></div>
+        <div class="event-container"></div>
+      </div>
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container"></div>
+        <div class="event-container"></div>
+      </div>
+    </div>
+    <div class="week">
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container"></div>
+        <div class="event-container"></div>
+      </div>
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container"></div>
+        <div class="event-container"></div>
+      </div>
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container"></div>
+        <div class="event-container"></div>
+      </div>
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container"></div>
+        <div class="event-container"></div>
+      </div>
+      <div class="day">
+        <div class="day-title">Tuesday, December 27</div>
+        <div class="event-container"></div>
+        <div class="event-container"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal for Editing Events -->
+  <div id="modal-edit" class="modal" style="display: none;">
+    <form>
+      <div class="input-container">
+        <label for="todo">Todo</label>
+        <select name="todo" id="todo" data-type="todos">
+          <option hidden disabled selected value>Select an option</option>
+        </select>
+      </div>
+      <div class="input-container">
+        <label for="vehicle">Vehicle</label>
+        <select name="vehicle" id="vehicle" data-type="vehicles">
+          <option hidden disabled selected value>Select an option</option>
+        </select>
+      </div>
+
+      <div class="input-container">
+        <label for="teammember1">Team member 1</label>
+        <select name="teammember1" id="teammember1" data-type="teammembers">
+          <option hidden disabled selected value>Select an option</option>
+        </select>
+      </div>
+      <div class="input-container">
+        <label for="repeat">Repeat (days)</label>
+        <input id="repeatInput" type="number" value="1" min="1">
+      </div>
+      <div class="input-container">
+        <label for="teammember2">Team member 2</label>
+        <select name="teammember2" id="teammember2" data-type="teammembers">
+          <option hidden disabled selected value>Select an option</option>
+        </select>
+      </div>
+      <div class="input-container">
+        <label for="eventDate">Date</label>
+        <input type="date" id="eventDate" name="eventDate">
+      </div>
+      <!-- <div class="input-container"> -->
+      <div class="input-container">
+        <label for="teammember3">Team member 3</label>
+        <select name="teammember3" id="teammember3" data-type="teammembers">
+          <option hidden disabled selected value>Select an option</option>
+        </select>
+      </div>
+      <div class="input-container" style="flex-direction: row;">
+        <div class="input-container">
+          <label for="startTime">Start Time</label>
+          <input type="time" id="startTime" name="startTime" value="08:00">
+        </div>
+        <div class="input-container">
+          <label for="endTime">End Time</label>
+          <input type="time" id="endTime" name="endTime" value="17:00">
+        </div>
+      </div>
+      <!-- </div> -->
+      <div class="modal-actions">
+        <button type="button" onclick="closeForm()">Cancel</button>
+        <button type="button" onclick="resetModalForm()" style="margin: 24px 16px 0px auto;">Clear</button>
+        <button type="button" onclick="updateEvent()">Update Event</button>
+      </div>
+
+    </form>
+  </div>
+  <div id="snackbar"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/customParseFormat.js"></script>
+  <script>dayjs.extend(window.dayjs_plugin_customParseFormat)</script>
+  <script src="./calendar.js"></script>
+  <script type="module">
+
+    // Full list of functions: https://firebase.google.com/docs/web/setup#available-libraries
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+    import { getFirestore, collection, doc, updateDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+    import { getDatabase, ref, child, get, set, push, remove } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyA076_DdfgtN-UFPRysbn-3ca7khvOSx6E",
+      authDomain: "fairfield-integrated-systems.firebaseapp.com",
+      databaseURL: "https://fairfield-integrated-systems-default-rtdb.firebaseio.com",
+      projectId: "fairfield-integrated-systems",
+      storageBucket: "fairfield-integrated-systems.appspot.com",
+      messagingSenderId: "358421826101",
+      appId: "1:358421826101:web:b8b89c26da56a64731ff7c"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const firestore = getFirestore(app);
+    const db = getDatabase();
+    const dbRef = ref(getDatabase());
+
+    window.getEvents = async () => {
+      const eventsRef = collection(firestore, "events");
+      const q = query(eventsRef, where("repeatDates", "array-contains", new Date(dayjs().startOf('D').format("YYYY-MM-DD"))));
+      const querySnapshot = await getDocs(q);
+      let totalDuration = 0, events = [];
+
+      querySnapshot.forEach(doc => {
+        const data = doc.data();
+        const duration = getTimeDuration(data.time);
+        events.push({
+          id: doc.id,
+          duration,
+          ...data
+        })
+      })
+
+      events.sort((firstVal, secondVal) => {
+        const firstValFormatted = dayjs(firstVal.time.startTime, "HH:mm")
+        const secondValFormatted = dayjs(secondVal.time.startTime, "HH:mm")
+        return firstValFormatted.diff(secondValFormatted)
+      })
+
+
+      removeAllEvents();
+      events.forEach(addEventCard)
+    }
+
+    // Get team members
+    window.getTeamMembers = function () {
+      return new Promise(resolve => {
+        get(child(dbRef, 'team')).then((snapshot) => {
+          const teamMembers = []
+          snapshot.forEach((childSnapshot) => {
+            var childData = childSnapshot.val();
+            teamMembers.push({ id: childSnapshot.key, ...childData })
+          });
+          resolve(teamMembers)
+        });
+      })
+    }
+
+    // Get vehicles
+    window.getVehicles = function () {
+      return new Promise(resolve => {
+        get(child(dbRef, 'vehicles')).then((snapshot) => {
+          const vehicles = [];
+          snapshot.forEach((childSnapshot) => {
+            var childData = childSnapshot.val();
+            vehicles.push({ id: childSnapshot.key, ...childData });
+          });
+          resolve(vehicles)
+        });
+      })
+    }
+
+    window.updateEventInDatabase = (payload) => {
+      return new Promise((resolve, reject) => {
+        const eventDocRef = doc(firestore, "events", payload.id);
+        updateDoc(eventDocRef, payload)
+          .then((docRef) => {
+            console.log(docRef);
+            resolve(docRef)
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      })
+    }
+
+		// getEvents();
+		// getAllData();
+  </script>
+</body>
+
+</html>
