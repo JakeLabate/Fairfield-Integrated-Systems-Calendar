@@ -1,5 +1,38 @@
 const EVENT_URL = "https://hook.us1.make.com/s7p9n5gdm4ixpewou15lueojpboa9f3s";
 
+function createCalendar({
+  startDate = dayjs(),
+  numberOfWeeks = 3,
+  includeWeekends = false,
+} = {}) {
+  const calendar = document.querySelector(".calendar-container");
+  removeAllChildren(calendar)
+  for (let weekNumber = 1; weekNumber <= numberOfWeeks; weekNumber++) {
+    const week = document.createElement("div");
+    week.classList.add("week");
+    calendar.appendChild(week);
+
+    for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
+      const offsetDate = startDate.add(dayOffset, "day")
+
+      if(!includeWeekends && [0,6].includes(offsetDate.day())){
+        continue;
+      }
+
+      const day = document.createElement("div");
+      day.classList.add("day");
+      week.appendChild(day);
+
+      day.innerHTML = `
+      <div class="day-title">${offsetDate.format("ddd, MMMM D")}</div>
+      <div class="event-container"></div>
+      <div class="event-container"></div>
+      `;
+    }
+    startDate = startDate.add(7, "day");
+  }
+}
+
 function addEventCard(event) {
   const body = document.getElementsByTagName("body")[0];
 
@@ -255,7 +288,9 @@ function resetModalForm() {
     select.selectedIndex = 0;
   });
   const today = new Date();
-  document.querySelector(".modal #eventDate").value = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+  document.querySelector(".modal #eventDate").value = `${today.getFullYear()}-${
+    today.getMonth() + 1
+  }-${today.getDate()}`;
   document.querySelector(".modal #startTime").value = "08:00";
   document.querySelector(".modal #endTime").value = "17:00";
 }
@@ -390,7 +425,7 @@ function updateEvent() {
     .then((data) => updateEventInDatabase({ ...payload, ...data }))
     .then((res) => {
       getEvents();
-      toggleModal('modal-edit')
+      toggleModal("modal-edit");
       showSnackbar({ message: "Event updated successfully" });
     })
     .catch((err) => {
@@ -558,4 +593,10 @@ function removeAllEvents() {
   events.forEach((event) => {
     body.removeChild(event);
   });
+}
+
+function removeAllChildren(element){
+	while(element.firstChild){
+		element.removeChild(element.firstChild)
+	}
 }
