@@ -6,16 +6,16 @@ function createCalendar({
   includeWeekends = false,
 } = {}) {
   const calendar = document.querySelector(".calendar-container");
-  removeAllChildren(calendar)
+  removeAllChildren(calendar);
   for (let weekNumber = 1; weekNumber <= numberOfWeeks; weekNumber++) {
     const week = document.createElement("div");
     week.classList.add("week");
     calendar.appendChild(week);
 
     for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
-      const offsetDate = startDate.add(dayOffset, "day")
+      const offsetDate = startDate.add(dayOffset, "day");
 
-      if(!includeWeekends && [0,6].includes(offsetDate.day())){
+      if (!includeWeekends && [0, 6].includes(offsetDate.day())) {
         continue;
       }
 
@@ -31,6 +31,22 @@ function createCalendar({
     }
     startDate = startDate.add(7, "day");
   }
+}
+
+function initialzeCalendar() {
+  const currentDate = dayjs();
+  const nextDate = currentDate.add(1, "day").startOf('D');
+  const diff = nextDate.diff(currentDate);
+  const oneDayinMillis = 86400000;
+
+  createCalendar(); // For today
+  setTimeout(() => {
+    createCalendar();
+    setInterval(
+      () => createCalendar({ startDate: dayjs().add(i++, "day") }),
+      oneDayinMillis
+    ); // For day after tomorrow and further
+  }, diff); // For tomorrow
 }
 
 function addEventCard(event) {
@@ -595,8 +611,8 @@ function removeAllEvents() {
   });
 }
 
-function removeAllChildren(element){
-	while(element.firstChild){
-		element.removeChild(element.firstChild)
-	}
+function removeAllChildren(element) {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
 }
