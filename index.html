@@ -15,7 +15,6 @@
 
 	<!-- CSS Stylesheet -->
 	<link rel="stylesheet" href="stylesheet.css">
-	<link rel="stylesheet" href="calendar_style.css">
 
 	<!-- Firebase Real Time Database -->
 	<script type="module">
@@ -202,7 +201,6 @@
 
 	<!-- Tabs -->
 	<button class="tablink" onclick="openPage('Assignments', this, 'black')" id="defaultOpen">Assignments</button>
-	<button class="tablink" onclick="openPage('Calendar', this, 'black')">Calendar</button>
 	<button class="tablink" onclick="openPage('Lists', this, 'black')">Lists</button>
 	<!-- Refresh Page Button -->
 	<button class="tablinkRefresh" onclick="window.location.href = window.location.href"><img src="media/refreshWhite.png" height="16"/></button>
@@ -341,281 +339,6 @@
 		</div>
 	</section>
 
-	<!-- Calendar Tab -->
-	<section id="Calendar" class="tabcontent">
-		<section id="today">
-			<div>
-				<h2>Today</h2>
-				<text class="currentDayOfWeek"></text>
-				<text class="currentMonth"></text>
-				<text class="currentDayOfMonth"></text>
-				<text class="currentYear"></text>
-				<br><br>
-				<div class="singleDayCalendar">
-					<div class="events-container-today">
-					</div>
-					<div class="hour">
-						<div>00:00 AM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>1:00 AM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>2:00 AM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>3:00 AM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>4:00 AM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>5:00 AM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>6:00 AM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>7:00 AM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>8:00 AM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>9:00 AM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>10:00 AM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>11:00 AM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>12:00 PM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>1:00 PM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>2:00 PM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>3:00 PM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>4:00 PM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>5:00 PM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>6:00 PM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>7:00 PM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>8:00 PM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>9:00 PM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>10:00 PM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-					<div class="hour">
-						<div>11:00 PM</div>
-						<div class="fifteenMinuteBlock">:15</div>
-						<div class="fifteenMinuteBlock">:30</div>
-						<div class="fifteenMinuteBlock">:45</div>
-					</div>
-				</div>
-			</div>
-			<div>
-
-			</div>
-		</section>
-
-		<section id="3weeksView">
-			<div>Tomorrow</div>
-			<div id="week1" style="display: flex; flex-direction: row;">
-				<div class="dayCard">
-					<div class="events-container-week">
-						<div class="event-week" style="top: 50px; left: 10px;" onclick="document.querySelector('.modal').style.display='flex'">
-							<span>Jake Labate</span><span>Blue Van</span><span> 22 Dairy - Pre-Wire and Savant Lighting</span>
-						</div>
-						<div class="event-week" style="top: 450px; left: 15px;" onclick="document.querySelector('.modal').style.display='flex'">
-							<span>Jake Labate</span><span>Blue Van</span><span> 22 Dairy - Pre-Wire and Savant Lighting</span>
-						</div>
-						<div class="event-week" style="top: 290px; left: 0px;" onclick="document.querySelector('.modal').style.display='flex'">
-							<span>Jake Labate</span><span>Blue Van</span><span> 22 Dairy - Pre-Wire and Savant Lighting</span>
-						</div>
-						<div class="event-week" style="top: 40px; left: 45px;" onclick="document.querySelector('.modal').style.display='flex'">
-							<span>Jake Labate</span><span>Blue Van</span><span> 22 Dairy - Pre-Wire and Savant Lighting</span>
-						</div>
-						<div class="event-week" style="top: 90px; left: 150px;" onclick="document.querySelector('.modal').style.display='flex'">
-							<span>Jake Labate</span><span>Blue Van</span><span> 22 Dairy - Pre-Wire and Savant Lighting</span>
-						</div>
-					</div>
-					<text class="currentDayOfWeekPlus3"></text>
-					<div class="smallHour">00:00 AM</div>
-					<div class="smallHour">01:00 AM</div>
-					<div class="smallHour">02:00 AM</div>
-					<div class="smallHour">03:00 AM</div>
-					<div class="smallHour">04:00 AM</div>
-					<div class="smallHour">05:00 AM</div>
-					<div class="smallHour">06:00 AM</div>
-					<div class="smallHour">07:00 AM</div>
-					<div class="smallHour">08:00 AM</div>
-					<div class="smallHour">09:00 AM</div>
-					<div class="smallHour">10:00 AM</div>
-					<div class="smallHour">11:00 AM</div>
-					<div class="smallHour">12:00 PM</div>
-					<div class="smallHour">01:00 PM</div>
-					<div class="smallHour">02:00 PM</div>
-					<div class="smallHour">03:00 PM</div>
-					<div class="smallHour">04:00 PM</div>
-					<div class="smallHour">05:00 PM</div>
-					<div class="smallHour">06:00 PM</div>
-					<div class="smallHour">07:00 PM</div>
-					<div class="smallHour">08:00 PM</div>
-					<div class="smallHour">09:00 PM</div>
-					<div class="smallHour">10:00 PM</div>
-					<div class="smallHour">11:00 PM</div>
-				</div>
-				<div class="dayCard">
-					<text class="currentDayOfWeekPlus4"></text>
-				</div>
-				<div class="dayCard">
-					<text class="currentDayOfWeekPlus5"></text>
-				</div>
-				<div class="dayCard">
-					<text class="currentDayOfWeekPlus6"></text>
-				</div>
-				<div class="dayCard">
-					<text class="currentDayOfWeek"></text>
-				</div>
-			</div>
-
-			<div>Week of 15th</div>
-			<div id="week2" style="display: flex; flex-direction: row;">
-				<div class="dayCard">
-					Monday
-				</div>
-				<div class="dayCard">
-					Tuesday
-				</div>
-				<div class="dayCard">
-					Wednesday
-				</div>
-				<div class="dayCard">
-					Thursday
-				</div>
-				<div class="dayCard">
-					Friday
-				</div>
-			</div>
-
-			<div>Week of 15th</div>
-			<div id="week3" style="display: flex; flex-direction: row;">
-				<div class="dayCard">
-					Monday
-				</div>
-				<div class="dayCard">
-					Tuesday
-				</div>
-				<div class="dayCard">
-					Wednesday
-				</div>
-				<div class="dayCard">
-					Thursday
-				</div>
-				<div class="dayCard">
-					Friday
-				</div>
-			</div>
-
-		</section>
-		<div class="modal" style="display: none;" onclick="document.querySelector('.modal').style.display='none'">		
-			<div class="modal-content" onclick="insideModal(event)">
-				<div class="modal-close" onclick="document.querySelector('.modal').style.display='none'">X</div>
-				<div class="modal-content-row"><span>Todo: </span> 22 Dairy - Pre-Wire and Savant Lighting</div>
-				<div class="modal-content-row"><span>Team Member: </span> Jake Labate</div>
-				<div class="modal-content-row"><span>Vehicle: </span> Blue Van</div>
-			</div>
-		</div>
-
-	</section>
-
 	<!-- Lists Tab -->
 	<section id="Lists" class="tabcontent">
 
@@ -713,9 +436,6 @@
 			document.getElementById(pageName).style.display = "block";
 			elmnt.style.backgroundColor = color;
 			console.log("'" + pageName + "' Tab Opened");
-			if(pageName === 'Calendar'){
-				getEvents()
-			}
 		}
 		// Get the element with id="defaultOpen" and click on it
 		document.getElementById("defaultOpen").click();
@@ -787,7 +507,6 @@
 	}
 </script>
 <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
-<script src="calendar_script.js"></script>
 
 </body>
 </html>
