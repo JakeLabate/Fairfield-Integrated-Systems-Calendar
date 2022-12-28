@@ -20,7 +20,7 @@ function createCalendar({
       }
 
       const day = document.createElement("div");
-      day.id = offsetDate.format('YYYY-MM-DD');
+      day.id = offsetDate.format("YYYY-MM-DD");
       day.classList.add("day");
       week.appendChild(day);
 
@@ -35,23 +35,20 @@ function createCalendar({
 
 function initialzeCalendar() {
   const currentDate = dayjs();
-  const nextDate = currentDate.add(1, "day").startOf('D');
+  const nextDate = currentDate.add(1, "day").startOf("D");
   const diff = nextDate.diff(currentDate);
   const oneDayinMillis = 86400000;
 
   createCalendar(); // For today
   setTimeout(() => {
     createCalendar();
-    setInterval(
-      () => createCalendar({ startDate: dayjs().add(i++, "day") }),
-      oneDayinMillis
-    ); // For day after tomorrow and further
+    setInterval(createCalendar, oneDayinMillis); // For day after tomorrow and further
   }, diff); // For tomorrow
 }
 
 function addEventCard(containerID, event) {
   const eventContainer = document.getElementById(containerID);
-  if(!eventContainer){
+  if (!eventContainer) {
     return;
   }
 
@@ -609,7 +606,7 @@ const colorPairs = [
 
 function removeAllEvents(containerID) {
   const container = document.getElementById(containerID);
-  if(!container){
+  if (!container) {
     return;
   }
   const events = container.querySelectorAll(".event-container");
