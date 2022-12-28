@@ -108,21 +108,29 @@
 
     window.getEvents = async ({ startDate = dayjs(), endDate = dayjs().add(20, 'day') } = {}) => {
       const eventsRef = collection(firestore, "events");
-      const q = query(eventsRef, where("time.date", ">=", new Date(startDate.startOf('D').format("YYYY-MM-DD"))),
-        where("time.date", "<=", new Date(endDate.startOf('D').format("YYYY-MM-DD"))));
-      const querySnapshot = await getDocs(q);
-      let totalDuration = 0, events = [];
+      let events = [];
+      
+      for (let i = 0; i < 3; i++) {
+        const datesArray = [];
+        for (let j = 0; j < 7; j++) {
+          datesArray.push(new Date(startDate.add(7 * i + j, 'day').startOf('D').format("YYYY-MM-DD")))
+        }
 
-      querySnapshot.forEach(doc => {
-        const data = doc.data();
-        const duration = getTimeDuration(data.time);
+        const q = query(eventsRef, where("repeatDates", "array-contains-any", datesArray));
+        const querySnapshot = await getDocs(q);
 
-        events.push({
-          id: doc.id,
-          duration,
-          ...data
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          const duration = getTimeDuration(data.time);
+
+          events.push({
+            id: doc.id,
+            duration,
+            ...data
+          })
         })
-      })
+
+      }
 
       events.sort((firstVal, secondVal) => {
         const firstValFormatted = dayjs(firstVal.time.startTime, "HH:mm")
@@ -144,7 +152,7 @@
 
       Object.keys(events).forEach(day => {
         removeAllEvents(day);
-        events[day].forEach( event => addEventCard(day, event))
+        events[day].forEach(event => addEventCard(day, event))
       })
     }
 
