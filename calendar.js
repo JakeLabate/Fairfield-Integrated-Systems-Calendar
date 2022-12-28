@@ -20,13 +20,12 @@ function createCalendar({
       }
 
       const day = document.createElement("div");
+      day.id = offsetDate.format('YYYY-MM-DD');
       day.classList.add("day");
       week.appendChild(day);
 
       day.innerHTML = `
       <div class="day-title">${offsetDate.format("ddd, MMMM D")}</div>
-      <div class="event-container"></div>
-      <div class="event-container"></div>
       `;
     }
     startDate = startDate.add(7, "day");
@@ -49,8 +48,11 @@ function initialzeCalendar() {
   }, diff); // For tomorrow
 }
 
-function addEventCard(event) {
-  const body = document.getElementsByTagName("body")[0];
+function addEventCard(containerID, event) {
+  const eventContainer = document.getElementById(containerID);
+  if(!eventContainer){
+    return;
+  }
 
   const newEventElement = document.createElement("div");
   newEventElement.id = event.id;
@@ -96,7 +98,7 @@ function addEventCard(event) {
   }
   innerHTML += "</div>"; // Closing the event info tag
   newEventElement.innerHTML = innerHTML;
-  body.appendChild(newEventElement);
+  eventContainer.appendChild(newEventElement);
 }
 
 function getTimeDuration(time = {}) {
@@ -603,11 +605,15 @@ const colorPairs = [
   },
 ];
 
-function removeAllEvents() {
-  const events = document.querySelectorAll(".event-container");
-  const body = document.querySelector("body");
+function removeAllEvents(containerID) {
+  const container = document.getElementById(containerID);
+  if(!container){
+    return;
+  }
+  const events = container.querySelectorAll(".event-container");
+  console.log(containerID, container, events);
   events.forEach((event) => {
-    body.removeChild(event);
+    container.removeChild(event);
   });
 }
 
