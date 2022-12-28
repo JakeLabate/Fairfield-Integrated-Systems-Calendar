@@ -109,7 +109,7 @@
     window.getEvents = async ({ startDate = dayjs(), endDate = dayjs().add(20, 'day') } = {}) => {
       const eventsRef = collection(firestore, "events");
       let events = [];
-      
+
       for (let i = 0; i < 3; i++) {
         const datesArray = [];
         for (let j = 0; j < 7; j++) {
@@ -120,6 +120,9 @@
         const querySnapshot = await getDocs(q);
 
         querySnapshot.forEach(doc => {
+          if (events.find(el => el.id === doc.id)) {
+            return;
+          }
           const data = doc.data();
           const duration = getTimeDuration(data.time);
 
@@ -131,6 +134,7 @@
         })
 
       }
+
 
       events.sort((firstVal, secondVal) => {
         const firstValFormatted = dayjs(firstVal.time.startTime, "HH:mm")
