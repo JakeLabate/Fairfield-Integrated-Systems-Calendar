@@ -12,103 +12,6 @@
 <body>
 
   <section class="calendar-container">
-    <div class="week">
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container">
-          <div class="datetime">
-            <span>8:00 AM</span> to <span>5:00 PM</span>
-          </div>
-          <div class="event-info">
-
-            <div class="project">
-              10 Locust - Exterior Shower and Playroom
-            </div>
-            <div class="vehicle">
-              Red Truck
-            </div>
-            <div class="team">
-              Jake Labate
-            </div>
-          </div>
-        </div>
-        <div class="event-container"></div>
-      </div>
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container"></div>
-        <div class="event-container"></div>
-      </div>
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container"></div>
-        <div class="event-container"></div>
-      </div>
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container"></div>
-        <div class="event-container"></div>
-      </div>
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container"></div>
-        <div class="event-container"></div>
-      </div>
-    </div>
-    <div class="week">
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container"></div>
-        <div class="event-container"></div>
-      </div>
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container"></div>
-        <div class="event-container"></div>
-      </div>
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container"></div>
-        <div class="event-container"></div>
-      </div>
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container"></div>
-        <div class="event-container"></div>
-      </div>
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container"></div>
-        <div class="event-container"></div>
-      </div>
-    </div>
-    <div class="week">
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container"></div>
-        <div class="event-container"></div>
-      </div>
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container"></div>
-        <div class="event-container"></div>
-      </div>
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container"></div>
-        <div class="event-container"></div>
-      </div>
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container"></div>
-        <div class="event-container"></div>
-      </div>
-      <div class="day">
-        <div class="day-title">Tuesday, December 27</div>
-        <div class="event-container"></div>
-        <div class="event-container"></div>
-      </div>
-    </div>
   </section>
 
   <!-- Modal for Editing Events -->
@@ -213,12 +116,10 @@
       querySnapshot.forEach(doc => {
         const data = doc.data();
         const duration = getTimeDuration(data.time);
-        const eventDate = dayjs.unix(data.time.date.seconds);
 
         events.push({
           id: doc.id,
           duration,
-          eventDate,
           ...data
         })
       })
@@ -230,12 +131,14 @@
       })
 
       events = events.reduce((acc, val) => {
-        const key = val.eventDate.format('YYYY-MM-DD');
-        if (Array.isArray(acc[key])) {
-          acc[key].push(val);
-        } else {
-          acc[key] = [val];
-        }
+        let dateKeys = val.repeatDates.map(date => dayjs.unix(date.seconds).format('YYYY-MM-DD'))
+        dateKeys.forEach(key => {
+          if (Array.isArray(acc[key])) {
+            acc[key].push(val);
+          } else {
+            acc[key] = [val];
+          }
+        })
         return acc;
       }, {})
 
@@ -278,7 +181,6 @@
         const eventDocRef = doc(firestore, "events", payload.id);
         updateDoc(eventDocRef, payload)
           .then((docRef) => {
-            console.log(docRef);
             resolve(docRef)
           })
           .catch((error) => {

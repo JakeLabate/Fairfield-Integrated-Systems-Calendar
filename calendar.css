@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+body{
+  background-color: whitesmoke;
+}
+
 .calendar-container {
   display: flex;
   flex-direction: column;

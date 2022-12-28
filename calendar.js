@@ -26,6 +26,7 @@ function createCalendar({
 
       day.innerHTML = `
       <div class="day-title">${offsetDate.format("ddd, MMMM D")}</div>
+      <hr>
       `;
     }
     startDate = startDate.add(7, "day");
@@ -442,6 +443,7 @@ function updateEvent() {
   updateCalendarEvent(payload)
     .then((data) => updateEventInDatabase({ ...payload, ...data }))
     .then((res) => {
+      createCalendar();
       getEvents();
       toggleModal("modal-edit");
       showSnackbar({ message: "Event updated successfully" });
@@ -611,7 +613,6 @@ function removeAllEvents(containerID) {
     return;
   }
   const events = container.querySelectorAll(".event-container");
-  console.log(containerID, container, events);
   events.forEach((event) => {
     container.removeChild(event);
   });
