@@ -510,7 +510,26 @@ function replaceUndefined(obj, replaceToken = '') {
 	});
 }
 
-function createNewEvent(){
+
+function isTimeEntryValid() {
+  const startTime = document.getElementById("startTime").value;
+  const endTime = document.getElementById("endTime").value;
+
+  const startTimeSplit = startTime.split(":").map(Number);
+  const endTimeSplit = endTime.split(":").map(Number);
+
+  const startTimeInMinutes = startTimeSplit[0] * 60 + startTimeSplit[1];
+  const endTimeInMinutes = endTimeSplit[0] * 60 + endTimeSplit[1];
+
+  return startTimeInMinutes <= endTimeInMinutes;
+}
+
+function createNewEvent() {
+  if (!isTimeEntryValid()) {
+    alert("Start time should be before end time!");
+    return;
+  }
+
 	const payload = {
 		eventColor:{
 			backgroundColor: 'white',
