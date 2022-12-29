@@ -262,7 +262,9 @@ function resetModalForm() {
     select.selectedIndex = 0;
   });
   const today = new Date();
-  document.querySelector(".modal #eventDate").value = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+  document.querySelector(".modal #eventDate").value = `${today.getFullYear()}-${
+    today.getMonth() + 1
+  }-${today.getDate()}`;
   document.querySelector(".modal #startTime").value = "08:00";
   document.querySelector(".modal #endTime").value = "17:00";
 }
@@ -304,7 +306,25 @@ function getSelectedOption({ selectTagId }) {
   }
 }
 
+function isTimeEntryValid() {
+  const startTime = document.querySelector(".modal #startTime").value;
+  const endTime = document.querySelector(".modal #endTime").value;
+
+  const startTimeSplit = startTime.split(":").map(Number);
+  const endTimeSplit = endTime.split(":").map(Number);
+
+  const startTimeInMinutes = startTimeSplit[0] * 60 + startTimeSplit[1];
+  const endTimeInMinutes = endTimeSplit[0] * 60 + endTimeSplit[1];
+
+  return startTimeInMinutes <= endTimeInMinutes;
+}
+
 function updateEvent() {
+  if (!isTimeEntryValid()) {
+    alert("Start time should be before end time!");
+    return;
+  }
+
   const payload = {
     eventColor: {
       backgroundColor: "white",
@@ -397,7 +417,7 @@ function updateEvent() {
     .then((data) => updateEventInDatabase({ ...payload, ...data }))
     .then((res) => {
       getEvents();
-      toggleModal('modal-edit')
+      toggleModal("modal-edit");
       showSnackbar({ message: "Event updated successfully" });
     })
     .catch((err) => {
