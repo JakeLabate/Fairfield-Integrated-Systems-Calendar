@@ -12,7 +12,7 @@ body{
   display: flex;
   flex-direction: column;
   height: 100vh;
-  font-size: 1.5rem;
+  font-size: 13px;
   gap: 16px;
   text-align: center;
 }
@@ -26,7 +26,7 @@ body{
   flex: 1;
   border: 1px solid black;
   border-radius: 8px;
-  padding: 8px 0px;
+  /* padding: 8px 0px; */
   display: flex;
   flex-direction: column;
 }
@@ -36,7 +36,7 @@ body{
 }
 
 .event-container {
-  margin: 8px 16px;
+  margin: 2px 4px;
   padding-top: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   background-color: burlywood;
@@ -176,4 +176,8 @@ body{
 option:disabled{
   text-align: center;
   font-size: 3rem;
+}
+
+.datetime{
+  visibility: hidden;
 }
