@@ -256,15 +256,20 @@ function selectOption({ selectTagId, optionId }) {
   selectElement.selectedIndex = index;
 }
 
+function padZero(val){
+  if(val && val < 10){
+    return '0'+val
+  }
+  return val;
+}
+
 function resetModalForm() {
   const selects = Array.from(document.querySelectorAll("select"));
   selects.forEach((select) => {
     select.selectedIndex = 0;
   });
   const today = new Date();
-  document.querySelector(".modal #eventDate").value = `${today.getFullYear()}-${
-    today.getMonth() + 1
-  }-${today.getDate()}`;
+  document.querySelector(".modal #eventDate").value = `${today.getFullYear()}-${padZero(today.getMonth()+1)}-${padZero(today.getDate())}`;
   document.querySelector(".modal #startTime").value = "08:00";
   document.querySelector(".modal #endTime").value = "17:00";
 }
