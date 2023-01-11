@@ -173,7 +173,7 @@ async function getAllData() {
     idKey: "id",
     labelKeys: ["vehicleName"],
   });
-  ["teammember1", "teammember2", "teammember3"].forEach((id) => {
+  ["teammember1", "teammember2", "teammember3", "teammember4"].forEach((id) => {
     setOptions({
       selectTagId: id,
       optionsArray: teamMembers,
@@ -340,9 +340,13 @@ function updateEvent() {
   let empty = true;
   const newTodo = getSelectedOption({ selectTagId: "todo" });
   const newVehicle = getSelectedOption({ selectTagId: "vehicle" });
-  const newTeamMember1 = getSelectedOption({ selectTagId: "teammember1" });
-  const newTeamMember2 = getSelectedOption({ selectTagId: "teammember2" });
-  const newTeamMember3 = getSelectedOption({ selectTagId: "teammember3" });
+  const teamMemersList = [1,2,3,4].reduce((acc,val) => {
+    const option = getSelectedOption({ selectTagId: `teammember${val}` });
+    if(option){
+      acc.push(option)
+    }
+    return acc;
+  },[])
 
   if (newTodo) {
     buffer = JSON.parse(newTodo.getAttribute("data-payload"));
@@ -372,9 +376,9 @@ function updateEvent() {
     };
     empty = false;
   }
-  if (newTeamMember1 || newTeamMember2 || newTeamMember3) {
+  if (teamMemersList.length > 0) {
     payload.teamMembers = [];
-    [newTeamMember1, newTeamMember2, newTeamMember3].forEach(
+    teamMemersList.forEach(
       (newTeamMember) => {
         if (!newTeamMember) {
           return;
