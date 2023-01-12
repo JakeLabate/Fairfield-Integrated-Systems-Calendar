@@ -541,6 +541,7 @@ function createNewEvent() {
 	let newTodo = document.querySelector("#newToDoSlot div");
 	let newVehicle = document.querySelector("#newVehicleSlot div");
 	let newTeamMembers = document.querySelectorAll(".newTeamMemberSlot>div");
+	const eventNote = document.querySelector("#eventNote").value
 
 	if(newTodo){
 		buffer = JSON.parse(newTodo.getAttribute('data-payload'))
@@ -582,7 +583,7 @@ function createNewEvent() {
 		})
 		empty = false;
 	}
-		
+
 	if(empty)	{ // if all the drop locations are empty
 		alert("No card selected");
 		return;
@@ -595,6 +596,8 @@ function createNewEvent() {
 		startTime: document.getElementById('startTime').value,
 		endTime: document.getElementById('endTime').value
 	}
+
+	payload.eventNote = eventNote;
 
 	const repeat = parseInt(document.getElementById('repeatInput').value, 10);
 	if(!repeat || repeat <= 1){

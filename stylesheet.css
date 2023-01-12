@@ -484,6 +484,14 @@ summary {
 	margin: 96px 10px 20px;
 }
 
+.event-note{
+	width: 320px;
+	font-size: 1.2rem;
+	margin: 12px;
+	padding: 12px 8px;
+	border-radius: 8px;
+}
+
 .repeat>input{
 	font-size: 0.9rem;
 	width: 100px;
