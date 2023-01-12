@@ -181,3 +181,7 @@ option:disabled{
 .datetime{
   visibility: hidden;
 }
+
+.event-note{
+  font-style: italic;
+}

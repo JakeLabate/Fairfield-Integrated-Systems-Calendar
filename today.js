@@ -52,6 +52,12 @@ function addEventCard(event) {
       ${event.teamMembers.map((el) => el.name).join(", ")}
       </div>`;
   }
+  if (event.eventNote) {
+    innerHTML += `
+    <div class="event-note">
+      Note: ${event.eventNote}
+    </div>`;
+  }
   innerHTML += "</div>"; // Closing the event info tag
   newEventElement.innerHTML = innerHTML;
   body.appendChild(newEventElement);
@@ -242,6 +248,8 @@ function editEvent(e) {
   document.querySelector(".modal #eventDate").value = date
     .toISOString()
     .substring(0, 10);
+  document.querySelector(".modal #eventNote").value =
+    selectedEvent.eventNote || "";
 }
 
 function selectOption({ selectTagId, optionId }) {
@@ -256,9 +264,9 @@ function selectOption({ selectTagId, optionId }) {
   selectElement.selectedIndex = index;
 }
 
-function padZero(val){
-  if(val && val < 10){
-    return '0'+val
+function padZero(val) {
+  if (val && val < 10) {
+    return "0" + val;
   }
   return val;
 }
@@ -269,7 +277,11 @@ function resetModalForm() {
     select.selectedIndex = 0;
   });
   const today = new Date();
-  document.querySelector(".modal #eventDate").value = `${today.getFullYear()}-${padZero(today.getMonth()+1)}-${padZero(today.getDate())}`;
+  document.querySelector(
+    ".modal #eventDate"
+  ).value = `${today.getFullYear()}-${padZero(today.getMonth() + 1)}-${padZero(
+    today.getDate()
+  )}`;
   document.querySelector(".modal #startTime").value = "08:00";
   document.querySelector(".modal #endTime").value = "17:00";
 }
@@ -340,13 +352,14 @@ function updateEvent() {
   let empty = true;
   const newTodo = getSelectedOption({ selectTagId: "todo" });
   const newVehicle = getSelectedOption({ selectTagId: "vehicle" });
-  const teamMemersList = [1,2,3,4].reduce((acc,val) => {
+  const teamMemersList = [1, 2, 3, 4].reduce((acc, val) => {
     const option = getSelectedOption({ selectTagId: `teammember${val}` });
-    if(option){
-      acc.push(option)
+    if (option) {
+      acc.push(option);
     }
     return acc;
-  },[])
+  }, []);
+  const eventNote = document.querySelector(".modal #eventNote").value;
 
   if (newTodo) {
     buffer = JSON.parse(newTodo.getAttribute("data-payload"));
@@ -378,19 +391,17 @@ function updateEvent() {
   }
   if (teamMemersList.length > 0) {
     payload.teamMembers = [];
-    teamMemersList.forEach(
-      (newTeamMember) => {
-        if (!newTeamMember) {
-          return;
-        }
-        buffer = JSON.parse(newTeamMember.getAttribute("data-payload"));
-        payload.teamMembers.push({
-          id: buffer.id,
-          name: `${buffer.firstName} ${buffer.lastName}`,
-          email: buffer.email,
-        });
+    teamMemersList.forEach((newTeamMember) => {
+      if (!newTeamMember) {
+        return;
       }
-    );
+      buffer = JSON.parse(newTeamMember.getAttribute("data-payload"));
+      payload.teamMembers.push({
+        id: buffer.id,
+        name: `${buffer.firstName} ${buffer.lastName}`,
+        email: buffer.email,
+      });
+    });
     empty = false;
   }
 
@@ -420,6 +431,9 @@ function updateEvent() {
   payload.repeatDates = createRepeatDates(payload.time.date, payload.repeat);
   payload.eventID = selectedEvent.eventID;
   payload.id = selectedEvent.id;
+
+  payload.eventNote = eventNote;
+
   replaceUndefined(payload); // Because undefined values are not allowed.
 
   updateCalendarEvent(payload)

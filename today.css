@@ -160,3 +160,7 @@ option:disabled{
   text-align: center;
   font-size: 3rem;
 }
+
+.event-note{
+  font-style: italic;
+}
