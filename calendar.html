@@ -96,7 +96,7 @@
 
     // Full list of functions: https://firebase.google.com/docs/web/setup#available-libraries
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
-    import { getFirestore, collection, doc, setDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+    import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
     import { getDatabase, ref, child, get, set, push, remove } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
 
     // Firebase configuration
@@ -210,6 +210,19 @@
           });
       })
     }
+
+    window.deleteEventFromDatabase = (eventID) => {
+			return new Promise((resolve, reject) => {
+				const eventDocRef = doc(firestore, "events", eventID);
+				deleteDoc(eventDocRef)
+					.then(() => {
+						resolve({ success: true })
+					})
+					.catch((error) => {
+						reject(error);
+					});
+			})
+		}
 
     getEvents();
     getAllData();
