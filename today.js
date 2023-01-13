@@ -1,4 +1,6 @@
 const EVENT_URL = "https://hook.us1.make.com/s7p9n5gdm4ixpewou15lueojpboa9f3s";
+const DELETE_EVENT_URL =
+  "https://hook.us1.make.com/mira76whs1tlorhfgf4sl7y51emexlt9";
 
 setInterval(() => {
   document.querySelector("#date-header .date").innerHTML =
@@ -18,7 +20,7 @@ function addEventCard(event) {
   newEventElement.style.backgroundColor = event.eventColor.backgroundColor;
   newEventElement.style.color = event.eventColor.textColor;
 
-  newEventElement.addEventListener("click", editEvent, true);
+  newEventElement.addEventListener("click", handleClick);
 
   const parsedTime = {
     startTime: dayjs(event.time.startTime, "HH:mm"),
@@ -52,6 +54,20 @@ function addEventCard(event) {
       ${event.teamMembers.map((el) => el.name).join(", ")}
       </div>`;
   }
+  if (event.eventNote) {
+    innerHTML += `
+    <div class="event-note">
+      Note: ${event.eventNote}
+    </div>`;
+  }
+  innerHTML += `
+  <div class="delete-icon" data-eventID=${event.eventID} data-id=${event.id} onclick="handleClick(event)">
+		<svg viewbox="0 0 875 1000" xmlns="http://www.w3.org/2000/svg">
+			<path
+			d="M0 281.296l0 -68.355q1.953 -37.107 29.295 -62.496t64.449 -25.389l93.744 0l0 -31.248q0 -39.06 27.342 -66.402t66.402 -27.342l312.48 0q39.06 0 66.402 27.342t27.342 66.402l0 31.248l93.744 0q37.107 0 64.449 25.389t29.295 62.496l0 68.355q0 25.389 -18.553 43.943t-43.943 18.553l0 531.216q0 52.731 -36.13 88.862t-88.862 36.13l-499.968 0q-52.731 0 -88.862 -36.13t-36.13 -88.862l0 -531.216q-25.389 0 -43.943 -18.553t-18.553 -43.943zm62.496 0l749.952 0l0 -62.496q0 -13.671 -8.789 -22.46t-22.46 -8.789l-687.456 0q-13.671 0 -22.46 8.789t-8.789 22.46l0 62.496zm62.496 593.712q0 25.389 18.553 43.943t43.943 18.553l499.968 0q25.389 0 43.943 -18.553t18.553 -43.943l0 -531.216l-624.96 0l0 531.216zm62.496 -31.248l0 -406.224q0 -13.671 8.789 -22.46t22.46 -8.789l62.496 0q13.671 0 22.46 8.789t8.789 22.46l0 406.224q0 13.671 -8.789 22.46t-22.46 8.789l-62.496 0q-13.671 0 -22.46 -8.789t-8.789 -22.46zm31.248 0l62.496 0l0 -406.224l-62.496 0l0 406.224zm31.248 -718.704l374.976 0l0 -31.248q0 -13.671 -8.789 -22.46t-22.46 -8.789l-312.48 0q-13.671 0 -22.46 8.789t-8.789 22.46l0 31.248zm124.992 718.704l0 -406.224q0 -13.671 8.789 -22.46t22.46 -8.789l62.496 0q13.671 0 22.46 8.789t8.789 22.46l0 406.224q0 13.671 -8.789 22.46t-22.46 8.789l-62.496 0q-13.671 0 -22.46 -8.789t-8.789 -22.46zm31.248 0l62.496 0l0 -406.224l-62.496 0l0 406.224zm156.24 0l0 -406.224q0 -13.671 8.789 -22.46t22.46 -8.789l62.496 0q13.671 0 22.46 8.789t8.789 22.46l0 406.224q0 13.671 -8.789 22.46t-22.46 8.789l-62.496 0q-13.671 0 -22.46 -8.789t-8.789 -22.46zm31.248 0l62.496 0l0 -406.224l-62.496 0l0 406.224z" />
+		</svg>
+	</div>
+  `;
   innerHTML += "</div>"; // Closing the event info tag
   newEventElement.innerHTML = innerHTML;
   body.appendChild(newEventElement);
@@ -173,7 +189,7 @@ async function getAllData() {
     idKey: "id",
     labelKeys: ["vehicleName"],
   });
-  ["teammember1", "teammember2", "teammember3"].forEach((id) => {
+  ["teammember1", "teammember2", "teammember3", "teammember4"].forEach((id) => {
     setOptions({
       selectTagId: id,
       optionsArray: teamMembers,
@@ -209,6 +225,15 @@ function setOptions({
   });
 }
 
+function handleClick(e){
+  e.stopPropagation();
+  if(e.currentTarget.hasAttribute('data-payload')){
+    editEvent(e)
+  }else{
+    deleteEvent(e)
+  }
+}
+
 function editEvent(e) {
   const eventContainer = e.currentTarget;
   window.selectedEvent = JSON.parse(
@@ -242,6 +267,8 @@ function editEvent(e) {
   document.querySelector(".modal #eventDate").value = date
     .toISOString()
     .substring(0, 10);
+  document.querySelector(".modal #eventNote").value =
+    selectedEvent.eventNote || "";
 }
 
 function selectOption({ selectTagId, optionId }) {
@@ -256,15 +283,24 @@ function selectOption({ selectTagId, optionId }) {
   selectElement.selectedIndex = index;
 }
 
+function padZero(val) {
+  if (val && val < 10) {
+    return "0" + val;
+  }
+  return val;
+}
+
 function resetModalForm() {
   const selects = Array.from(document.querySelectorAll("select"));
   selects.forEach((select) => {
     select.selectedIndex = 0;
   });
   const today = new Date();
-  document.querySelector(".modal #eventDate").value = `${today.getFullYear()}-${
-    today.getMonth() + 1
-  }-${today.getDate()}`;
+  document.querySelector(
+    ".modal #eventDate"
+  ).value = `${today.getFullYear()}-${padZero(today.getMonth() + 1)}-${padZero(
+    today.getDate()
+  )}`;
   document.querySelector(".modal #startTime").value = "08:00";
   document.querySelector(".modal #endTime").value = "17:00";
 }
@@ -335,9 +371,14 @@ function updateEvent() {
   let empty = true;
   const newTodo = getSelectedOption({ selectTagId: "todo" });
   const newVehicle = getSelectedOption({ selectTagId: "vehicle" });
-  const newTeamMember1 = getSelectedOption({ selectTagId: "teammember1" });
-  const newTeamMember2 = getSelectedOption({ selectTagId: "teammember2" });
-  const newTeamMember3 = getSelectedOption({ selectTagId: "teammember3" });
+  const teamMemersList = [1, 2, 3, 4].reduce((acc, val) => {
+    const option = getSelectedOption({ selectTagId: `teammember${val}` });
+    if (option) {
+      acc.push(option);
+    }
+    return acc;
+  }, []);
+  const eventNote = document.querySelector(".modal #eventNote").value;
 
   if (newTodo) {
     buffer = JSON.parse(newTodo.getAttribute("data-payload"));
@@ -367,21 +408,19 @@ function updateEvent() {
     };
     empty = false;
   }
-  if (newTeamMember1 || newTeamMember2 || newTeamMember3) {
+  if (teamMemersList.length > 0) {
     payload.teamMembers = [];
-    [newTeamMember1, newTeamMember2, newTeamMember3].forEach(
-      (newTeamMember) => {
-        if (!newTeamMember) {
-          return;
-        }
-        buffer = JSON.parse(newTeamMember.getAttribute("data-payload"));
-        payload.teamMembers.push({
-          id: buffer.id,
-          name: `${buffer.firstName} ${buffer.lastName}`,
-          email: buffer.email,
-        });
+    teamMemersList.forEach((newTeamMember) => {
+      if (!newTeamMember) {
+        return;
       }
-    );
+      buffer = JSON.parse(newTeamMember.getAttribute("data-payload"));
+      payload.teamMembers.push({
+        id: buffer.id,
+        name: `${buffer.firstName} ${buffer.lastName}`,
+        email: buffer.email,
+      });
+    });
     empty = false;
   }
 
@@ -411,6 +450,9 @@ function updateEvent() {
   payload.repeatDates = createRepeatDates(payload.time.date, payload.repeat);
   payload.eventID = selectedEvent.eventID;
   payload.id = selectedEvent.id;
+
+  payload.eventNote = eventNote;
+
   replaceUndefined(payload); // Because undefined values are not allowed.
 
   updateCalendarEvent(payload)
@@ -585,4 +627,40 @@ function removeAllEvents() {
   events.forEach((event) => {
     body.removeChild(event);
   });
+}
+
+function deleteCalendarEvent(eventId) {
+  const eventOptions = {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({ eventId }),
+  };
+
+  return new Promise((resolve) => {
+    fetch(DELETE_EVENT_URL, eventOptions)
+      .then((res) => res.json())
+      .then((data) => resolve(data));
+  });
+}
+
+function deleteEvent(e) {
+  if(!confirm("Are you sure you want to delete the event?")){
+    return;
+  }
+
+  const eventId = e.currentTarget.getAttribute("data-eventid");
+  const docId = e.currentTarget.getAttribute("data-id");
+  
+  deleteEventFromDatabase(docId)
+    .then(() => deleteCalendarEvent(eventId))
+    .then((res) => {
+      getEvents();
+      showSnackbar({ message: "Event deleted successfully" });
+    })
+    .catch((err) => {
+      console.log(err);
+      alert("Failed to delete the event");
+    });
 }

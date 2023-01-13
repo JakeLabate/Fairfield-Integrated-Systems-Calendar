@@ -36,6 +36,7 @@ body{
 }
 
 .event-container {
+  position: relative;
   margin: 2px 4px;
   padding-top: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -180,4 +181,21 @@ option:disabled{
 
 .datetime{
   visibility: hidden;
+}
+
+.event-note{
+  font-style: italic;
+}
+
+
+.delete-icon{
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  height: 20px;
+  width: 20px;
+}
+
+.delete-icon svg:hover {
+  fill: red;
 }

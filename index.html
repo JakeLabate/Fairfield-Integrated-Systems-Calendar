@@ -325,6 +325,8 @@
 						<input id="repeatInput" type="number" value="1" min="1">
 					</div>
 
+					<input id="eventNote" placeholder="Event Note" class="event-note" autocomplete="off"/>
+
 					<br>
 					<div>
 						<button onclick="clearCards()" style="padding: 8px; cursor: pointer;">Clear All</button>
@@ -443,9 +445,15 @@
 
 <!-- To Do Filter -->
 <script>
+	function padZero(val){
+		if(val && val < 10){
+			return '0'+val
+		}
+		return val;
+	}
 	function setInitialDateTime(){
 		const today = new Date();
-		document.getElementById('eventDate').value = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+		document.getElementById('eventDate').value = `${today.getFullYear()}-${padZero(today.getMonth()+1)}-${padZero(today.getDate())}`;
 		document.getElementById('startTime').value = "08:00";
 		document.getElementById('endTime').value = "17:00";
 	}

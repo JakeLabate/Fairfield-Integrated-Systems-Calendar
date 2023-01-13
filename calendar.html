@@ -67,6 +67,16 @@
           <input type="time" id="endTime" name="endTime" value="17:00">
         </div>
       </div>
+      <div class="input-container">
+        <label for="teammember4">Team member 4</label>
+        <select name="teammember4" id="teammember4" data-type="teammembers">
+          <option hidden disabled selected value>Select an option</option>
+        </select>
+      </div>
+      <div class="input-container">
+        <label for="eventNote">Event Note</label>
+        <input id="eventNote" placeholder="Enter event note" class="event-note" autocomplete="off" />
+      </div>
       <!-- </div> -->
       <div class="modal-actions">
         <button type="button" onclick="closeForm()">Cancel</button>
@@ -86,7 +96,7 @@
 
     // Full list of functions: https://firebase.google.com/docs/web/setup#available-libraries
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
-    import { getFirestore, collection, doc, setDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+    import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
     import { getDatabase, ref, child, get, set, push, remove } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
 
     // Firebase configuration
@@ -200,6 +210,19 @@
           });
       })
     }
+
+    window.deleteEventFromDatabase = (eventID) => {
+			return new Promise((resolve, reject) => {
+				const eventDocRef = doc(firestore, "events", eventID);
+				deleteDoc(eventDocRef)
+					.then(() => {
+						resolve({ success: true })
+					})
+					.catch((error) => {
+						reject(error);
+					});
+			})
+		}
 
     getEvents();
     getAllData();
