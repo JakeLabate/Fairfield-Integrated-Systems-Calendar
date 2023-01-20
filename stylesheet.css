@@ -544,3 +544,8 @@ summary {
 .overflow-scroll{
 	overflow-y: scroll;
 }
+
+#toDoSearch{
+	max-width: 300px;
+	margin-bottom: 8px;
+}
