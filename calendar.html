@@ -16,76 +16,88 @@
 
   <!-- Modal for Editing Events -->
   <div id="modal-edit" class="modal" style="display: none;">
-    <form>
-      <div class="input-container">
-        <label for="todo">Todo</label>
-        <select name="todo" id="todo" data-type="todos">
-          <option hidden disabled selected value>Select an option</option>
-        </select>
-      </div>
-      <div class="input-container">
-        <label for="vehicle">Vehicle</label>
-        <select name="vehicle" id="vehicle" data-type="vehicles">
-          <option hidden disabled selected value>Select an option</option>
-        </select>
-      </div>
+		<form>
+			<div class="input-container">
+				<label for="todo">Todo</label>
+				<select name="todo" id="todo" data-type="todos">
+					<option hidden disabled selected value>Select an option</option>
+				</select>
+			</div>
+			<div class="input-container">
+				<label for="vehicle2">Vehicle 2</label>
+				<select name="vehicle2" id="vehicle2" data-type="vehicles">
+					<option hidden disabled selected value>Select an option</option>
+				</select>
+			</div>
 
-      <div class="input-container">
-        <label for="teammember1">Team member 1</label>
-        <select name="teammember1" id="teammember1" data-type="teammembers">
-          <option hidden disabled selected value>Select an option</option>
-        </select>
-      </div>
-      <div class="input-container">
-        <label for="repeat">Repeat (days)</label>
-        <input id="repeatInput" type="number" value="1" min="1">
-      </div>
-      <div class="input-container">
-        <label for="teammember2">Team member 2</label>
-        <select name="teammember2" id="teammember2" data-type="teammembers">
-          <option hidden disabled selected value>Select an option</option>
-        </select>
-      </div>
-      <div class="input-container">
-        <label for="eventDate">Date</label>
-        <input type="date" id="eventDate" name="eventDate">
-      </div>
-      <!-- <div class="input-container"> -->
-      <div class="input-container">
-        <label for="teammember3">Team member 3</label>
-        <select name="teammember3" id="teammember3" data-type="teammembers">
-          <option hidden disabled selected value>Select an option</option>
-        </select>
-      </div>
-      <div class="input-container" style="flex-direction: row;">
-        <div class="input-container">
-          <label for="startTime">Start Time</label>
-          <input type="time" id="startTime" name="startTime" value="08:00">
-        </div>
-        <div class="input-container">
-          <label for="endTime">End Time</label>
-          <input type="time" id="endTime" name="endTime" value="17:00">
-        </div>
-      </div>
-      <div class="input-container">
-        <label for="teammember4">Team member 4</label>
-        <select name="teammember4" id="teammember4" data-type="teammembers">
-          <option hidden disabled selected value>Select an option</option>
-        </select>
-      </div>
-      <div class="input-container">
-        <label for="eventNote">Event Note</label>
-        <input id="eventNote" placeholder="Enter event note" class="event-note" autocomplete="off" />
-      </div>
-      <!-- </div> -->
-      <div class="modal-actions">
-        <button type="button" onclick="closeForm()">Cancel</button>
-        <button type="button" onclick="resetModalForm()" style="margin: 24px 16px 0px auto;">Clear</button>
-        <button type="button" onclick="updateEvent()">Update Event</button>
-      </div>
+			<div class="input-container">
+				<label for="teammember1">Team member 1</label>
+				<select name="teammember1" id="teammember1" data-type="teammembers">
+					<option hidden disabled selected value>Select an option</option>
+				</select>
+			</div>
+			<div class="input-container">
+				<label for="repeat">Repeat (days)</label>
+				<input id="repeatInput" type="number" value="1" min="1">
+			</div>
 
-    </form>
-  </div>
+			<div class="input-container">
+				<label for="teammember2">Team member 2</label>
+				<select name="teammember2" id="teammember2" data-type="teammembers">
+					<option hidden disabled selected value>Select an option</option>
+				</select>
+			</div>
+
+			<div class="input-container">
+				<label for="eventDate">Date</label>
+				<input type="date" id="eventDate" name="eventDate">
+			</div>
+
+			<!-- <div class="input-container"> -->
+			<div class="input-container">
+				<label for="teammember3">Team member 3</label>
+				<select name="teammember3" id="teammember3" data-type="teammembers">
+					<option hidden disabled selected value>Select an option</option>
+				</select>
+			</div>
+
+			<div class="input-container">
+				<label for="startTime">Start Time</label>
+				<input type="time" id="startTime" name="startTime" value="08:00">
+			</div>
+
+			<div class="input-container">
+				<label for="teammember4">Team member 4</label>
+				<select name="teammember4" id="teammember4" data-type="teammembers">
+					<option hidden disabled selected value>Select an option</option>
+				</select>
+			</div>
+			
+			<div class="input-container">
+				<label for="endTime">End Time</label>
+				<input type="time" id="endTime" name="endTime" value="17:00">
+			</div>
+
+			<div class="input-container">
+				<label for="vehicle1">Vehicle 1</label>
+				<select name="vehicle1" id="vehicle1" data-type="vehicles">
+					<option hidden disabled selected value>Select an option</option>
+				</select>
+			</div>
+
+			<div class="input-container">
+				<label for="eventNote">Event Note</label>
+				<input id="eventNote" placeholder="Enter event note" class="event-note" autocomplete="off" />
+			</div>
+			<!-- </div> -->
+			<div class="modal-actions">
+				<button type="button" onclick="closeForm()">Cancel</button>
+				<button type="button" onclick="resetModalForm()" style="margin: 24px 16px 0px auto;">Clear</button>
+				<button type="button" onclick="updateEvent()">Update Event</button>
+			</div>
+
+		</form>
+	</div>
   <div id="snackbar"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
@@ -168,6 +180,7 @@
         removeAllEvents(day);
         events[day].forEach(event => addEventCard(day, event))
       })
+      fixOverflow();
     }
 
     // Get team members

@@ -1,351 +1,408 @@
-console.log('script.js loaded');
+console.log("script.js loaded");
 
 getAll();
-const EVENT_URL = 'https://hook.us1.make.com/8il7zph12nsp5lkmdkx85fv5h2smwyb1'
-selectedTeamMembers = []
+const EVENT_URL = "https://hook.us1.make.com/8il7zph12nsp5lkmdkx85fv5h2smwyb1";
+selectedTeamMembers = [];
+selectedVehicles = []
 
 // GET all lists from D-Tools
 function getAll() {
-	console.log ('Getting all lists...');
-	const promiseArray = [];
-	promiseArray.push(getProjects());
-	promiseArray.push(getTasks());
-	promiseArray.push(getServiceOrders());
+  console.log("Getting all lists...");
+  const promiseArray = [];
+  promiseArray.push(getProjects());
+  promiseArray.push(getTasks());
+  promiseArray.push(getServiceOrders());
 
-	Promise.all(promiseArray).then(res => {
-		filterSelection("all");
-		const todoContainer = document.querySelector(".todo-container");
-		addScollBarIfNecessary(todoContainer);
-	})
+  Promise.all(promiseArray).then((res) => {
+    filterSelection("all");
+    const todoContainer = document.querySelector(".todo-container");
+    addScollBarIfNecessary(todoContainer);
+  });
 
-	getPurchaseOrders();
-	getServicePlans();
-	getTimeSheets();
-	getProducts();
+  getPurchaseOrders();
+  getServicePlans();
+  getTimeSheets();
+  getProducts();
 }
 
 // GET list of PROJECTS from D-Tools
 function getProjects() {
-	console.log('Getting projects...');
-	const projectOptions = {
-		method: 'GET',
-		headers: {
-			'content-type': 'application/json',
-			'X-DTSI-ApiKey': 's0vAAip0W0uwXkKDO5JpGwSXgLYj6cokGrs2LUHi8P0g'
-		}
-	};
-	return new Promise((resolve) => {
-		fetch('https://api.d-tools.com/SI/Subscribe/Projects', projectOptions)
-		.then(response => response.json())
-		.then(data => {
-			data.Projects.forEach(Project => {
+  console.log("Getting projects...");
+  const projectOptions = {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      "X-DTSI-ApiKey": "s0vAAip0W0uwXkKDO5JpGwSXgLYj6cokGrs2LUHi8P0g",
+    },
+  };
+  return new Promise((resolve) => {
+    fetch("https://api.d-tools.com/SI/Subscribe/Projects", projectOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        data.Projects.forEach((Project) => {
+          // Console log ALL projects
+          console.log(Project);
 
-				// Console log ALL projects
-				console.log(Project);
+          // If the project's progress is 'Approved'
+          if (Project.Progress == "Approved") {
+            // Create a new div for each project
+            let div = document.createElement("div");
+            div.setAttribute("data-id", Project.Id);
+            div.setAttribute("data-name", Project.Name);
+            div.setAttribute(
+              "data-payload",
+              JSON.stringify({ type: "Project", ...Project })
+            );
+            div.addEventListener("dragstart", (event) => {
+              event.dataTransfer.setData("text/todo", "project");
+              window.dragNode = div;
+            });
+            div.innerHTML =
+              '<div draggable="true" class="card filterDiv ' +
+              Project.Progress.toLowerCase() +
+              ' project" style="cursor: pointer;">' +
+              '<text class="topCardLabel">Project</text><br>' +
+              '<text class="ProjectProgress chip">' +
+              Project.Progress +
+              "</text> <br>" +
+              //	'<text class="ProjectPrice">$' + Project.Price + '</text> <br>' +
+              '<text class="ProjectName">' +
+              Project.Name +
+              "</text> <br>" +
+              "<details>" +
+              "<summary>Project Details</summary>" +
+              '<text class="ProjectNumber"><u>Project Number:</u> ' +
+              Project.Number +
+              "</text> <br>" +
+              '<text class="ProjectId"><u>Project ID:</u> ' +
+              Project.Id +
+              "</text> <br>" +
+              '<text class="ProjectPublishedOn"><u>Published On:</u> ' +
+              Project.PublishedOn +
+              "</text> <br>" +
+              "</details>" +
+              "<details>" +
+              '<summary class="ProjectClient">' +
+              Project.Client +
+              "</summary>" +
+              '<text class="ProjectClientId"><u>Client ID:</u> ' +
+              Project.ClientId +
+              "</text> <br>" +
+              "</details>" +
+              //	'<text class="ProjectApproved">Approved: ' + Project.Approved + '</text> <br>' +
+              //	'<text class="ProjectCONumber">CO Number: ' + Project.CONumber + '</text> <br>' +
+              //	'<text class="ProjectCurrencyCode">Currency Code: ' + Project.CurrencyCode + '</text> <br>' +
+              //	'<text class="ProjectIntegrationProjectId">IntegrationProjectId: ' + Project.IntegrationProjectId + '</text> <br>' +
+              //	'<text class="ProjectImportedOn">Imported On: ' + Project.ImportedOn + '</text> <br>' +
+              //	'<text class="ProjectDeleted">Deleted: ' + Project.Deleted + '</text> <br>' +
+              "</div>";
 
-				// If the project's progress is 'Approved'
-				if (Project.Progress == 'Approved') {
+            // add the new div to the section with the id of "projects"
+            document.getElementById("Projects").appendChild(div);
 
-					// Create a new div for each project
-					let div = document.createElement('div');
-					div.setAttribute('data-id',Project.Id);
-					div.setAttribute('data-name',Project.Name);
-					div.setAttribute('data-payload',JSON.stringify({type: 'Project', ...Project}))
-					div.addEventListener('dragstart', (event) => {
-						event.dataTransfer.setData("text/todo", "project")
-						window.dragNode = div
-					})
-					div.innerHTML =
-						'<div draggable="true" class="card filterDiv ' + Project.Progress.toLowerCase() + ' project" style="cursor: pointer;">' +
-						'<text class="topCardLabel">Project</text><br>' +
-						'<text class="ProjectProgress chip">' + Project.Progress + '</text> <br>' +
-						//	'<text class="ProjectPrice">$' + Project.Price + '</text> <br>' +
-						'<text class="ProjectName">' + Project.Name + '</text> <br>' +
-						'<details>' +
-						'<summary>Project Details</summary>' +
-						'<text class="ProjectNumber"><u>Project Number:</u> ' + Project.Number + '</text> <br>' +
-						'<text class="ProjectId"><u>Project ID:</u> ' + Project.Id + '</text> <br>' +
-						'<text class="ProjectPublishedOn"><u>Published On:</u> ' + Project.PublishedOn + '</text> <br>' +
-						'</details>' +
-						'<details>' +
-						'<summary class="ProjectClient">' + Project.Client + '</summary>' +
-						'<text class="ProjectClientId"><u>Client ID:</u> ' + Project.ClientId + '</text> <br>' +
-						'</details>' +
-						//	'<text class="ProjectApproved">Approved: ' + Project.Approved + '</text> <br>' +
-						//	'<text class="ProjectCONumber">CO Number: ' + Project.CONumber + '</text> <br>' +
-						//	'<text class="ProjectCurrencyCode">Currency Code: ' + Project.CurrencyCode + '</text> <br>' +
-						//	'<text class="ProjectIntegrationProjectId">IntegrationProjectId: ' + Project.IntegrationProjectId + '</text> <br>' +
-						//	'<text class="ProjectImportedOn">Imported On: ' + Project.ImportedOn + '</text> <br>' +
-						//	'<text class="ProjectDeleted">Deleted: ' + Project.Deleted + '</text> <br>' +
-						'</div>';
+            // Set the background color of the ProjectProgress .chip to green
+            div.getElementsByClassName(
+              "ProjectProgress"
+            )[0].style.backgroundColor = "#1e8123";
 
-					// add the new div to the section with the id of "projects"
-					document.getElementById('Projects').appendChild(div);
-
-					// Set the background color of the ProjectProgress .chip to green
-					div.getElementsByClassName('ProjectProgress')[0].style.backgroundColor = '#1e8123';
-
-					// Add an 'option' for each project to the search input with the id of 'toDoList'
-					let option = document.createElement('option');
-					option.value = Project.Name;
-					document.getElementById('toDoList').appendChild(option);
-
-				}
-			})
-			resolve()
-		})
-	})
+            // Add an 'option' for each project to the search input with the id of 'toDoList'
+            let option = document.createElement("option");
+            option.value = Project.Name;
+            document.getElementById("toDoList").appendChild(option);
+          }
+        });
+        resolve();
+      });
+  });
 }
 
 // GET list of TASKS from D-Tools
 function getTasks() {
-	console.log('Getting tasks...');
-	const taskOptions = {
-		method: 'GET',
-		headers: {
-			'content-type': 'application/json',
-			'X-DTSI-ApiKey': 's0vAAip0W0uwXkKDO5JpGwSXgLYj6cokGrs2LUHi8P0g'
-		}
-	};
-	return new Promise((resolve) => {
-		fetch('https://api.d-tools.com/SI/Subscribe/Tasks', taskOptions)
-		.then(response => response.json())
-		.then(data => {
-			data.Tasks.forEach(Task => {
-				console.log(Task);
+  console.log("Getting tasks...");
+  const taskOptions = {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      "X-DTSI-ApiKey": "s0vAAip0W0uwXkKDO5JpGwSXgLYj6cokGrs2LUHi8P0g",
+    },
+  };
+  return new Promise((resolve) => {
+    fetch("https://api.d-tools.com/SI/Subscribe/Tasks", taskOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        data.Tasks.forEach((Task) => {
+          console.log(Task);
 
-				// Create a new div for each task
-				let div = document.createElement('div');
-				div.setAttribute('data-id',Task.Id);
-				div.setAttribute('data-name',Task.Name);
-				div.setAttribute('data-payload',JSON.stringify({type: 'Task', ...Task}))
-				div.addEventListener('dragstart', (event) => {
-					event.dataTransfer.setData("text/todo", "task")
-					window.dragNode = div
-				})
-				div.innerHTML =
-					'<div draggable="true" class="card filterDiv ' + Task.Progress.toLowerCase() + ' task" style="cursor: pointer;">' +
-					'<text class="topCardLabel">Task</text><br>' +
-					'<text class="TaskProgress chip">' + Task.Progress + '</text> <br>' +
-					'<text class="TaskName">' + Task.Name + '</text> <br>' +
-					'<text class="TaskClient">' + Task.Client + '</text>' +
-					'<text class="TaskDescription">' + Task.Description + '</text> <br>' +
-					'<details>' +
-					'<summary>Task Details</summary>' +
-					'<text class="TaskNumber"><u>Task Number:</u> ' + Task.Number + '</text> <br>' +
-					'<text class="TaskId"><u>Task ID:</u> ' + Task.Id + '</text> <br>' +
-					'<text class="TaskPublishedOn"><u>Published on:</u> ' + Task.PublishedOn + '</text> <br>' +
-					'</details>' +
-					'</div>';
+          // Create a new div for each task
+          let div = document.createElement("div");
+          div.setAttribute("data-id", Task.Id);
+          div.setAttribute("data-name", Task.Name);
+          div.setAttribute(
+            "data-payload",
+            JSON.stringify({ type: "Task", ...Task })
+          );
+          div.addEventListener("dragstart", (event) => {
+            event.dataTransfer.setData("text/todo", "task");
+            window.dragNode = div;
+          });
+          div.innerHTML =
+            '<div draggable="true" class="card filterDiv ' +
+            Task.Progress.toLowerCase() +
+            ' task" style="cursor: pointer;">' +
+            '<text class="topCardLabel">Task</text><br>' +
+            '<text class="TaskProgress chip">' +
+            Task.Progress +
+            "</text> <br>" +
+            '<text class="TaskName">' +
+            Task.Name +
+            "</text> <br>" +
+            '<text class="TaskClient">' +
+            Task.Client +
+            "</text>" +
+            '<text class="TaskDescription">' +
+            Task.Description +
+            "</text> <br>" +
+            "<details>" +
+            "<summary>Task Details</summary>" +
+            '<text class="TaskNumber"><u>Task Number:</u> ' +
+            Task.Number +
+            "</text> <br>" +
+            '<text class="TaskId"><u>Task ID:</u> ' +
+            Task.Id +
+            "</text> <br>" +
+            '<text class="TaskPublishedOn"><u>Published on:</u> ' +
+            Task.PublishedOn +
+            "</text> <br>" +
+            "</details>" +
+            "</div>";
 
-				// add the new div to the section with the id of "projects"
-				document.getElementById('Tasks').appendChild(div);
+          // add the new div to the section with the id of "projects"
+          document.getElementById("Tasks").appendChild(div);
 
-				if (Task.Progress == 'In Progress') {
-					// Set the background color of the ProjectProgress .chip to orange
-					div.getElementsByClassName('TaskProgress')[0].style.backgroundColor = '#c27312';
-				}
+          if (Task.Progress == "In Progress") {
+            // Set the background color of the ProjectProgress .chip to orange
+            div.getElementsByClassName(
+              "TaskProgress"
+            )[0].style.backgroundColor = "#c27312";
+          }
 
-				// Add an 'option' for each task to the search input with the id of 'toDoList'
-				let option = document.createElement('option');
-				option.value = Task.Name;
-				document.getElementById('toDoList').appendChild(option);
-
-			})
-			resolve()
-		})
-	})
+          // Add an 'option' for each task to the search input with the id of 'toDoList'
+          let option = document.createElement("option");
+          option.value = Task.Name;
+          document.getElementById("toDoList").appendChild(option);
+        });
+        resolve();
+      });
+  });
 }
 
 // GET list of SERVICE ORDERS from D-Tools
 function getServiceOrders() {
-	console.log('Getting service orders...');
-	const serviceOptions = {
-		method: 'GET',
-		headers: {
-			'content-type': 'application/json',
-			'X-DTSI-ApiKey': 's0vAAip0W0uwXkKDO5JpGwSXgLYj6cokGrs2LUHi8P0g'
-		}
-	};
-	return new Promise((resolve) => {
-		fetch('https://api.d-tools.com/SI/Subscribe/ServiceOrders', serviceOptions)
-		.then(response => response.json())
-		.then(data => {
-			data.ServiceOrders.forEach(ServiceOrder => {
-				console.log(ServiceOrder);
+  console.log("Getting service orders...");
+  const serviceOptions = {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      "X-DTSI-ApiKey": "s0vAAip0W0uwXkKDO5JpGwSXgLYj6cokGrs2LUHi8P0g",
+    },
+  };
+  return new Promise((resolve) => {
+    fetch("https://api.d-tools.com/SI/Subscribe/ServiceOrders", serviceOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        data.ServiceOrders.forEach((ServiceOrder) => {
+          console.log(ServiceOrder);
 
-				// Create a new div for each serviceOrder
-				let div = document.createElement('div');
-				div.setAttribute('data-id',ServiceOrder.Id);
-				div.setAttribute('data-name',ServiceOrder.Name);
-				div.setAttribute('data-payload',JSON.stringify({type: 'ServiceOrder', ...ServiceOrder}))
-				div.addEventListener('dragstart', (event) => {
-					event.dataTransfer.setData("text/todo", "serviceorder")
-					window.dragNode = div
-				})
-				div.innerHTML =
-					'<div draggable="true" class="card filterDiv ' + ServiceOrder.Progress.toLowerCase() + ' serviceOrder" style="cursor: pointer;">' +
-					'<text class="topCardLabel">Service Order</text><br>' +
-					'<text class="ServiceOrderProgress chip">' + ServiceOrder.Progress + '</text> <br>' +
-					'<text class="ServiceOrderName">' + ServiceOrder.Name + '</text> <br>' +
-					//	'<text class="ServiceOrderClient">' + ServiceOrder.Client + '</text> <br>' +
-					'<div class="ServiceOrderDescription">' + ServiceOrder.Description + '</div>' +
-					'<details>' +
-					'<summary>Service Order Details</summary>' +
-					'<text class="ServiceOrderId"><u>Service Order ID:</u> ' + ServiceOrder.Id + '</text> <br>' +
-					'<text class="ServiceOrderPublishedOn"><u>Published on:</u> ' + ServiceOrder.PublishedOn + '</text> <br>' +
-					'</details>'
-				//	'<text class="ServiceOrderImportedOn">Imported on: ' + ServiceOrder.ImportedOn + '</text> <br>' +
+          // Create a new div for each serviceOrder
+          let div = document.createElement("div");
+          div.setAttribute("data-id", ServiceOrder.Id);
+          div.setAttribute("data-name", ServiceOrder.Name);
+          div.setAttribute(
+            "data-payload",
+            JSON.stringify({ type: "ServiceOrder", ...ServiceOrder })
+          );
+          div.addEventListener("dragstart", (event) => {
+            event.dataTransfer.setData("text/todo", "serviceorder");
+            window.dragNode = div;
+          });
+          div.innerHTML =
+            '<div draggable="true" class="card filterDiv ' +
+            ServiceOrder.Progress.toLowerCase() +
+            ' serviceOrder" style="cursor: pointer;">' +
+            '<text class="topCardLabel">Service Order</text><br>' +
+            '<text class="ServiceOrderProgress chip">' +
+            ServiceOrder.Progress +
+            "</text> <br>" +
+            '<text class="ServiceOrderName">' +
+            ServiceOrder.Name +
+            "</text> <br>" +
+            //	'<text class="ServiceOrderClient">' + ServiceOrder.Client + '</text> <br>' +
+            '<div class="ServiceOrderDescription">' +
+            ServiceOrder.Description +
+            "</div>" +
+            "<details>" +
+            "<summary>Service Order Details</summary>" +
+            '<text class="ServiceOrderId"><u>Service Order ID:</u> ' +
+            ServiceOrder.Id +
+            "</text> <br>" +
+            '<text class="ServiceOrderPublishedOn"><u>Published on:</u> ' +
+            ServiceOrder.PublishedOn +
+            "</text> <br>" +
+            "</details>";
+          //	'<text class="ServiceOrderImportedOn">Imported on: ' + ServiceOrder.ImportedOn + '</text> <br>' +
 
-				'</div>';
+          ("</div>");
 
-				if (ServiceOrder.Description == null) {
-					// Set the background color of the ServiceOrderProgress .chip to orange
-					div.getElementsByClassName('ServiceOrderDescription')[0].style.display = 'none';
-				}
+          if (ServiceOrder.Description == null) {
+            // Set the background color of the ServiceOrderProgress .chip to orange
+            div.getElementsByClassName(
+              "ServiceOrderDescription"
+            )[0].style.display = "none";
+          }
 
-				// add the new div to the section with the id of 'ServiceOrders'
-				document.getElementById('ServiceOrders').appendChild(div);
+          // add the new div to the section with the id of 'ServiceOrders'
+          document.getElementById("ServiceOrders").appendChild(div);
 
-				// change the color of the progress chip based on their value
-				if (ServiceOrder.Progress == 'Completed') {
-					// Set the background color of the ProjectProgress .chip to green
-					div.getElementsByClassName('ServiceOrderProgress')[0].style.backgroundColor = '#1e8123';
-				}
-				if (ServiceOrder.Progress == 'Not Started') {
-					// Set the background color of the ProjectProgress .chip to orange
-					div.getElementsByClassName('ServiceOrderProgress')[0].style.backgroundColor = '#c27312';
-				}
+          // change the color of the progress chip based on their value
+          if (ServiceOrder.Progress == "Completed") {
+            // Set the background color of the ProjectProgress .chip to green
+            div.getElementsByClassName(
+              "ServiceOrderProgress"
+            )[0].style.backgroundColor = "#1e8123";
+          }
+          if (ServiceOrder.Progress == "Not Started") {
+            // Set the background color of the ProjectProgress .chip to orange
+            div.getElementsByClassName(
+              "ServiceOrderProgress"
+            )[0].style.backgroundColor = "#c27312";
+          }
 
-				// Add an 'option' for each service order to the search input with the id of 'toDoList'
-				let option = document.createElement('option');
-				option.value = ServiceOrder.Name;
-				document.getElementById('toDoList').appendChild(option);
-
-			})
-			resolve()
-		})
-	})
+          // Add an 'option' for each service order to the search input with the id of 'toDoList'
+          let option = document.createElement("option");
+          option.value = ServiceOrder.Name;
+          document.getElementById("toDoList").appendChild(option);
+        });
+        resolve();
+      });
+  });
 }
 
 // GET list of PURCHASE ORDERS from D-Tools
 function getPurchaseOrders() {
-	console.log('Getting purchase orders...');
-	const purchaseOptions = {
-		method: 'GET',
-		headers: {
-			'content-type': 'application/json',
-			'X-DTSI-ApiKey': 's0vAAip0W0uwXkKDO5JpGwSXgLYj6cokGrs2LUHi8P0g'
-		}
-	};
-	fetch('https://api.d-tools.com/SI/Subscribe/PurchaseOrders', purchaseOptions)
-	.then(response => response.json())
-	.then(data => {
-		console.log(data);
-	})
+  console.log("Getting purchase orders...");
+  const purchaseOptions = {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      "X-DTSI-ApiKey": "s0vAAip0W0uwXkKDO5JpGwSXgLYj6cokGrs2LUHi8P0g",
+    },
+  };
+  fetch("https://api.d-tools.com/SI/Subscribe/PurchaseOrders", purchaseOptions)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    });
 }
 
 // GET list of SERVICE PLANS from D-Tools
 function getServicePlans() {
-	console.log('Getting service plans...');
-	const planOptions = {
-		method: 'GET',
-		headers: {
-			'content-type': 'application/json',
-			'X-DTSI-ApiKey': 's0vAAip0W0uwXkKDO5JpGwSXgLYj6cokGrs2LUHi8P0g'
-		}
-	};
-	fetch('https://api.d-tools.com/SI/Subscribe/ServicePlans', planOptions)
-	.then(response => response.json())
-	.then(data => {
-		console.log(data);
-	})
+  console.log("Getting service plans...");
+  const planOptions = {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      "X-DTSI-ApiKey": "s0vAAip0W0uwXkKDO5JpGwSXgLYj6cokGrs2LUHi8P0g",
+    },
+  };
+  fetch("https://api.d-tools.com/SI/Subscribe/ServicePlans", planOptions)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    });
 }
 
 // GET list of TIMESHEETS from D-Tools
 function getTimeSheets() {
-	console.log('Getting time sheets...');
-	const timesheetOptions = {
-		method: 'GET',
-		headers: {
-			'content-type': 'application/json',
-			'X-DTSI-ApiKey': 's0vAAip0W0uwXkKDO5JpGwSXgLYj6cokGrs2LUHi8P0g'
-		}
-	};
-	fetch('https://api.d-tools.com/SI/Subscribe/TimeSheets', timesheetOptions)
-	.then(response => response.json())
-	.then(data => {
-		console.log(data);
-	})
+  console.log("Getting time sheets...");
+  const timesheetOptions = {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      "X-DTSI-ApiKey": "s0vAAip0W0uwXkKDO5JpGwSXgLYj6cokGrs2LUHi8P0g",
+    },
+  };
+  fetch("https://api.d-tools.com/SI/Subscribe/TimeSheets", timesheetOptions)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    });
 }
 
 // GET list of PRODUCTS from D-Tools
 function getProducts() {
-	console.log('Getting products...');
-	const productOptions = {
-		method: 'GET',
-		headers: {
-			'content-type': 'application/json',
-			'X-DTSI-ApiKey': 's0vAAip0W0uwXkKDO5JpGwSXgLYj6cokGrs2LUHi8P0g'
-		}
-	};
-	fetch('https://api.d-tools.com/SI/Subscribe/ProductCatalogs', productOptions)
-	.then(response => response.json())
-	.then(data => {
-		console.log(data);
-	})
+  console.log("Getting products...");
+  const productOptions = {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      "X-DTSI-ApiKey": "s0vAAip0W0uwXkKDO5JpGwSXgLYj6cokGrs2LUHi8P0g",
+    },
+  };
+  fetch("https://api.d-tools.com/SI/Subscribe/ProductCatalogs", productOptions)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    });
 }
-
 
 function newEvent() {
-	console.log('Creating new event...');
+  console.log("Creating new event...");
 
-	// POST to 'Make' webhook - Can be accessed at: https://us1.make.com/145062/scenarios/517441/edit (only with account cookie)
-	const eventOptions = {
-		method: 'POST',
-		headers: {
-			'content-type': 'application/json'
-		},
-		body: JSON.stringify({
-			toDo: {
-				name: '123 Branch Ave (Home)', // always
-				type: 'Task', // always
-				progress: 'Not Started', // always
-				description: 'This is a test description', // if != null
-				client: {
-					name: 'Test Client', // if 'type' == 'Project'
-					id: '123456789' // if 'type' == 'Project'
-				}
-			},
-			vehicle: {
-				name: 'Test Vehicle', // always
-				vin: '123456789', // always
-				license: 'GDG36F3', // always
-			},
-			teamMember: {
-				firstName: 'Test', // always
-				lastName: 'User', // always
-				email: 'brandwield@gmail.com' // always
-			},
-			time: {
-				start: '2020-01-01T00:00:00', // always
-				end: '2022-01-01T00:00:00' // always
-			}
-		})
-	};
-	fetch(EVENT_URL, eventOptions)
-	.then(response => response.json())
-	.then(data => {
-		console.log(data);
-		}
-	)
+  // POST to 'Make' webhook - Can be accessed at: https://us1.make.com/145062/scenarios/517441/edit (only with account cookie)
+  const eventOptions = {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      toDo: {
+        name: "123 Branch Ave (Home)", // always
+        type: "Task", // always
+        progress: "Not Started", // always
+        description: "This is a test description", // if != null
+        client: {
+          name: "Test Client", // if 'type' == 'Project'
+          id: "123456789", // if 'type' == 'Project'
+        },
+      },
+      vehicle: {
+        name: "Test Vehicle", // always
+        vin: "123456789", // always
+        license: "GDG36F3", // always
+      },
+      teamMember: {
+        firstName: "Test", // always
+        lastName: "User", // always
+        email: "brandwield@gmail.com", // always
+      },
+      time: {
+        start: "2020-01-01T00:00:00", // always
+        end: "2022-01-01T00:00:00", // always
+      },
+    }),
+  };
+  fetch(EVENT_URL, eventOptions)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    });
 }
 
-function addTeamMemberToDOM(payload){
-	// Create a div for the 'lists' tab
-	var teamMember = document.createElement("div");
-	teamMember.setAttribute('data-id',payload.id);
-	teamMember.innerHTML = `
+function addTeamMemberToDOM(payload) {
+  // Create a div for the 'lists' tab
+  var teamMember = document.createElement("div");
+  teamMember.setAttribute("data-id", payload.id);
+  teamMember.innerHTML = `
 	<div class="card">
 	<div class="topCardLabel" style="position:relative;  margin-bottom: 20px;">
 		<span style="position:absolute; top:8px; right: 8px;" onclick="deleteTeamMember('${payload.id}')">X</span>
@@ -355,19 +412,22 @@ function addTeamMemberToDOM(payload){
 		<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">${payload.email}</text>
 	</div>`;
 
-	// Place the div
-	document.getElementById("team").appendChild(teamMember);
+  // Place the div
+  document.getElementById("team").appendChild(teamMember);
 
-	// Create a div for the 'today' tab
-	var teamMemberToday = document.createElement("div");
-	teamMemberToday.setAttribute('data-id',payload.id);
-	teamMemberToday.setAttribute('data-name',`${payload.firstName} ${payload.lastName}`);
-	teamMemberToday.setAttribute('data-payload',JSON.stringify(payload))
-	teamMemberToday.addEventListener('dragstart', (event) => {
-		event.dataTransfer.setData("text/teamMember", "teamMember")
-		window.dragNode = teamMemberToday
-	})
-	teamMemberToday.innerHTML = `
+  // Create a div for the 'today' tab
+  var teamMemberToday = document.createElement("div");
+  teamMemberToday.setAttribute("data-id", payload.id);
+  teamMemberToday.setAttribute(
+    "data-name",
+    `${payload.firstName} ${payload.lastName}`
+  );
+  teamMemberToday.setAttribute("data-payload", JSON.stringify(payload));
+  teamMemberToday.addEventListener("dragstart", (event) => {
+    event.dataTransfer.setData("text/teamMember", "teamMember");
+    window.dragNode = teamMemberToday;
+  });
+  teamMemberToday.innerHTML = `
 	<div class="card" draggable="true" style="cursor: pointer;">
 	<div class="topCardLabel" style="position:relative; margin-bottom: 20px;">
 		<text >Team Member</text><br>
@@ -375,21 +435,27 @@ function addTeamMemberToDOM(payload){
 		<text> ${payload.firstName}&nbsp${payload.lastName}</text><br>
 		<text style="color: var(--secondaryTextColor); font-size: var(--secondaryFontSize);">${payload.email}</text>
 	</div>
-	`
-	// Place the div
-	document.getElementById("TeamMembers").appendChild(teamMemberToday);
+	`;
+  // Place the div
+  document.getElementById("TeamMembers").appendChild(teamMemberToday);
 
-	addScollBarIfNecessary(document.querySelector('#TeamMembers'));
-	// Console log the created items
-	console.log('Team member loaded: ' + payload.firstName + ' ' + payload.lastName + ' ' + payload.lastName);
+  addScollBarIfNecessary(document.querySelector("#TeamMembers"));
+  // Console log the created items
+  console.log(
+    "Team member loaded: " +
+      payload.firstName +
+      " " +
+      payload.lastName +
+      " " +
+      payload.lastName
+  );
 }
 
-function addVehicleToDOM(payload){
-
-	// Create a div for the 'lists' tab
-	var vehicle = document.createElement("div");
-	vehicle.setAttribute('data-id',payload.id);
-	vehicle.innerHTML = `
+function addVehicleToDOM(payload) {
+  // Create a div for the 'lists' tab
+  var vehicle = document.createElement("div");
+  vehicle.setAttribute("data-id", payload.id);
+  vehicle.innerHTML = `
 	<div class="card">
 	<div class="topCardLabel" style="position:relative;  margin-bottom: 20px;">
 		<span style="position:absolute; top:8px; right: 8px;" onclick="deleteVehicle('${payload.id}')">X</span>
@@ -401,20 +467,20 @@ function addVehicleToDOM(payload){
 	</div>
 	`;
 
-	// Place the div
-	document.getElementById("vehicles").appendChild(vehicle);
+  // Place the div
+  document.getElementById("vehicles").appendChild(vehicle);
 
-	// Create a div for the 'today' tab
-	var vehicleToday = document.createElement("div");
-	vehicleToday.setAttribute('data-id',payload.id);
-	vehicleToday.setAttribute('data-name',payload.vehicleName);
-	vehicleToday.setAttribute('data-payload',JSON.stringify(payload))
-	vehicleToday.addEventListener('dragstart', (event) => {
-		event.dataTransfer.setData("text/vehicle", "vehicle")
-		window.dragNode = vehicleToday
-		// console.log(vehicleToday, window.dragNode)
-	})
-	vehicleToday.innerHTML = `
+  // Create a div for the 'today' tab
+  var vehicleToday = document.createElement("div");
+  vehicleToday.setAttribute("data-id", payload.id);
+  vehicleToday.setAttribute("data-name", payload.vehicleName);
+  vehicleToday.setAttribute("data-payload", JSON.stringify(payload));
+  vehicleToday.addEventListener("dragstart", (event) => {
+    event.dataTransfer.setData("text/vehicle", "vehicle");
+    window.dragNode = vehicleToday;
+    // console.log(vehicleToday, window.dragNode)
+  });
+  vehicleToday.innerHTML = `
 	<div class="card" draggable="true" style="cursor: pointer;">
 	<div class="topCardLabel" style="position:relative;  margin-bottom: 20px;">
 		<text >Vehicle</text>
@@ -425,91 +491,103 @@ function addVehicleToDOM(payload){
 	</div>
 	`;
 
-	// Place the div
-	document.getElementById("Vehicles").appendChild(vehicleToday);
-	
-	addScollBarIfNecessary(document.querySelector('#Vehicles'));
+  // Place the div
+  document.getElementById("Vehicles").appendChild(vehicleToday);
 
-	// Console log the created items
-	console.log('Vehicle loaded: ' + payload.vehicleName);
+  addScollBarIfNecessary(document.querySelector("#Vehicles"));
+
+  // Console log the created items
+  console.log("Vehicle loaded: " + payload.vehicleName);
 }
 
-function toggleModal(modalID = 'modal-team'){
-
-	const modal = document.getElementById(modalID)
-	if(modal.style.display === "none"){
-		console.log("Opening Modal");
-		modal.style.display = "flex"
-	}else{
-		console.log("Closing Modal");
-		modal.style.display = "none"
-	}
+function toggleModal(modalID = "modal-team") {
+  const modal = document.getElementById(modalID);
+  if (modal.style.display === "none") {
+    console.log("Opening Modal");
+    modal.style.display = "flex";
+  } else {
+    console.log("Closing Modal");
+    modal.style.display = "none";
+  }
 }
 
-function resetModalForm(modalID = 'modal-team'){
-	const modal = document.getElementById(modalID)
-	const inputs = modal.querySelectorAll('input')
-	inputs.forEach(input => input.value = "")
+function resetModalForm(modalID = "modal-team") {
+  const modal = document.getElementById(modalID);
+  const inputs = modal.querySelectorAll("input");
+  inputs.forEach((input) => (input.value = ""));
 }
 
-function onDragOver(event){
-	const type = event.dataTransfer.types[0].substring(5)
-	
-	// Only allow drop in the correct drop zone
-	if(type === event.target.getAttribute('data-type')){
-		event.preventDefault()
-	}
+function onDragOver(event) {
+  const type = event.dataTransfer.types[0].substring(5);
+
+  // Only allow drop in the correct drop zone
+  if (type === event.target.getAttribute("data-type")) {
+    event.preventDefault();
+  }
 }
 
-function removeAllChildren(element){
-	while(element.firstChild){
-		element.removeChild(element.firstChild)
-	}
+function removeAllChildren(element) {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
 }
 
-function dropCard(event, eventType){
-	let dropZone = event.target
-	const clone = dragNode.cloneNode(true);
-	clone.querySelector('[draggable="true"]').setAttribute('draggable', false)
-	const type = eventType? eventType : event.dataTransfer.types[0]
+function dropCard(event, eventType) {
+  let dropZone = event.target;
+  const clone = dragNode.cloneNode(true);
+  clone.querySelector('[draggable="true"]').setAttribute("draggable", false);
+  const type = eventType ? eventType : event.dataTransfer.types[0];
 
-	clone.ondragover = function (e) {
-		if(e.dataTransfer.types[0] === type){
-			e.preventDefault()
-		}
-	}
+  clone.ondragover = function (e) {
+    if (e.dataTransfer.types[0] === type) {
+      e.preventDefault();
+    }
+  };
 
-	clone.ondrop = (e) => {
-		dropCard(event, type)
-		e.stopPropagation()
-	}
+  clone.ondrop = (e) => {
+    dropCard(event, type);
+    e.stopPropagation();
+  };
 
-	if(type === "text/teammember" && selectedTeamMembers.includes(clone.getAttribute('data-id'))){
-		// If team member is already selected in one of the placeholders
-		alert("You cannot add same team member twice")
-		return;
-	}else{
-		window.selectedTeamMembers.push(clone.getAttribute('data-id'))
-	}
-	
-	removeAllChildren(dropZone)
-	dropZone.appendChild(clone)
-	
+  if (
+    type === "text/teammember" &&
+    selectedTeamMembers.includes(clone.getAttribute("data-id"))
+  ) {
+    // If team member is already selected in one of the placeholders
+    alert("You cannot add same team member twice");
+    return;
+  } 
+  else if(type === "text/teammember") {
+    window.selectedTeamMembers.push(clone.getAttribute("data-id"));
+  }
+
+  if (
+    type === "text/vehicle" &&
+    selectedVehicles.includes(clone.getAttribute("data-id"))
+  ) {
+    // If vehicle is already selected in one of the placeholders
+    alert("You cannot add same vehicle twice");
+    return;
+  } 
+  else if(type === "text/vehicle") {
+    window.selectedVehicles.push(clone.getAttribute("data-id"));
+  }
+
+  removeAllChildren(dropZone);
+  dropZone.appendChild(clone);
 }
 
-function replaceUndefined(obj, replaceToken = '') {
-	Object.keys(obj).forEach(function(key) {
-		let value = obj[key];
-		let type = typeof value;
-			if (type === "object") {
-					replaceUndefined(obj[key], replaceToken);
-			}
-			else if (type === "undefined") {
-					obj[key] = replaceToken;
-			}
-	});
+function replaceUndefined(obj, replaceToken = "") {
+  Object.keys(obj).forEach(function (key) {
+    let value = obj[key];
+    let type = typeof value;
+    if (type === "object") {
+      replaceUndefined(obj[key], replaceToken);
+    } else if (type === "undefined") {
+      obj[key] = replaceToken;
+    }
+  });
 }
-
 
 function isTimeEntryValid() {
   const startTime = document.getElementById("startTime").value;
@@ -530,105 +608,109 @@ function createNewEvent() {
     return;
   }
 
-	const payload = {
-		eventColor:{
-			backgroundColor: 'white',
-			textColor: 'black'
-		}
-	};
-	let buffer;
-	let empty = true;
-	let newTodo = document.querySelector("#newToDoSlot div");
-	let newVehicle = document.querySelector("#newVehicleSlot div");
-	let newTeamMembers = document.querySelectorAll(".newTeamMemberSlot>div");
-	const eventNote = document.querySelector("#eventNote").value
+  const payload = {
+    eventColor: {
+      backgroundColor: "white",
+      textColor: "black",
+    },
+  };
+  let buffer;
+  let empty = true;
+  let newTodo = document.querySelector("#newToDoSlot div");
+  let newVehicles = document.querySelectorAll(".newVehicleSlot>div");
+  let newTeamMembers = document.querySelectorAll(".newTeamMemberSlot>div");
+  const eventNote = document.querySelector("#eventNote").value;
 
-	if(newTodo){
-		buffer = JSON.parse(newTodo.getAttribute('data-payload'))
-		payload.toDo = {
-			id: buffer.Id,
-			name: buffer.Name,
-			type: buffer.type,
-			progress: buffer.Progress,
-			description: buffer.Description,
-		}
-		payload.eventColor = colorPairs[hash_fn(buffer.Id)]
-		if(buffer.type === 'Project'){
-			payload.toDo.client = {
-				name: buffer.Client,
-				id: buffer.ClientId
-			}
-		}
-		empty = false;
-	}
-	if(newVehicle){
-		buffer = JSON.parse(newVehicle.getAttribute('data-payload'));
-		payload.vehicle = {
-			id: buffer.id,
-			name: buffer.vehicleName,
-			vin: buffer.vin,
-			license: buffer.license
-		}
-		empty = false;
-	}
-	if(newTeamMembers.length){
-		payload.teamMembers = []
-		newTeamMembers.forEach( newTeamMember => {
-			buffer = JSON.parse(newTeamMember.getAttribute('data-payload'));
-			payload.teamMembers.push( {
-				id: buffer.id,
-				name: `${buffer.firstName} ${buffer.lastName}`,
-				email: buffer.email
-			})
-		})
-		empty = false;
-	}
+  if (newTodo) {
+    buffer = JSON.parse(newTodo.getAttribute("data-payload"));
+    payload.toDo = {
+      id: buffer.Id,
+      name: buffer.Name,
+      type: buffer.type,
+      progress: buffer.Progress,
+      description: buffer.Description,
+    };
+    payload.eventColor = colorPairs[hash_fn(buffer.Id)];
+    if (buffer.type === "Project") {
+      payload.toDo.client = {
+        name: buffer.Client,
+        id: buffer.ClientId,
+      };
+    }
+    empty = false;
+  }
+  if (newVehicles.length) {
+    payload.vehicles = [];
+    newVehicles.forEach((newVehicle) => {
+      buffer = JSON.parse(newVehicle.getAttribute("data-payload"));
+      payload.vehicles.push({
+        id: buffer.id,
+        name: buffer.vehicleName,
+        vin: buffer.vin,
+        license: buffer.license,
+      });
+    });
+    empty = false;
+  }
+  if (newTeamMembers.length) {
+    payload.teamMembers = [];
+    newTeamMembers.forEach((newTeamMember) => {
+      buffer = JSON.parse(newTeamMember.getAttribute("data-payload"));
+      payload.teamMembers.push({
+        id: buffer.id,
+        name: `${buffer.firstName} ${buffer.lastName}`,
+        email: buffer.email,
+      });
+    });
+    empty = false;
+  }
 
-	if(empty)	{ // if all the drop locations are empty
-		alert("No card selected");
-		return;
-	}else if(!confirm("Are you sure you want to create the event?")){
-		return;
-	}
+  if (empty) {
+    // if all the drop locations are empty
+    alert("No card selected");
+    return;
+  } else if (!confirm("Are you sure you want to create the event?")) {
+    return;
+  }
 
-	payload.time = {
-		date: new Date(document.getElementById('eventDate').value),
-		startTime: document.getElementById('startTime').value,
-		endTime: document.getElementById('endTime').value
-	}
+  payload.time = {
+    date: new Date(document.getElementById("eventDate").value),
+    startTime: document.getElementById("startTime").value,
+    endTime: document.getElementById("endTime").value,
+  };
 
-	payload.eventNote = eventNote;
+  payload.eventNote = eventNote;
 
-	const repeat = parseInt(document.getElementById('repeatInput').value, 10);
-	if(!repeat || repeat <= 1){
-		payload.repeat = 1;
-	}else{
-		payload.repeat = repeat
-	}
-	payload.repeatDates = createRepeatDates(payload.time.date, payload.repeat);
+  const repeat = parseInt(document.getElementById("repeatInput").value, 10);
+  if (!repeat || repeat <= 1) {
+    payload.repeat = 1;
+  } else {
+    payload.repeat = repeat;
+  }
+  payload.repeatDates = createRepeatDates(payload.time.date, payload.repeat);
 
-	replaceUndefined(payload); // Because undefined values are not allowed.
-
-	saveEventToCalendar(payload)
-	.then(data => {
-		saveEventToDatabase({...data, ...payload})
-		showSnackbar({message: "Shit is GUCCI"})
-		clearCards()
-		createConfetti()
-	}).catch(err => {
-		console.log(err);
-		alert("Failed to create the event")
-	})	
+  replaceUndefined(payload); // Because undefined values are not allowed.
+  saveEventToCalendar(payload)
+    .then((data) => {
+      saveEventToDatabase({ ...data, ...payload });
+      showSnackbar({ message: "Shit is GUCCI" });
+      clearCards();
+      createConfetti();
+    })
+    .catch((err) => {
+      console.log(err);
+      alert("Failed to create the event");
+    });
 }
 
 function saveEventToCalendar(payload) {
   const { date, startTime, endTime } = payload.time;
   const start = date.toISOString().substring(0, 11) + startTime;
   const end = date.toISOString().substring(0, 11) + endTime;
-	let repeat = payload.repeat;
-	if(date.getDay() === 0 || date.getDay() === 6){
-		repeat = repeat - 1;
-	}
+  let repeat = payload.repeat;
+  if (date.getDay() === 0 || date.getDay() === 6) {
+    repeat = repeat - 1;
+  }
 
   const eventOptions = {
     method: "POST",
@@ -678,7 +760,7 @@ function createConfetti() {
 function clearCards() {
   const placeholderSelectors = [
     "#newToDoSlot",
-    "#newVehicleSlot",
+    ".newVehicleSlot",
     ".newTeamMemberSlot",
   ];
 
@@ -692,6 +774,7 @@ function clearCards() {
   });
 
   window.selectedTeamMembers = [];
+  window.selectedVehicles = [];
 }
 
 // function searchVehicles(e){
@@ -730,25 +813,26 @@ function clearCards() {
 
 // }
 
-function searchTodos(e){
-	let keyword = e.target.value;
-	keyword = keyword.trim()
-	keyword = keyword.toLowerCase()
+function searchTodos(e) {
+  let keyword = e.target.value;
+  keyword = keyword.trim();
+  keyword = keyword.toLowerCase();
 
-	const projectList = Array.from(document.querySelectorAll('#Projects .card'))
-	const taskList = Array.from(document.querySelectorAll('#Tasks .card'))
-	const serviceOrderList = Array.from(document.querySelectorAll('#ServiceOrders .card'))
-	const combinedList = [...projectList,...taskList,...serviceOrderList]
+  const projectList = Array.from(document.querySelectorAll("#Projects .card"));
+  const taskList = Array.from(document.querySelectorAll("#Tasks .card"));
+  const serviceOrderList = Array.from(
+    document.querySelectorAll("#ServiceOrders .card")
+  );
+  const combinedList = [...projectList, ...taskList, ...serviceOrderList];
 
-	combinedList.forEach(project => {
-		const projectName = project.children[4].innerText.trim().toLowerCase()
-		if(projectName.includes(keyword)){
-			project.classList.remove('hidden')
-		}else{
-			project.classList.add('hidden')
-		}
-	})
-
+  combinedList.forEach((project) => {
+    const projectName = project.children[4].innerText.trim().toLowerCase();
+    if (projectName.includes(keyword)) {
+      project.classList.remove("hidden");
+    } else {
+      project.classList.add("hidden");
+    }
+  });
 }
 
 function padTo2Digits(num) {
@@ -953,13 +1037,14 @@ const colorPairs = [
   },
 ];
 
-function addScollBarIfNecessary(element){
-	const styles = window.getComputedStyle(element);
-	const maxHeight = Number(styles.getPropertyValue('max-height').split('px')[0]);
-	console.log({maxHeight});
-	if( element.scrollHeight >= maxHeight){
-		element.classList.add("overflow-scroll")
-	}else{
-		element.classList.remove("overflow-scroll")
-	}
+function addScollBarIfNecessary(element) {
+  const styles = window.getComputedStyle(element);
+  const maxHeight = Number(
+    styles.getPropertyValue("max-height").split("px")[0]
+  );
+  if (element.scrollHeight >= maxHeight) {
+    element.classList.add("overflow-scroll");
+  } else {
+    element.classList.remove("overflow-scroll");
+  }
 }

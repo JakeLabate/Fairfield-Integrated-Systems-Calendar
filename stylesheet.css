@@ -480,8 +480,8 @@ summary {
 	height: 80vh;
 }
 
-#newVehicleSlot{
-	margin: 96px 10px 20px;
+#newToDoSlot{
+	margin-bottom: 96px;
 }
 
 .event-note{
@@ -506,7 +506,7 @@ summary {
 }
 
 #Vehicles .topCardLabel,
-#newVehicleSlot .topCardLabel,
+.newVehicleSlot .topCardLabel,
 #vehicles .topCardLabel{
 	background-color: #0A6A56;
 }

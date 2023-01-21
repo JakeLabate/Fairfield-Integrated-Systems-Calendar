@@ -42,10 +42,10 @@ function addEventCard(event) {
     ${event.toDo.name}
     </div>`;
   }
-  if (event.vehicle) {
+  if (event.vehicles) {
     innerHTML += `
     <div class="vehicle">
-      ${event.vehicle.name}
+      ${event.vehicles.map((el) => el.name).join(", ")}
     </div>`;
   }
   if (Array.isArray(event.teamMembers) && event.teamMembers.length > 0) {
@@ -62,7 +62,7 @@ function addEventCard(event) {
   }
   innerHTML += `
   <div class="delete-icon" data-eventID=${event.eventID} data-id=${event.id} onclick="handleClick(event)">
-		<svg viewbox="0 0 875 1000" xmlns="http://www.w3.org/2000/svg">
+		<svg class="fill-${event.eventColor?.textColor}" viewbox="0 0 875 1000" xmlns="http://www.w3.org/2000/svg">
 			<path
 			d="M0 281.296l0 -68.355q1.953 -37.107 29.295 -62.496t64.449 -25.389l93.744 0l0 -31.248q0 -39.06 27.342 -66.402t66.402 -27.342l312.48 0q39.06 0 66.402 27.342t27.342 66.402l0 31.248l93.744 0q37.107 0 64.449 25.389t29.295 62.496l0 68.355q0 25.389 -18.553 43.943t-43.943 18.553l0 531.216q0 52.731 -36.13 88.862t-88.862 36.13l-499.968 0q-52.731 0 -88.862 -36.13t-36.13 -88.862l0 -531.216q-25.389 0 -43.943 -18.553t-18.553 -43.943zm62.496 0l749.952 0l0 -62.496q0 -13.671 -8.789 -22.46t-22.46 -8.789l-687.456 0q-13.671 0 -22.46 8.789t-8.789 22.46l0 62.496zm62.496 593.712q0 25.389 18.553 43.943t43.943 18.553l499.968 0q25.389 0 43.943 -18.553t18.553 -43.943l0 -531.216l-624.96 0l0 531.216zm62.496 -31.248l0 -406.224q0 -13.671 8.789 -22.46t22.46 -8.789l62.496 0q13.671 0 22.46 8.789t8.789 22.46l0 406.224q0 13.671 -8.789 22.46t-22.46 8.789l-62.496 0q-13.671 0 -22.46 -8.789t-8.789 -22.46zm31.248 0l62.496 0l0 -406.224l-62.496 0l0 406.224zm31.248 -718.704l374.976 0l0 -31.248q0 -13.671 -8.789 -22.46t-22.46 -8.789l-312.48 0q-13.671 0 -22.46 8.789t-8.789 22.46l0 31.248zm124.992 718.704l0 -406.224q0 -13.671 8.789 -22.46t22.46 -8.789l62.496 0q13.671 0 22.46 8.789t8.789 22.46l0 406.224q0 13.671 -8.789 22.46t-22.46 8.789l-62.496 0q-13.671 0 -22.46 -8.789t-8.789 -22.46zm31.248 0l62.496 0l0 -406.224l-62.496 0l0 406.224zm156.24 0l0 -406.224q0 -13.671 8.789 -22.46t22.46 -8.789l62.496 0q13.671 0 22.46 8.789t8.789 22.46l0 406.224q0 13.671 -8.789 22.46t-22.46 8.789l-62.496 0q-13.671 0 -22.46 -8.789t-8.789 -22.46zm31.248 0l62.496 0l0 -406.224l-62.496 0l0 406.224z" />
 		</svg>
@@ -183,11 +183,13 @@ async function getAllData() {
     labelKeys: ["Name"],
     dummyOptionValue: "Service Orders",
   });
-  setOptions({
-    selectTagId: "vehicle",
-    optionsArray: vehicles,
-    idKey: "id",
-    labelKeys: ["vehicleName"],
+  ["vehicle1", "vehicle2"].forEach((id) => {
+    setOptions({
+      selectTagId: id,
+      optionsArray: vehicles,
+      idKey: "id",
+      labelKeys: ["vehicleName"],
+    });
   });
   ["teammember1", "teammember2", "teammember3", "teammember4"].forEach((id) => {
     setOptions({
@@ -225,12 +227,12 @@ function setOptions({
   });
 }
 
-function handleClick(e){
+function handleClick(e) {
   e.stopPropagation();
-  if(e.currentTarget.hasAttribute('data-payload')){
-    editEvent(e)
-  }else{
-    deleteEvent(e)
+  if (e.currentTarget.hasAttribute("data-payload")) {
+    editEvent(e);
+  } else {
+    deleteEvent(e);
   }
 }
 
@@ -244,10 +246,19 @@ function editEvent(e) {
     selectTagId: "todo",
     optionId: selectedEvent.toDo ? selectedEvent.toDo.id : 0,
   });
-  selectOption({
-    selectTagId: "vehicle",
-    optionId: selectedEvent.vehicle ? selectedEvent.vehicle.id : 0,
-  });
+  if (selectedEvent.vehicle) {
+    selectOption({
+      selectTagId: "vehicle1",
+      optionId: selectedEvent.vehicle ? selectedEvent.vehicle.id : 0,
+    });
+  } else if (selectedEvent.vehicles) {
+    selectedEvent.vehicles.forEach((vehicle, index) => {
+      selectOption({
+        selectTagId: `vehicle${index + 1}`,
+        optionId: vehicle.id,
+      });
+    });
+  }
   if (selectedEvent.teamMembers) {
     selectedEvent.teamMembers.forEach((teamMember, index) => {
       selectOption({
@@ -370,7 +381,13 @@ function updateEvent() {
   let buffer;
   let empty = true;
   const newTodo = getSelectedOption({ selectTagId: "todo" });
-  const newVehicle = getSelectedOption({ selectTagId: "vehicle" });
+  const newVehiclesList = [1, 2].reduce((acc, val) => {
+    const option = getSelectedOption({ selectTagId: `vehicle${val}` });
+    if (option) {
+      acc.push(option);
+    }
+    return acc;
+  }, []);
   const teamMemersList = [1, 2, 3, 4].reduce((acc, val) => {
     const option = getSelectedOption({ selectTagId: `teammember${val}` });
     if (option) {
@@ -398,14 +415,21 @@ function updateEvent() {
     }
     empty = false;
   }
-  if (newVehicle) {
-    buffer = JSON.parse(newVehicle.getAttribute("data-payload"));
-    payload.vehicle = {
-      id: buffer.id,
-      name: buffer.vehicleName,
-      vin: buffer.vin,
-      license: buffer.license,
-    };
+  if (newVehiclesList.length > 0) {
+    payload.vehicles = [];
+    newVehiclesList.forEach((vehicle) => {
+      if (!vehicle) {
+        return;
+      }
+
+      buffer = JSON.parse(vehicle.getAttribute("data-payload"));
+      payload.vehicles.push({
+        id: buffer.id,
+        name: buffer.vehicleName,
+        vin: buffer.vin,
+        license: buffer.license,
+      });
+    });
     empty = false;
   }
   if (teamMemersList.length > 0) {
@@ -646,13 +670,13 @@ function deleteCalendarEvent(eventId) {
 }
 
 function deleteEvent(e) {
-  if(!confirm("Are you sure you want to delete the event?")){
+  if (!confirm("Are you sure you want to delete the event?")) {
     return;
   }
 
   const eventId = e.currentTarget.getAttribute("data-eventid");
   const docId = e.currentTarget.getAttribute("data-id");
-  
+
   deleteEventFromDatabase(docId)
     .then(() => deleteCalendarEvent(eventId))
     .then((res) => {
@@ -663,4 +687,26 @@ function deleteEvent(e) {
       console.log(err);
       alert("Failed to delete the event");
     });
+}
+
+function decreaseFontSize(container, percentage = 5) {
+  let currentFontSize = getComputedStyle(container).fontSize;
+  currentFontSize = currentFontSize.substring(0, currentFontSize.length - 2);
+  container.style.fontSize = `${
+    (currentFontSize * (100 - percentage)) / 100
+  }px`;
+}
+
+function fixOverflow() {
+  const events = document.querySelectorAll(".event-container");
+  events.forEach(event => {
+    const eventInfo = event.querySelector('.event-info');
+    const datetime = event.querySelector('.datetime');
+
+    // Loop until overflow exists
+    while (eventInfo.scrollHeight > eventInfo.clientHeight) {
+      decreaseFontSize(eventInfo, 1); // Reduce the font size by 1%
+      decreaseFontSize(datetime, 1); // Reduce the font size by 1%
+    }
+  })
 }
