@@ -222,9 +222,7 @@
 					<option value="name-desc">Name Descending</option>
 				</select>
 			</label><br/>
-				<!-- To Dos Search -->
-				<!-- <label for="toDoSearch">Search To Dos</label>
-				<input id="toDoSearch" type="text" placeholder="Search To Dos" name="search" style="width: 90%" oninput="searchTodos(event)"> -->
+				<input id="toDoSearch" type="text" placeholder="Search To Dos" name="search" style="width: 90%" oninput="searchTodos(event)">
 				<datalist id="toDoList"></datalist>
 
 				<!-- To Dos Filter By 'Type' -->
@@ -289,7 +287,11 @@
 						Drop<br>To Do
 					</div>
 
-					<div id="newVehicleSlot" data-type="vehicle" class="placeholder" ondrop="dropCard(event)" ondragover="onDragOver(event)">
+					<div data-type="vehicle" class="newVehicleSlot placeholder" ondrop="dropCard(event)" ondragover="onDragOver(event)">
+						Drop<br>Vehicle
+					</div>
+					
+					<div data-type="vehicle" class="newVehicleSlot placeholder" ondrop="dropCard(event)" ondragover="onDragOver(event)">
 						Drop<br>Vehicle
 					</div>
 

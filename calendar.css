@@ -20,6 +20,8 @@ body{
 .week{
   display: flex;
   flex: 1;
+  min-height: 0px;
+  font-size: 2rem;
 }
 
 .day{
@@ -45,13 +47,14 @@ body{
   text-align: center;
   cursor: pointer;
   flex: 1;
+  min-height: 0px;
 }
 
 .event-info{
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: calc(100% - 46px);
+  height: 100%;
   text-align: center;
 }
 
@@ -180,7 +183,7 @@ option:disabled{
 }
 
 .datetime{
-  visibility: hidden;
+  display: none;
 }
 
 .event-note{
@@ -190,11 +193,21 @@ option:disabled{
 
 .delete-icon{
   position: absolute;
-  top: 16px;
-  right: 16px;
-  height: 20px;
-  width: 20px;
+  top: 0.5em;
+  right: 0.5em;
+  padding: 4px;
+  height: 35px;
+  width: 35px;
 }
+
+.fill-white{
+  fill: white;
+}
+
+.fill-black{
+  fill: black;
+}
+
 
 .delete-icon svg:hover {
   fill: red;
