@@ -674,7 +674,7 @@ function createNewEvent() {
   }
 
   payload.time = {
-    date: new Date(document.getElementById("eventDate").value),
+    date: new Date(document.getElementById("eventDate").value.replaceAll('-','/')),
     startTime: document.getElementById("startTime").value,
     endTime: document.getElementById("endTime").value,
   };
@@ -728,13 +728,13 @@ function saveEventToCalendar(payload) {
 
 function createRepeatDates(startDate, repeatDays = 1) {
   // Include the start date as well
-  const repeatDatesArr = [startDate];
+  const repeatDatesArr = [formatDate(startDate)];
   const date = new Date(startDate);
   while (repeatDays > 1) {
     const currentDate = date.getDate();
     date.setDate(currentDate + 1);
     if (date.getDay() !== 0 && date.getDay() !== 6) {
-      repeatDatesArr.push(new Date(date));
+      repeatDatesArr.push(formatDate(new Date(date)));
       repeatDays--;
     }
   }
