@@ -320,9 +320,8 @@ function editEvent(e) {
   const { seconds, nanoseconds } = selectedEvent.time.date;
   const date = new Date(seconds * 1000 + nanoseconds);
 
-  document.querySelector(".modal #eventDate").value = date
-    .toISOString()
-    .substring(0, 10);
+  document.querySelector(".modal #eventDate").value = formatDate(date)
+  
   document.querySelector(".modal #eventNote").value =
     selectedEvent.eventNote || "";
 }
@@ -502,7 +501,7 @@ function updateEvent() {
   }
 
   payload.time = {
-    date: new Date(document.querySelector(".modal #eventDate").value),
+    date: new Date(document.querySelector(".modal #eventDate").value.replaceAll('-','/')),
     startTime: document.querySelector(".modal #startTime").value,
     endTime: document.querySelector(".modal #endTime").value,
   };
@@ -540,13 +539,13 @@ function updateEvent() {
 
 function createRepeatDates(startDate, repeatDays = 1) {
   // Include the start date as well
-  const repeatDatesArr = [startDate];
+  const repeatDatesArr = [formatDate(startDate)];
   const date = new Date(startDate);
   while (repeatDays > 1) {
     const currentDate = date.getDate();
     date.setDate(currentDate + 1);
     if (date.getDay() !== 0 && date.getDay() !== 6) {
-      repeatDatesArr.push(new Date(date));
+      repeatDatesArr.push(formatDate(new Date(date)));
       repeatDays--;
     }
   }
@@ -763,4 +762,16 @@ function fixOverflow() {
       decreaseFontSize(eventInfo, 1); // Reduce the font size by 1%
     }
   })
+}
+
+function padTo2Digits(num) {
+  return num.toString().padStart(2, "0");
+}
+
+function formatDate(date) {
+  return [
+    date.getFullYear(),
+    padTo2Digits(date.getMonth() + 1),
+    padTo2Digits(date.getDate()),
+  ].join("-");
 }

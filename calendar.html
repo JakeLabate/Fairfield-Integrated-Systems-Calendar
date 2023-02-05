@@ -135,7 +135,7 @@
       for (let i = 0; i < 3; i++) {
         const datesArray = [];
         for (let j = 0; j < 7; j++) {
-          datesArray.push(new Date(startDate.add(7 * i + j, 'day').startOf('D').format("YYYY-MM-DD")))
+          datesArray.push(startDate.add(7 * i + j, 'day').startOf('D').format("YYYY-MM-DD"))
         }
 
         const q = query(eventsRef, where("repeatDates", "array-contains-any", datesArray));
@@ -165,7 +165,7 @@
       })
 
       events = events.reduce((acc, val) => {
-        let dateKeys = val.repeatDates.map(date => dayjs.unix(date.seconds).format('YYYY-MM-DD'))
+        const dateKeys = val.repeatDates
         dateKeys.forEach(key => {
           if (Array.isArray(acc[key])) {
             acc[key].push(val);
