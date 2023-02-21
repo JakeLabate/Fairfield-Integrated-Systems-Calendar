@@ -581,7 +581,7 @@ function replaceUndefined(obj, replaceToken = "") {
   Object.keys(obj).forEach(function (key) {
     let value = obj[key];
     let type = typeof value;
-    if (type === "object") {
+    if (type === "object" && value !== null) {
       replaceUndefined(obj[key], replaceToken);
     } else if (type === "undefined") {
       obj[key] = replaceToken;
