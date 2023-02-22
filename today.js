@@ -521,6 +521,9 @@ function replaceUndefined(obj, replaceToken = "") {
 const NUMBER_OF_COLORS = 20;
 // The following is a hash function with good distribution and less collision
 function hash_fn(s) {
+  if(s.length>1){
+    s = s.substring(1);
+  }
   const range = NUMBER_OF_COLORS - 1;
   // Initialize the seed value to 0
   let seed = 0;
@@ -563,12 +566,16 @@ function murmur2_impl(data, seed) {
 
 const colorPairs = [
   {
-    backgroundColor: "turquoise",
+    backgroundColor: "teal",
     textColor: "black",
   },
   {
-    backgroundColor: "salmon",
-    textColor: "black",
+    backgroundColor: "brown",
+    textColor: "white",
+  },
+  {
+    backgroundColor: "mediumslateblue",
+    textColor: "white",
   },
   {
     backgroundColor: "red",
@@ -587,8 +594,12 @@ const colorPairs = [
     textColor: "white",
   },
   {
-    backgroundColor: "brown",
+    backgroundColor: "olive",
     textColor: "white",
+  },
+  {
+    backgroundColor: "turquoise",
+    textColor: "black",
   },
   {
     backgroundColor: "yellow",
@@ -607,20 +618,16 @@ const colorPairs = [
     textColor: "black",
   },
   {
-    backgroundColor: "olive",
-    textColor: "white",
-  },
-  {
     backgroundColor: "navy",
     textColor: "white",
   },
   {
-    backgroundColor: "maroon",
+    backgroundColor: "#B53471",
     textColor: "white",
   },
   {
-    backgroundColor: "teal",
-    textColor: "white",
+    backgroundColor: "lavender",
+    textColor: "black",
   },
   {
     backgroundColor: "peachpuff",
@@ -637,10 +644,6 @@ const colorPairs = [
   {
     backgroundColor: "palegreen",
     textColor: "black",
-  },
-  {
-    backgroundColor: "mediumslateblue",
-    textColor: "white",
   },
 ];
 
